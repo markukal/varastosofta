@@ -25,7 +25,31 @@ app.use(cookieparser);
 
 app.use(express.static('/'));
 
-app.route('/collection')
+/*app.route('/collection')
     .get(controller.collection)
     .post(controller.collection)
-    .delete(controller.collection);
+    .delete(controller.collection); */
+
+app.get('/', function (request, response) {
+
+    /* if (request.cookies.userData == null) {
+             response.redirect("/login");
+         }
+         else {
+             fs.readFile("front.html", function (err, data) {
+                 response.writeHead(200, { 'Content-Type': 'text/html' });
+                 response.write(data);
+                 response.end();
+             });
+         } */
+         fs.readFile("./welcome.html", function (err, data) {
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            response.write(data);
+            response.end();  
+        });   
+    });
+     
+     
+    app.listen(port, hostname, () => {
+        console.log(`Server running AT http://${hostname}:${port}/`);
+    });
