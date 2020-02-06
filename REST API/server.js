@@ -18,3 +18,14 @@ var allowCrossDomain = function (req, res, next) {
 
     next();
 }
+
+app.use(allowCrossDomain);
+app.use(cookieparser);
+
+
+app.use(express.static('/'));
+
+app.route('/collection')
+    .get(controller.collection)
+    .post(controller.collection)
+    .delete(controller.collection);
