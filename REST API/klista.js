@@ -1,7 +1,8 @@
 var mysql = require('mysql');
 var sqlQuery;
+var connection = require('./connection')
 
-var connection = mysql.createConnection({
+/*var connection = mysql.createConnection({
     host: 'localhost',
     user: '',
     password: '',
@@ -9,6 +10,7 @@ var connection = mysql.createConnection({
     timezone: 'Europe/Helsinki'
 
 });
+*/
 
 
 module.exports =

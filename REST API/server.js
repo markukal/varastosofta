@@ -4,11 +4,12 @@ var cookieparser = require('cookie-parser');
 
 const http = require('http');
 const hostname = '127.0.0.1';
+const port = process.env.PORT || 3002;
 
-
+var app = express();
 // Määrittelevät selaimen kautta käytettävät tiedostot.
-app.use(express.static(__dirname + '/www'));
-app.use(express.static(__dirname + '/www/images'));
+//app.use(express.static(__dirname + '/www'));
+//app.use(express.static(__dirname + '/www/images'));
 
 
 var allowCrossDomain = function (req, res, next) {
@@ -20,7 +21,7 @@ var allowCrossDomain = function (req, res, next) {
 }
 
 app.use(allowCrossDomain);
-app.use(cookieparser);
+//app.use(cookieparser);
 
 
 
