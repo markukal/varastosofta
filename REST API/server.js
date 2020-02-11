@@ -1,3 +1,4 @@
+// Määritetään tarvittavat moduulit
 var express = require('express');
 var klista = require('./klista');
 var cookieparser = require('cookie-parser');
@@ -27,6 +28,7 @@ app.use(allowCrossDomain);
 
 app.use(express.static('/'));
 
+// Reitit tietokantafunktioihin.
 app.route('/collection')
     .get(klista.fetchAll);
 
