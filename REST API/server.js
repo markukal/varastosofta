@@ -1,5 +1,5 @@
 var express = require('express');
-var controller = require('./controller');
+var klista = require('./klista');
 var cookieparser = require('cookie-parser');
 
 const http = require('http');
@@ -23,12 +23,12 @@ app.use(allowCrossDomain);
 app.use(cookieparser);
 
 
+
 app.use(express.static('/'));
 
-/*app.route('/collection')
-    .get(controller.collection)
-    .post(controller.collection)
-    .delete(controller.collection); */
+app.route('/collection')
+    .get(klista.fetchAll);
+
 
 app.get('/', function (request, response) {
 
