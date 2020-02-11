@@ -1172,3 +1172,5 @@ REST API/node_modules/vary/index.js
 REST API/node_modules/vary/LICENSE
 REST API/node_modules/vary/package.json
 REST API/node_modules/vary/README.md
+node_modules/
+package-lock.json

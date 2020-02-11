@@ -1,6 +1,7 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
 var klista = require('./klista');
+var tarvikkeet = require('./tarvikkeet');
 var cookieparser = require('cookie-parser');
 
 const http = require('http');
@@ -31,6 +32,9 @@ app.use(express.static('/'));
 // Reitit tietokantafunktioihin.
 app.route('/collection')
     .get(klista.fetchAll);
+
+app.route('/tarvikkeet')
+    .get(tarvikkeet.fetchAll);
 
 
 app.get('/', function (request, response) {
