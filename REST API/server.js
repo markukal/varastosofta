@@ -1,6 +1,7 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
 var klista = require('./klista');
+var users = require('./users');
 var tarvikkeet = require('./tarvikkeet');
 var cookieparser = require('cookie-parser');
 
@@ -36,6 +37,8 @@ app.route('/collection')
 app.route('/tarvikkeet')
     .get(tarvikkeet.fetchAll);
 
+app.route('/users')
+    .post(users.register);
 
 app.get('/', function (request, response) {
 
