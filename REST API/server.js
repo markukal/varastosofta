@@ -35,7 +35,10 @@ app.route('/collection')
     .get(klista.fetchAll);
 
 app.route('/tarvikkeet')
-    .get(tarvikkeet.fetchAll);
+    .get(tarvikkeet.fetchAll)
+    .post(tarvikkeet.addNew)
+    .put(tarvikkeet.update)
+    .delete(tarvikkeet.delete);
 
 app.route('/users')
     .post(users.register);
