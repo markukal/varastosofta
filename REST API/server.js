@@ -3,6 +3,7 @@ var express = require('express');
 var klista = require('./klista');
 var users = require('./users');
 var tarvikkeet = require('./tarvikkeet');
+var varastot = require('./varastot');
 var cookieparser = require('cookie-parser');
 
 const http = require('http');
@@ -41,6 +42,12 @@ app.route('/tarvikkeet')
     .post(tarvikkeet.addNew)
     .put(tarvikkeet.update)
     .delete(tarvikkeet.delete);
+
+app.route('/varastot')
+    .get(varastot.fetchAll)
+    .post(varastot.addNew)
+    .put(varastot.update)
+    .delete(varastot.delete);
 
 app.route('/users')
     .post(users.register);
