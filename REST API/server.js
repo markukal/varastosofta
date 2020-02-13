@@ -31,8 +31,10 @@ app.use(allowCrossDomain);
 app.use(express.static('/'));
 
 // Reitit tietokantafunktioihin.
-app.route('/collection')
-    .get(klista.fetchAll);
+app.route('/klista')
+    .get(klista.fetchAll)
+    .delete(klista.remove)
+    .put(klista.add);
 
 app.route('/tarvikkeet')
     .get(tarvikkeet.fetchAll);
