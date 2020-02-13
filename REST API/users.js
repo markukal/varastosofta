@@ -25,7 +25,7 @@ module.exports =
                 else
                 {
                     console.log("Rekisteröinti onnistui.");
-                    res.send({"status": 200});
+                    res.send({"status": 201});
                 }
             });
         }
