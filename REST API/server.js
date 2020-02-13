@@ -14,7 +14,6 @@ var app = express();
 //app.use(express.static(__dirname + '/www'));
 //app.use(express.static(__dirname + '/www/images'));
 
-
 var allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -26,7 +25,8 @@ var allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 //app.use(cookieparser);
 
-
+app.set('view-engine', 'ejs')
+app.use(express.urlencoded({ extended: false}));
 
 app.use(express.static('/'));
 
@@ -39,6 +39,10 @@ app.route('/tarvikkeet')
 
 app.route('/users')
     .post(users.register);
+
+app.get('/login',  function (req, res) {
+    res.render('login.ejs')
+})
 
 app.get('/', function (request, response) {
 
