@@ -1,10 +1,14 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
-var klista = require('./klista');
 var users = require('./users');
+var cookieparser = require('cookie-parser');
+
+//Käytettävät sql luokat
 var tarvikkeet = require('./tarvikkeet');
 var varastot = require('./varastot');
-var cookieparser = require('cookie-parser');
+var klista = require('./klista');
+var yksikot = require('./yksikot');
+var tarviketyypit = require('./tarviketyypit');
 
 const http = require('http');
 const hostname = '127.0.0.1';
@@ -48,6 +52,18 @@ app.route('/varastot')
     .post(varastot.addNew)
     .put(varastot.update)
     .delete(varastot.delete);
+
+app.route('/yksikot')
+    .get(yksikot.fetchAll)
+    .post(yksikot.addNew)
+    .put(yksikot.update)
+    .delete(yksikot.delete);
+
+app.route('/tarviketyypit')
+    .get(tarviketyypit.fetchAll)
+    .post(tarviketyypit.addNew)
+    .put(tarviketyypit.update)
+    .delete(tarviketyypit.delete);
 
 app.route('/users')
     .post(users.register);
