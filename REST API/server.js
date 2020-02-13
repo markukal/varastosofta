@@ -3,12 +3,14 @@ var express = require('express');
 var users = require('./users');
 var cookieparser = require('cookie-parser');
 
-//Käytettävät sql luokat
+//Käytettävät tietokantafunktiot
 var tarvikkeet = require('./tarvikkeet');
 var varastot = require('./varastot');
 var klista = require('./klista');
 var yksikot = require('./yksikot');
 var tarviketyypit = require('./tarviketyypit');
+var tapahtumatyypit = require('./tapahtumatyypit');
+var ostoskori = require('./ostoskori');
 
 const http = require('http');
 const hostname = '127.0.0.1';
@@ -64,6 +66,18 @@ app.route('/tarviketyypit')
     .post(tarviketyypit.addNew)
     .put(tarviketyypit.update)
     .delete(tarviketyypit.delete);
+
+app.route('/tapahtumatyypit')
+    .get(tapahtumatyypit.fetchAll)
+    .post(tapahtumatyypit.addNew)
+    .put(tapahtumatyypit.update)
+    .delete(tapahtumatyypit.delete);
+
+app.route('/ostoskori')
+    .get(ostoskori.fetchAll)
+    .post(ostoskori.addNew)
+    .put(ostoskori.update)
+    .delete(ostoskori.delete);
 
 app.route('/users')
     .post(users.register);
