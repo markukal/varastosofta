@@ -2,8 +2,16 @@
 var express = require('express');
 var klistat = require('./klistat');
 var users = require('./users');
-var tarvikkeet = require('./tarvikkeet');
 var cookieparser = require('cookie-parser');
+
+//Käytettävät tietokantafunktiot
+var tarvikkeet = require('./tarvikkeet');
+var varastot = require('./varastot');
+var klistat = require('./klistat');
+var yksikot = require('./yksikot');
+var tarviketyypit = require('./tarviketyypit');
+var tapahtumatyypit = require('./tapahtumatyypit');
+var ostoskori = require('./ostoskori');
 
 const http = require('http');
 const hostname = '127.0.0.1';
@@ -43,6 +51,36 @@ app.route('/tarvikkeet')
     .post(tarvikkeet.addNew)
     .put(tarvikkeet.update)
     .delete(tarvikkeet.delete);
+
+app.route('/varastot')
+    .get(varastot.fetchAll)
+    .post(varastot.addNew)
+    .put(varastot.update)
+    .delete(varastot.delete);
+
+app.route('/yksikot')
+    .get(yksikot.fetchAll)
+    .post(yksikot.addNew)
+    .put(yksikot.update)
+    .delete(yksikot.delete);
+
+app.route('/tarviketyypit')
+    .get(tarviketyypit.fetchAll)
+    .post(tarviketyypit.addNew)
+    .put(tarviketyypit.update)
+    .delete(tarviketyypit.delete);
+
+app.route('/tapahtumatyypit')
+    .get(tapahtumatyypit.fetchAll)
+    .post(tapahtumatyypit.addNew)
+    .put(tapahtumatyypit.update)
+    .delete(tapahtumatyypit.delete);
+
+app.route('/ostoskori')
+    .get(ostoskori.fetchAll)
+    .post(ostoskori.addNew)
+    .put(ostoskori.update)
+    .delete(ostoskori.delete);
 
 app.route('/users')
     .post(users.register);

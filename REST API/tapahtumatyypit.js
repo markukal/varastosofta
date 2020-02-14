@@ -3,10 +3,10 @@ var connection = require('./connection');
 
 module.exports = 
 {
-    //Tietojen haku tarvikkeet taulusta
+    //Tietojen haku tapahtumatyypit taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tarvikkeet";
+        sqlQuery = "SELECT * FROM tapahtumatyypit";
 
         var i = 0;//Apumuuttuja
 
@@ -25,7 +25,7 @@ module.exports =
         }
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe haettaessa tapahtumatyypit-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -37,14 +37,13 @@ module.exports =
         });
     },
 
-    //Uuden tarvikkeen lisäys
+    //Uuden tapahtumatyypin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tarvikkeet (tarvikeID, tyyppiID, varastoID, nimi, kuvaus, maara) VALUES (" + null + ", " + 
-        req.query.tyyppiID + ", " + req.query.varastoID +", '" + req.query.nimi + "', '" + req.query.kuvaus + "', " + req.query.maara + ")";
+        sqlQuery = "INSERT INTO tapahtumatyypit (ttyyppiID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe lisätessä dataa tapahtumatyypit-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -56,14 +55,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen tietojen päivitys
+    //Tapahtumatyypin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ req.query.tyyppiID + ", varastoID =" + req.query.varastoID + ", nimi ='" + req.query.nimi + 
-        "', kuvaus ='"+ req.query.kuvaus +"', maara="+ req.query.maara + " WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "UPDATE tapahtumatyypit SET nimi ='"+ req.query.nimi + "' WHERE ttyyppiID=" + req.query.ttyyppiID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe päivittäessä dataa tapahtumatyypit-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -75,13 +73,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen poisto
+    //Tapahtumatyypin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "DELETE FROM tapahtumatyypit WHERE ttyyppiID=" + req.query.ttyyppiID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe poistaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe poistaessa dataa tapahtumatyypit-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {

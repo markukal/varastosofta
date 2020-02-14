@@ -3,10 +3,10 @@ var connection = require('./connection');
 
 module.exports = 
 {
-    //Tietojen haku tarvikkeet taulusta
+    //Tietojen haku yksikot taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tarvikkeet";
+        sqlQuery = "SELECT * FROM yksikot";
 
         var i = 0;//Apumuuttuja
 
@@ -25,7 +25,7 @@ module.exports =
         }
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe haettaessa yksikot-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -37,14 +37,13 @@ module.exports =
         });
     },
 
-    //Uuden tarvikkeen lisäys
+    //Uuden yksikon lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tarvikkeet (tarvikeID, tyyppiID, varastoID, nimi, kuvaus, maara) VALUES (" + null + ", " + 
-        req.query.tyyppiID + ", " + req.query.varastoID +", '" + req.query.nimi + "', '" + req.query.kuvaus + "', " + req.query.maara + ")";
+        sqlQuery = "INSERT INTO yksikot (yksikkoID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe lisätessä dataa yksikot-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -56,14 +55,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen tietojen päivitys
+    //Yksikon tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ req.query.tyyppiID + ", varastoID =" + req.query.varastoID + ", nimi ='" + req.query.nimi + 
-        "', kuvaus ='"+ req.query.kuvaus +"', maara="+ req.query.maara + " WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "UPDATE yksikot SET nimi ='"+ req.query.nimi + "' WHERE yksikkoID=" + req.query.yksikkoID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe päivittäessä dataa yksikot-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -75,13 +73,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen poisto
+    //Varaston poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "DELETE FROM yksikot WHERE yksikkoID=" + req.query.yksikkoID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe poistaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe poistaessa dataa yksikot-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {

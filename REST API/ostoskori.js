@@ -3,10 +3,10 @@ var connection = require('./connection');
 
 module.exports = 
 {
-    //Tietojen haku tarvikkeet taulusta
+    //Tietojen haku ostoskori taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tarvikkeet";
+        sqlQuery = "SELECT * FROM ostoskori";
 
         var i = 0;//Apumuuttuja
 
@@ -25,7 +25,7 @@ module.exports =
         }
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe haettaessa ostoskori-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -37,14 +37,13 @@ module.exports =
         });
     },
 
-    //Uuden tarvikkeen lisäys
+    //Uuden ostoskorin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tarvikkeet (tarvikeID, tyyppiID, varastoID, nimi, kuvaus, maara) VALUES (" + null + ", " + 
-        req.query.tyyppiID + ", " + req.query.varastoID +", '" + req.query.nimi + "', '" + req.query.kuvaus + "', " + req.query.maara + ")";
+        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara) VALUES (" + null + ", " + req.query.tarvikeID + ", " + req.query.maara + ")";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe lisätessä dataa ostoskori-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -56,14 +55,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen tietojen päivitys
+    //Ostoskorin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ req.query.tyyppiID + ", varastoID =" + req.query.varastoID + ", nimi ='" + req.query.nimi + 
-        "', kuvaus ='"+ req.query.kuvaus +"', maara="+ req.query.maara + " WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "UPDATE ostoskori SET tarvikeID="+ req.query.tarvikeID + ", maara ="+ req.query.maara + " WHERE ostosID=" + req.query.ostosID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
+                console.log("Virhe päivittäessä dataa ostoskori-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
@@ -75,13 +73,13 @@ module.exports =
         });
     },
 
-    //Tarvikkeen poisto
+    //Ostoskorin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + req.query.ostosID;
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe poistaessa dataa tarvikkeet-taulusta, syy: " + error);
+                console.log("Virhe poistaessa dataa ostoskori-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
