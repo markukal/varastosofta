@@ -26,6 +26,7 @@ module.exports =
             sqlQuery = "SELECT * FROM klistat;"
         }
 
+
         //Lokitetaan hakulauseke palvelimelle debuggausta varten. Tietoturvasyistä oletuksena kommentoitu
         //console.log(sqlQuery);
         
@@ -45,13 +46,13 @@ module.exports =
     },
 
     // Poistaa klistaID-indeksin mukaisen rivin klistat-taulusta.
-    remove: function (req, res) {
+    delete: function (req, res) {
 
         if (req.query.klistaID == "" && req.query.klistaID == undefined) {
-            sqlQuery = "REMOVE * FROM klistat;"
+            sqlQuery = "DELETE * FROM klistat;"
         }
         else if (req.query.klistaID != "") {
-            sqlQuery = "REMOVE FROM klistat WHERE klistaID='" + req.query.klistaID + "';";   
+            sqlQuery = "DELETE FROM klistat WHERE klistaID='" + req.query.klistaID + "';";  
         }
 
 
@@ -71,17 +72,18 @@ module.exports =
     },
 
     // Lisää klistat tauluun tarvikkeen.
-    add: function (req, res) {
+    addNew: function (req, res) {
 
         var tarID = req.query.tarvikeID;
         var pv = req.query.pvm;
 
-        if (tarID != "" && tarID != null && pvm != "" && pvm != undefined) {
-            sqlQuery = "INSERT INTO klista (klistaID, tarvikeID, pvm)" + " " +
+        if (tarID != "" && tarID != null && pv != "" && pv != undefined) {
+            sqlQuery = "INSERT INTO klistat (tarvikeID, pvm)" + " " +
             "VALUES " + "(" + "'" + tarID + "'" + "," 
-            + "'" + pvm + "'" + ")" + ";";
+            + "'" + pv + "'" + ")" + ";";
         }
 
+        console.log(sqlQuery);
 
         // Suoritetaan muodostettu hakulauseke.
         connection.query(sqlQuery, function (error, results, fields) {
@@ -97,6 +99,34 @@ module.exports =
             }
         });
 
-    }
+    },
+
+        // Päivittää klistat taulusta parametrien mukaisen tarvikkeen.
+        update: function (req, res) {
+
+            var tarID = req.query.tarvikeID;
+            var pv = req.query.pvm;
+            var id = req.query.klistaID;
+    
+            if (tarID != "" && tarID != undefined && tarID != null && pv != "" && pv != undefined && pv != null) {
+                sqlQuery = "UPDATE klistat SET tarvikeID ="+ tarID + ", pvm =" + pv + " WHERE tarvikeID=" + id;
+            }
+    
+    
+            // Suoritetaan muodostettu hakulauseke.
+            connection.query(sqlQuery, function (error, results, fields) {
+                if (error) {
+                    console.log("Virhe muokattaessa dataa klista-taulusta, syy: " + error);
+                    res.send({ "status": 500, "error": error, "response": null });
+                }
+                else {
+                    /*console.log("Data = " + JSON.stringify(results));
+                    console.log("Params = " + JSON.stringify(req.query));*/
+    
+                    res.json(results);
+                }
+            });
+    
+        }
 
 }

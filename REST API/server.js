@@ -1,6 +1,6 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
-var klista = require('./klista');
+var klistat = require('./klistat');
 var users = require('./users');
 var tarvikkeet = require('./tarvikkeet');
 var cookieparser = require('cookie-parser');
@@ -31,10 +31,12 @@ app.use(express.urlencoded({ extended: false}));
 app.use(express.static('/'));
 
 // Reitit tietokantafunktioihin.
-app.route('/klista')
-    .get(klista.fetchAll)
-    .delete(klista.remove)
-    .put(klista.add);
+app.route('/klistat')
+    .get(klistat.fetchAll)
+    .post(klistat.addNew)
+    .put(klistat.update)
+    .delete(klistat.delete);
+    
 
 app.route('/tarvikkeet')
     .get(tarvikkeet.fetchAll)
