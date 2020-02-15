@@ -6,6 +6,7 @@ var cookieparser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 var flash = require('connect-flash');
+var path = require('path');
 //Käytettävät tietokantafunktiot
 var tarvikkeet = require('./tarvikkeet');
 var varastot = require('./varastot');
@@ -38,18 +39,24 @@ var allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 //app.use(cookieparser);
 
+// ejs
 app.set('view-engine', 'ejs')
 app.engine('html', require('ejs').renderFile);
-app.use(express.urlencoded({ extended: false}));
 
-app.use(express.static('/'));
+app.use(express.urlencoded({ extended: true}));
 
-// tarvitaan passportia varten
+//app.use(express.static('/'));
+// staattiset tiedostot haetaan public kansion alta. esim css tiedostot
+app.use(express.static(path.join(__dirname, '../public')));
+
+// tarvitaan passportia varten. express session
 app.use(session({
     secret: 'satunnaistatekstia',
     resave: true,
     saveUninitialized: true
 })); 
+
+// passport middleware
 app.use(passport.initialize());
 app.use(passport.session()); // autentikoituneena pysyminen
 app.use(flash());
