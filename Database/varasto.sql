@@ -47,12 +47,20 @@ CREATE TABLE IF NOT EXISTS `kayttajat` (
   `luokkaID` int(30) NOT NULL,
   `etunimi` varchar(30) NOT NULL,
   `sukunimi` varchar(50) NOT NULL,
-  `kayttajanimi` varchar(30) NOT NULL,
+  `kayttajatunnus` varchar(30) NOT NULL,
   `salasana` char(60) NOT NULL,
   `kayttoOikeus` int(11) NOT NULL,
   PRIMARY KEY (`kayttajaID`),
   KEY `luokkaID` (`luokkaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `kayttajat`
+--
+
+INSERT INTO `kayttajat` (`kayttajaID`, `luokkaID`, `etunimi`, `sukunimi`, `kayttajatunnus`, `salasana`, `kayttoOikeus`) VALUES
+(7, 1, 'etunimi1', 'sukunimi1', 'opettaja', '$2b$10$QkE1Ebw2nfndh/scL5wIeuH1YSHVzjivtWVyTbBsVi4vlhaGzjs5q', 1),
+(8, 1, 'etunimi2', 'sukunimi2', 'oppilas', '$2b$10$4dSuD9xsVkkGbfdVckX6YelpbH90bPmuVVO1Y6gN5Ib5kIpBBUjRa', 2);
 
 -- --------------------------------------------------------
 
@@ -81,6 +89,13 @@ CREATE TABLE IF NOT EXISTS `luokat` (
   `nimi` varchar(50) NOT NULL,
   PRIMARY KEY (`luokkaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `luokat`
+--
+
+INSERT INTO `luokat` (`luokkaID`, `nimi`) VALUES
+(1, 'Luokka1');
 
 -- --------------------------------------------------------
 

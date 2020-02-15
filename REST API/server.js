@@ -3,7 +3,10 @@ var express = require('express');
 var klistat = require('./klistat');
 var users = require('./users');
 var cookieparser = require('cookie-parser');
-
+var passport = require('passport');
+var session = require('express-session');
+var flash = require('connect-flash');
+var path = require('path');
 //Käytettävät tietokantafunktiot
 var tarvikkeet = require('./tarvikkeet');
 var varastot = require('./varastot');
@@ -16,6 +19,9 @@ var ostoskori = require('./ostoskori');
 const http = require('http');
 const hostname = '127.0.0.1';
 const port = process.env.PORT || 3002;
+
+// TARVITAAN AUTENTIKOINTIIN
+require('../passport-config')(passport);
 
 var app = express();
 // Määrittelevät selaimen kautta käytettävät tiedostot.
@@ -33,10 +39,27 @@ var allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 //app.use(cookieparser);
 
+// ejs
 app.set('view-engine', 'ejs')
-app.use(express.urlencoded({ extended: false}));
+app.engine('html', require('ejs').renderFile);
 
-app.use(express.static('/'));
+app.use(express.urlencoded({ extended: true}));
+
+//app.use(express.static('/'));
+// staattiset tiedostot haetaan public kansion alta. esim css tiedostot
+app.use(express.static(path.join(__dirname, '../public')));
+
+// tarvitaan passportia varten. express session
+app.use(session({
+    secret: 'satunnaistatekstia',
+    resave: true,
+    saveUninitialized: true
+})); 
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session()); // autentikoituneena pysyminen
+app.use(flash());
 
 // Reitit tietokantafunktioihin.
 app.route('/klistat')
@@ -88,9 +111,13 @@ app.route('/users')
 app.get('/login',  function (req, res) {
     res.render('login.ejs')
 })
+app.post('/login', passport.authenticate('local', {
+    successRedirect : '/' ,
+    failureRedirect : '/login'
+}));
 
-app.get('/', function (request, response) {
-
+app.get('/', function (req, res) {
+    res.render('index.html')
     /* if (request.cookies.userData == null) {
              response.redirect("/login");
          }
@@ -100,13 +127,27 @@ app.get('/', function (request, response) {
                  response.write(data);
                  response.end();
              });
-         } */
+         } 
          fs.readFile("./welcome.html", function (err, data) {
             response.writeHead(200, { 'Content-Type': 'text/html' });
             response.write(data);
             response.end();  
         });   
+    */
     });
+
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next()
+    }
+    res.redirect('/login')
+}
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    next()
+}
      
      
     app.listen(port, hostname, () => {
