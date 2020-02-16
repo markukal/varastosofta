@@ -11,49 +11,37 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+<script>
+    
+    $(function () {
+
+        $("#etusivu").click(function naytaEtusivu() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/yhteenveto");
+        })
+
+
+        $("#hallinnointi").click(function naytaHallinnointi() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/hallinnointi");
+        })
+
+
+    });
+
+</script>
 <body>
 
     <div class="topnav">
         <a href="#etusivu" id="etusivu">Etusivu</a>
         <a href="#linkki1" id="linkki1">Linkki1</a>
         <a href="#linkki2" id="linkki2">Linkki2</a>
-        <a href="#linkki3" id="linkki3">Linkki3</a>
+        <a href="#hallinnointi" id="hallinnointi">Hallinnointi</a>
     </div>
     
-    <br>
-    <br>
-    <br>
+    <div id="maindiv">
 
-    <table class="table" id="taulu">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Tarviketyyppi</th>
-                <th scope="col">Nimike</th>
-                <th scope="col">Kuvaus</th>
-                <th scope="col">Määrä</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th scope="row">Työkalu</th>
-                <td>Vasara</td>
-                <td>Tosi hyvä vasara, kahvassa kumituppi</td>
-                <td>3 (yksikköä)</td>
-            </tr>
-            <tr>
-                <th scope="row">Puutavara</th>
-                <td>Mäntylauta</td>
-                <td>20mm x 100 mm raakalauta</td>
-                <td>25 (yksikköä)</td>
-            </tr>
-            <tr>
-                <th scope="row">Metalli</th>
-                <td>Alumiini</td>
-                <td>2mm paksu alumiini</td>
-                <td>3 (yksikköä)</td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
     
 </body>
 </html>
