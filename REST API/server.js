@@ -136,6 +136,15 @@ app.get('/', function (req, res) {
     */
     });
 
+app.get('/yhteenveto', (req, res) => {
+    res.render('yhteenveto.html');
+});
+
+app.get('/hallinnointi', (req, res) => {
+    res.render('hallinnointi.html');
+});
+
+
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
