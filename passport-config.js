@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
-const mysql = require('mysql')
+//const mysql = require('mysql')
 const connection = require('./REST API/connection')
 
 module.exports = function(passport) {
