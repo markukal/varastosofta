@@ -27,16 +27,13 @@ module.exports =
            // "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
 
         }
-        else if (req.query.tyoteID == undefined && req.query.proNimi == undefined) {
+        else if (req.query.klistaID == undefined && req.query.tarvikeID == undefined) {
             sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, tarvikkeet.maara AS Määrä, tarvikkeet.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
             "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
 
             // Vaihtoehtoinen hakulauseke toisenlaiseen klistat-taulun rakenteeseen.
            // sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, klistat.maara AS Määrä, klistat.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
            // "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
-        }
-        else if (req.query.tyoteID != undefined || req.query.proNimi != undefined) {
-
         }
 
 
@@ -61,18 +58,14 @@ module.exports =
     // Poistaa klistaID-indeksin mukaisen rivin klistat-taulusta.
     delete: function (req, res) {
 
-        if (req.query.klistaID == "" && req.query.klistaID == undefined) {
-            sqlQuery = "DELETE * FROM klistat;"
-        }
-        else if (req.query.klistaID != "") {
             sqlQuery = "DELETE FROM klistat WHERE klistaID='" + req.query.klistaID + "';";  
-        }
+
 
 
         // Suoritetaan muodostettu hakulauseke.
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
-                console.log("Virhe poistettaessa klista-taulusta, syy: " + error);
+                console.log("Virhe poistettaessa klistat-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {

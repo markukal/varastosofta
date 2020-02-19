@@ -6,10 +6,14 @@ module.exports =
     //Tietojen haku tarvikkeet taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tarvikkeet";
+        sqlQuery = "SELECT tarvikkeet.tarvikeID AS ID, tarviketyypit.nimi AS Tyyppi, tarvikkeet.nimi AS Nimi, varastot.nimi AS Varasto, tarvikkeet.hinta AS Hinta, " +
+        "tarvikkeet.kuvaus AS Kuvaus, tarvikkeet.maara AS Määrä, yksikot.nimi AS Yksikkö, tarvikkeet.rarvo AS Hälytysraja, tarvikkeet.hpaikka AS Hankintapaikka FROM tarvikkeet " +
+        "INNER JOIN tarviketyypit ON tarvikkeet.tarvikeID = tarviketyypit.tyyppiID " +
+        "INNER JOIN varastot ON tarvikkeet.varastoID = varastot.varastoID " +
+        "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID";
 
         var i = 0;//Apumuuttuja
-
+        console.log(sqlQuery);
         //Käydään req.query läpi ja lisätään hakuun ehdot 
         for (var key in req.query){
 
