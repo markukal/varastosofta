@@ -19,10 +19,24 @@ module.exports =
     fetchAll: function (req, res) {
             
         if (req.query.klistaID == "" &&  req.query.tarvikeID == "") {
-            sqlQuery = "SELECT * FROM klistat;"
+            sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, tarvikkeet.maara AS Määrä, tarvikkeet.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
+            "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
+
+            // Vaihtoehtoinen hakulauseke toisenlaiseen klistat-taulun rakenteeseen.
+            // sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, klistat.maara AS Määrä, klistat.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
+           // "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
+
         }
         else if (req.query.tyoteID == undefined && req.query.proNimi == undefined) {
-            sqlQuery = "SELECT * FROM klistat;"
+            sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, tarvikkeet.maara AS Määrä, tarvikkeet.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
+            "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
+
+            // Vaihtoehtoinen hakulauseke toisenlaiseen klistat-taulun rakenteeseen.
+           // sqlQuery = "SELECT klistat.klistaID, tarvikkeet.nimi AS Nimi, klistat.maara AS Määrä, klistat.hinta AS Hinta, klistat.pvm AS Päivämäärä FROM klistat " + 
+           // "INNER JOIN tarvikkeet ON klistat.tarvikeID = tarvikkeet.tarvikeID;"
+        }
+        else if (req.query.tyoteID != undefined || req.query.proNimi != undefined) {
+
         }
 
 
