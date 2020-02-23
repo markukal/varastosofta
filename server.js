@@ -1,27 +1,27 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
-var klistat = require('./klistat');
-var users = require('./users');
 var cookieparser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 var flash = require('connect-flash');
 var path = require('path');
 //Käytettävät tietokantafunktiot
-var tarvikkeet = require('./tarvikkeet');
-var varastot = require('./varastot');
-var klistat = require('./klistat');
-var yksikot = require('./yksikot');
-var tarviketyypit = require('./tarviketyypit');
-var tapahtumatyypit = require('./tapahtumatyypit');
-var ostoskori = require('./ostoskori');
+var klistat = require('./control/klistat');
+var users = require('./control/users');
+var tarvikkeet = require('./control/tarvikkeet');
+var varastot = require('./control/varastot');
+var klistat = require('./control/klistat');
+var yksikot = require('./control/yksikot');
+var tarviketyypit = require('./control/tarviketyypit');
+var tapahtumatyypit = require('./control/tapahtumatyypit');
+var ostoskori = require('./control/ostoskori');
 
 const http = require('http');
 const hostname = '127.0.0.1';
 const port = process.env.PORT || 3002;
 
 // TARVITAAN AUTENTIKOINTIIN
-require('../passport-config')(passport);
+require('./control/passport-config')(passport);
 
 var app = express();
 // Määrittelevät selaimen kautta käytettävät tiedostot.
@@ -47,7 +47,7 @@ app.use(express.urlencoded({ extended: true}));
 
 //app.use(express.static('/'));
 // staattiset tiedostot haetaan public kansion alta. esim css tiedostot
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, './public')));
 
 // tarvitaan passportia varten. express session
 app.use(session({
