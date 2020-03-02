@@ -1,19 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Varastokirjanpitosovellus</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./public/css/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Varastosofta</title>
 </head>
 <script>
-    
-    $(function () {
+
+    $(document).ready(function () {
+
+        function lataaEtusivu() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/yhteenveto");
+        }
 
         $("#etusivu").click(function naytaEtusivu() {
             $("#maindiv").empty();
@@ -21,27 +28,107 @@
         })
 
 
-        $("#hallinnointi").click(function naytaHallinnointi() {
+        $("#asetukset").click(function naytaAsetukset() {
             $("#maindiv").empty();
-            $("#maindiv").load("/hallinnointi");
+            $("#maindiv").load("/asetukset");
         })
 
+        $("#kerailylista").click(function naytaKerailylista() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/kerailylista");
+        })
+
+        $("#ostoskorisivu").click(function naytaKerailylista() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/ostoskorisivu");
+        })
+        
+        function haeVarastot() {
+            $.get("http://localhost:3002/varastot", function (data, status) {
+                $("#varastomenu").append('<a class="dropdown-item" href="#">Kaikki varastot</a>')
+                $.each(data, function (i, item) {
+                    $("#varastomenu").append(
+                        '<a class="dropdown-item" href="#" val="' + item.varastoID + '">' + item.nimi + '</a>'
+                    )
+                });
+            });
+        }
+
+        $("#varastomenu").click(function () {
+            $("#varastoDropdown").text(""+ document.getElementById("varastomenu").textContent +"");
+        })
+
+        lataaEtusivu();
+        haeVarastot();
+        
 
     });
 
 </script>
+<header>
+
+    <!-- Ylänavi alkaa -->
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" id="ylanavi">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#etusivu" id="etusivu">Etusivu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#asetukset" id="asetukset">Asetukset</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#kerailylista" id="kerailylista">Keräilylista</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#ostoskorisivu" id="ostoskorisivu">Ostoskori</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Ylänavi päättyy -->
+
+    <!-- Sivupalkki alkaa -->
+
+    <div class="wrapper">
+        <nav id="sidebar">
+
+            <!-- Dropdown-nappi varaston valintaan -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false" id="varastoDropdown">
+                    Kaikki varastot
+                </button>
+                <div class="dropdown-menu" id="varastomenu">
+                    
+                </div>
+            </div>
+              
+
+
+        </nav>
+
+    </div>
+
+    <!-- Sivupalkki päättyy -->
+
+</header>
+
 <body>
 
-    <div class="topnav">
-        <a href="#etusivu" id="etusivu">Etusivu</a>
-        <a href="#tarvikkeet" id="tarvikkeet">Tarvikkeet</a>
-        <a href="#klistat" id="klistat">Keräilylista</a>
-        <a href="#hallinnointi" id="hallinnointi">Hallinnointi</a>
-    </div>
-    
-    <div id="maindiv">
 
+
+    <div id="maindiv">
+        <!-- Tämän divin sisälle ladataan kaikki toiminnot muista html:istä -->
     </div>
-    
+
 </body>
+
 </html>

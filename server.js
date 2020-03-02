@@ -140,6 +140,18 @@ app.get('/yhteenveto', (req, res) => {
     res.render('yhteenveto.html');
 });
 
+app.get('/asetukset', (req, res) => {
+    res.render('asetukset.html');
+});
+
+app.get('/kerailylista', (req, res) => {
+    res.render('kerailylista.html');
+});
+
+app.get('/ostoskorisivu', (req, res) => {
+    res.render('ostoskorisivu.html');
+});
+
 app.get('/hallinnointi', (req, res) => {
     res.render('hallinnointi.html');
 });

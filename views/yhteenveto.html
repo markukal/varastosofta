@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,16 +13,83 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <script>
-    
+    $(document).ready(function () {
+
+        function lataaTaulukko() {
+            $("#taulu").empty();
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">(painikesarake)</th></tr>');
+            $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#taulu").append(
+                        "<tr>" +
+                        "<th scope='row'>" + data[i].ID + "</th>" +
+                        "<td>" + data[i].Nimi + "</td>" +
+                        "<td>" + data[i].Kuvaus + "</td>" +
+                        "<td>" + data[i].Määrä + "</td>" +
+                        "<td>" + data[i].Yksikkö + "</td>" + "</tr>"
+
+
+                    )
+                    $("#taulu").append("</tbody>")
+                }
+            })
+        };
+        lataaTaulukko();
+    });
+
+
+
+
 
 </script>
+
 <body>
 
+    <div id="yhteenvetodiv">
+        <table class="table" id="taulu">
+        </table>
+    </div>
 
-    
+
+
     <br>
     <br>
     <br>
+    <!--
+    <table class="table" id="taulu">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nimike</th>
+                <th scope="col">Kuvaus</th>
+                <th scope="col">Määrä</th>
+                <th scope="col">Yksikkö</th>
+                <th scope="col">(painikesarake)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">Työkalu</th>
+                <td>Vasara</td>
+                <td>Tosi hyvä vasara, kahvassa kumituppi</td>
+                <td>3 (yksikköä)</td>
+            </tr>
+            <tr>
+                <th scope="row">Puutavara</th>
+                <td>Mäntylauta</td>
+                <td>20mm x 100 mm raakalauta</td>
+                <td>25 (yksikköä)</td>
+            </tr>
+            <tr>
+                <th scope="row">Metalli</th>
+                <td>Alumiini</td>
+                <td>2mm paksu alumiini</td>
+                <td>3 (yksikköä)</td>
+            </tr>
+        </tbody>
+    </table>
+
 
     <table class="table" id="taulu">
         <thead class="thead-dark">
@@ -53,6 +121,7 @@
             </tr>
         </tbody>
     </table>
-    
+    -->
 </body>
+
 </html>
