@@ -42,31 +42,76 @@
             $("#maindiv").empty();
             $("#maindiv").load("/ostoskorisivu");
         })
-        
+        /*
         function haeVarastot() {
             $.get("http://localhost:3002/varastot", function (data, status) {
-                $("#varastomenu").append('<a class="dropdown-item" href="#">Kaikki varastot</a>')
                 $.each(data, function (i, item) {
-                    $("#varastomenu").append(
-                        '<a class="dropdown-item" href="#" val="' + item.varastoID + '">' + item.nimi + '</a>'
+                    $("#dropdown").append(
+                        '<option value="' + item.varastoID + '">' + item.nimi + '</option>'
                     )
                 });
             });
         }
 
-        $("#varastomenu").click(function () {
-            $("#varastoDropdown").text(""+ document.getElementById("varastomenu").textContent +"");
+        function suodataTaulukko(vid) {
+                $("#taulu").empty();
+                $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">(painikesarake)</th></tr>');
+                $.get("http://127.0.0.1:3002/tarvikkeet", { "tarvikkeet.varastoID": vid }).done(function (data) {
+                    var len = data.length;
+                    for (var i = 0; i < len; i++) {
+                        $("#taulu").append(
+                            "<tr>" +
+                            "<th scope='row'>" + data[i].ID + "</th>" +
+                            "<td>" + data[i].Nimi + "</td>" +
+                            "<td>" + data[i].Kuvaus + "</td>" +
+                            "<td>" + data[i].Määrä + "</td>" +
+                            "<td>" + data[i].Yksikkö + "</td>" + "</tr>"
+
+
+                        )
+                        $("#taulu").append("</tbody>")
+                    }
+                })
+
+
+            };
+
+        $("#dropdown").change(function (){
+            var vid = $("#dropdown").find(":selected").val();
+
+            if (vid != "defaultval") {
+                suodataTaulukko(vid);
+            }
+            else {
+                $("#taulu").empty();
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">(painikesarake)</th></tr>');
+            $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#taulu").append(
+                        "<tr>" +
+                        "<th scope='row'>" + data[i].ID + "</th>" +
+                        "<td>" + data[i].Nimi + "</td>" +
+                        "<td>" + data[i].Kuvaus + "</td>" +
+                        "<td>" + data[i].Määrä + "</td>" +
+                        "<td>" + data[i].Yksikkö + "</td>" + "</tr>"
+                         )
+                    $("#taulu").append("</tbody>")
+                }
+            })
+
+            }
         })
 
         lataaEtusivu();
         haeVarastot();
-        
-
+        */
+        lataaEtusivu(); // todo: lataa etusivun vain ensimmäisellä kerralla
     });
 
 </script>
-<header>
-
+<body>
+    
     <!-- Ylänavi alkaa -->
 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" id="ylanavi">
@@ -93,40 +138,13 @@
         </div>
     </nav>
 
+
     <!-- Ylänavi päättyy -->
 
-    <!-- Sivupalkki alkaa -->
-
-    <div class="wrapper">
-        <nav id="sidebar">
-
-            <!-- Dropdown-nappi varaston valintaan -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false" id="varastoDropdown">
-                    Kaikki varastot
-                </button>
-                <div class="dropdown-menu" id="varastomenu">
-                    
-                </div>
-            </div>
-              
-
-
-        </nav>
-
-    </div>
-
-    <!-- Sivupalkki päättyy -->
-
-</header>
-
-<body>
-
-
-
-    <div id="maindiv">
-        <!-- Tämän divin sisälle ladataan kaikki toiminnot muista html:istä -->
+    <div class="mainwrapper">
+        <div id="maindiv">
+            <!-- Tämän divin sisälle ladataan kaikki toiminnot muista html:istä -->
+        </div>
     </div>
 
 </body>

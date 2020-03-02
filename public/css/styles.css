@@ -1,18 +1,28 @@
-body {
-  background-color: rgb(235, 235, 235);
-}
+body, html {
+  height: 100%;
+  background-color:rgb(41, 43, 44);
+  }
+
 
 #ylanavi {
   position:static;
 }
 
-.wrapper {
-  display: flex;
-  width: 100%;  
+.mainwrapper {
+  background-color: rgb(235, 235, 235);
+  margin-left: 8%;
+  margin-right: 8%;
+  height: 100%;
 }
 
+#suodatusContainer {
+  padding-top: 2%;
+  text-align: center;
+}
+
+
 #sidebar {
-  width: 250px;
+  width: 15%;
   position: fixed;
   left: 0;
   height: 100%;
@@ -21,16 +31,18 @@ body {
 }
 
 #taulu {
-  margin-top: 5%;
-  margin-left: 280px;
-  margin-right: 5%;
+  position: relative;
+  margin-top: 2%;
+  margin-left:auto; 
+  margin-right:auto;
   width:80%;
   transition: all 0.5s;
 }
 
-#varastoDropdown {
-    position:relative;
-    top:40px; 
-    left:5%;
+
+
+#dropdown {
+  width: 15%;
+  margin-right: 5%;
 }
 
