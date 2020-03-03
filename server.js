@@ -121,11 +121,14 @@ app.get('/yhteenveto', (req, res) => {
 });
 
 app.get('/asetukset', checkAuthenticated,( req, res) => {
+    // opettajan kayttooikeus = 1 , oppilaan = 2
     console.log(req.user.kayttoOikeus)
     if (req.user.kayttoOikeus == "1") {
         res.render('asetukset.html');
     }
     else {
+        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
+        // res.redirect('back')
         res.redirect('/login')
     }
 });
