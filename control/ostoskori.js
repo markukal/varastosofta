@@ -6,7 +6,9 @@ module.exports =
     //Tietojen haku ostoskori taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM ostoskori";
+        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, ostoskori.maara as maara, ostoskori.kasittelija as kasittelija FROM ostoskori " +
+                "INNER JOIN tarvikkeet ON ostoskori.tarvikeID = tarvikkeet.tarvikeID;"; 
+                
 
         var i = 0;//Apumuuttuja
 
@@ -39,7 +41,7 @@ module.exports =
 
     //Uuden ostoskorin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara) VALUES (" + null + ", " + req.query.tarvikeID + ", " + req.query.maara + ")";
+        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara, kasittelija) VALUES (" + null + ", " + req.query.tarvikeID + ", " + req.query.maara + ", '" + req.query.kasittelija +"');";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {

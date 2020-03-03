@@ -8,7 +8,7 @@ module.exports =
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
         sqlQuery = "SELECT tarvikkeet.tarvikeID AS ID, tarviketyypit.nimi AS Tyyppi, tarvikkeet.nimi AS Nimi, varastot.nimi AS Varasto, tarvikkeet.hinta AS Hinta, " +
         "tarvikkeet.kuvaus AS Kuvaus, tarvikkeet.maara AS Määrä, yksikot.nimi AS Yksikkö, tarvikkeet.rarvo AS Hälytysraja, tarvikkeet.hpaikka AS Hankintapaikka FROM tarvikkeet " +
-        "INNER JOIN tarviketyypit ON tarvikkeet.tarvikeID = tarviketyypit.tyyppiID " +
+        "INNER JOIN tarviketyypit ON tarvikkeet.tyyppiID = tarviketyypit.tyyppiID " +
         "INNER JOIN varastot ON tarvikkeet.varastoID = varastot.varastoID " +
         "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID";
 
@@ -43,8 +43,9 @@ module.exports =
 
     //Uuden tarvikkeen lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tarvikkeet (tarvikeID, tyyppiID, varastoID, nimi, kuvaus, maara) VALUES (" + null + ", " + 
-        req.query.tyyppiID + ", " + req.query.varastoID +", '" + req.query.nimi + "', '" + req.query.kuvaus + "', " + req.query.maara + ")";
+        sqlQuery = "INSERT INTO tarvikkeet (tarvikeID, tyyppiID, varastoID, nimi, kuvaus, hinta, maara, yksikkoID, hpaikka, rarvo) VALUES (" + null + ", " + 
+        connection.escape(req.query.tyyppiID) + ", " + connection.escape(req.query.varastoID) +", " + connection.escape(req.query.nimi) + ", " 
+        + connection.escape(req.query.kuvaus) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.hinta) + ", '"+ req.query.yksikkoID + "'" + ", "+ connection.escape(req.query.hpaikka) + ", "+ connection.escape(req.query.rarvo) + ");";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -62,8 +63,8 @@ module.exports =
 
     //Tarvikkeen tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ req.query.tyyppiID + ", varastoID =" + req.query.varastoID + ", nimi ='" + req.query.nimi + 
-        "', kuvaus ='"+ req.query.kuvaus +"', maara="+ req.query.maara + " WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ connection.escape(req.query.tyyppiID) + ", varastoID =" + connection.escape(req.query.varastoID) + ", nimi ='" + connection.escape(req.query.nimi) + 
+        "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -81,7 +82,7 @@ module.exports =
 
     //Tarvikkeen poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + req.query.tarvikeID;
+        sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
