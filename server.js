@@ -24,15 +24,11 @@ const port = process.env.PORT || 3002;
 require('./control/passport-config')(passport);
 
 var app = express();
-// Määrittelevät selaimen kautta käytettävät tiedostot.
-//app.use(express.static(__dirname + '/www'));
-//app.use(express.static(__dirname + '/www/images'));
 
 var allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
-
     next();
 }
 
@@ -118,30 +114,20 @@ app.post('/login', passport.authenticate('local', {
 
 app.get('/', function (req, res) {
     res.render('index.html')
-    /* if (request.cookies.userData == null) {
-             response.redirect("/login");
-         }
-         else {
-             fs.readFile("front.html", function (err, data) {
-                 response.writeHead(200, { 'Content-Type': 'text/html' });
-                 response.write(data);
-                 response.end();
-             });
-         } 
-         fs.readFile("./welcome.html", function (err, data) {
-            response.writeHead(200, { 'Content-Type': 'text/html' });
-            response.write(data);
-            response.end();  
-        });   
-    */
-    });
+});
 
 app.get('/yhteenveto', (req, res) => {
     res.render('yhteenveto.html');
 });
 
-app.get('/asetukset', (req, res) => {
-    res.render('asetukset.html');
+app.get('/asetukset', checkAuthenticated,( req, res) => {
+    console.log(req.user.kayttoOikeus)
+    if (req.user.kayttoOikeus == "1") {
+        res.render('asetukset.html');
+    }
+    else {
+        res.redirect('/login')
+    }
 });
 
 app.get('/kerailylista', (req, res) => {
@@ -169,7 +155,6 @@ function checkNotAuthenticated(req, res, next) {
     }
     next()
 }
-     
      
     app.listen(port, hostname, () => {
         console.log(`Server running AT http://${hostname}:${port}/`);
