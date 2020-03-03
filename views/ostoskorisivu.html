@@ -3,17 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Varastokirjanpitosovellus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+<script>
+    $(document).ready(function(){
+        
+        // Hakee ostoskorin rivit taulukkoon.
+        function listaaKori() {
+            $("#koriTaulu").empty();
+            $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th><th scope="col">Määrä</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
+            $.getJSON("http://127.0.0.1:3002/ostoskori", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#koriTaulu").append(
+                        "<tr>" +
+                        "<th scope='row'>" + data[i].id + "</th>" +
+                        "<td>" + data[i].nimi + "</td>" +
+                        "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].kasittelija + "</td>" + "</tr>"
+                        
+                    )
+                    $("#taulu").append("</tbody>")
+                }
+            })
+        };
+        
+        // Suorittaa listaaKori-funktion
+        listaaKori();
+        
+    })
+</script>
 <body>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    tavaraa
+    <div id="yhteenvetodiv">
+        <div id="suodatusContainer">
+            <div class="row justify-content-sm-center">
+                <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+            </div>
+        </div>
+
+
+        <table class="table" id="koriTaulu">
+        </table>
+    </div>
+
+
 </body>
 </html>
