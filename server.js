@@ -102,6 +102,7 @@ app.route('/ostoskori')
     .delete(ostoskori.delete);
 
 app.route('/users')
+    .get(users.fetchAll)
     .post(users.register);
 
 app.get('/login',  function (req, res) {
