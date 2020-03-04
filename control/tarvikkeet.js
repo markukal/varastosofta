@@ -6,8 +6,8 @@ module.exports =
     //Tietojen haku tarvikkeet taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT tarvikkeet.tarvikeID AS ID, tarviketyypit.nimi AS Tyyppi, tarvikkeet.nimi AS Nimi, varastot.nimi AS Varasto, tarvikkeet.hinta AS Hinta, " +
-        "tarvikkeet.kuvaus AS Kuvaus, tarvikkeet.maara AS Määrä, yksikot.nimi AS Yksikkö, tarvikkeet.rarvo AS Hälytysraja, tarvikkeet.hpaikka AS Hankintapaikka FROM tarvikkeet " +
+        sqlQuery = "SELECT tarvikkeet.tarvikeID AS ID, tarviketyypit.nimi AS tyyppi, tarvikkeet.nimi AS nimi, varastot.nimi AS varasto, tarvikkeet.hinta AS hinta, " +
+        "tarvikkeet.kuvaus AS kuvaus, tarvikkeet.maara AS maara, yksikot.nimi AS yksikko, tarvikkeet.rarvo AS halytysraja, tarvikkeet.hpaikka AS hankintapaikka FROM tarvikkeet " +
         "INNER JOIN tarviketyypit ON tarvikkeet.tyyppiID = tarviketyypit.tyyppiID " +
         "INNER JOIN varastot ON tarvikkeet.varastoID = varastot.varastoID " +
         "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID";

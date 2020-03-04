@@ -24,18 +24,18 @@
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">(painikesarake)</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th></tr>');
             $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
                     $("#taulu").append(
                         "<tr>" +
                         "<th scope='row'>" + data[i].ID + "</th>" +
-                        "<td>" + data[i].Nimi + "</td>" +
-                        "<td>" + data[i].Kuvaus + "</td>" +
-                        "<td>" + data[i].Määrä + "</td>" +
-                        "<td>" + data[i].Yksikkö + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Muokkaa</a>" + "</td>" + "</tr>"
+                        "<td>" + data[i].nimi + "</td>" +
+                        "<td>" + data[i].kuvaus + "</td>" +
+                        "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].yksikko + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" + "</tr>"
 
 
                     )
@@ -54,12 +54,23 @@
             }); 
 
 
-        // Listaa varastot pudotusvalikkoon.
-        function haeVarastot() {
+        // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+        function haeVarastot(dd) {
             $.get("http://localhost:3002/varastot", function (data, status) {
                 $.each(data, function (i, item) {
-                    $("#dropdown").append(
+                    $("#" + dd).append(
                         '<option value="' + item.varastoID + '">' + item.nimi + '</option>'
+                    )
+                });
+            });
+        }
+
+        // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+        function haeYksikot(dd) {
+            $.get("http://localhost:3002/yksikot", function (data, status) {
+                $.each(data, function (i, item) {
+                    $("#" + dd).append(
+                        '<option value="' + item.yksikkoID + '">' + item.nimi + '</option>'
                     )
                 });
             });
@@ -128,8 +139,30 @@
             }
         })
 
+        // Lisää tarvikkeen tietokantaan ja sulkee dialogin
+        $("#btnLuoTarvike").click(function () {
+            // to-do: Tarvikkeen lisäys dialogista.
+        })
+
+        // Avaa dialogin tarvikkeen luomista varten.
+        $("#btnLisaaTarvike").click(function () {
+            avaaLisaysDialog();
+            haeVarastot("ddVarastot");
+            haeYksikot("ddYksikot");
+        })
+
+        // Avaa dialogin tarvikkeen luomista varten.
+        function avaaLisaysDialog () {
+            $("#tarvikeDialog").dialog({
+                modal: true
+            })
+        }
+
+        // Lataa sivun avautuessa tarvikkeet taulukkoon.
         lataaTaulukko();
-        haeVarastot();
+
+        // Lataa sivun avautuessa varastot pudotusvalikkoon.
+        haeVarastot("dropdown");
 
 
 
@@ -158,13 +191,36 @@
 
                 <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
                 <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+
+                <!--Painike uuden tarvikkeen luomiseen-->
+                <button type="button" id="btnLisaaTarvike" class="btn btn-dark">Uusi tarvike</button>
             </div>
         </div>
         <table class="table" id="taulu">
         </table>
+
+        <!--Dialogi tarvikkeiden luomista varten-->
+        <div id="tarvikeDialog" title="Luo tarvike" style="display: none">
+        <form id="frmLuotarvike">
+            Nimike <br> <input type="text" name="projektinimike"><br>
+            Kuvaus <br> <input type="text" name="projektinimike"><br>
+            Yksikkö <br> 
+            <select class="form-control" id="ddYksikot">
+                <option value="defaultval">Valitse yksikkö</option>
+            </select> 
+            
+            Varasto <br>
+            <select class="form-control" id="ddVarastot">
+                <option value="defaultval">Valitse varasto</option>
+            </select>
+            <br>
+        </form>
+        <button id="btnLuotarvike" class="btn btn-primary">Lisää</button>
+
     </div>
 
-
+    
+</div>
 
     <br>
     <br>

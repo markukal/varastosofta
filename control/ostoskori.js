@@ -6,8 +6,9 @@ module.exports =
     //Tietojen haku ostoskori taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, ostoskori.maara as maara, tarvikkeet.hinta AS hinta, ostoskori.kasittelija as kasittelija FROM ostoskori " +
-                "INNER JOIN tarvikkeet ON ostoskori.tarvikeID = tarvikkeet.tarvikeID;"; 
+        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, yksikot.nimi AS yksikko, tarvikkeet.maara as varastossa, ostoskori.maara as maara, tarvikkeet.hinta AS hinta, ostoskori.kasittelija as kasittelija FROM ostoskori " +
+                "INNER JOIN tarvikkeet ON ostoskori.tarvikeID = tarvikkeet.tarvikeID " +
+                "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID;"; 
                 
 
         var i = 0;//Apumuuttuja
