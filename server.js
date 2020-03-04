@@ -55,7 +55,7 @@ app.use(session({
 // passport middleware
 app.use(passport.initialize());
 app.use(passport.session()); // autentikoituneena pysyminen
-app.use(flash());
+app.use(flash()); // käytetään virheviesteihin kirjautumisen epäonnistuessa
 
 // Reitit tietokantafunktioihin.
 app.route('/klistat')
@@ -106,11 +106,12 @@ app.route('/users')
     .post(users.register);
 
 app.get('/login',  function (req, res) {
-    res.render('login.ejs')
+    res.render('login.ejs', { message: req.flash('loginMessage') });
 })
 app.post('/login', passport.authenticate('local', {
     successRedirect : '/' ,
-    failureRedirect : '/login'
+    failureRedirect : '/login',
+	failureFlash: true
 }));
 
 app.get('/logout', function(req, res) {
