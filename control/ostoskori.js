@@ -6,7 +6,7 @@ module.exports =
     //Tietojen haku ostoskori taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, ostoskori.maara as maara, ostoskori.kasittelija as kasittelija FROM ostoskori " +
+        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, ostoskori.maara as maara, tarvikkeet.hinta AS hinta, ostoskori.kasittelija as kasittelija FROM ostoskori " +
                 "INNER JOIN tarvikkeet ON ostoskori.tarvikeID = tarvikkeet.tarvikeID;"; 
                 
 

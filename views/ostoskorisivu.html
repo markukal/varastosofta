@@ -16,7 +16,8 @@
         // Hakee ostoskorin rivit taulukkoon.
         function listaaKori() {
             $("#koriTaulu").empty();
-            $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th><th scope="col">Määrä</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
+            $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th>' +
+                '<th scope="col">Määrä</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
             $.getJSON("http://127.0.0.1:3002/ostoskori", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -25,6 +26,7 @@
                         "<th scope='row'>" + data[i].id + "</th>" +
                         "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].hinta + "</td>" +
                         "<td>" + data[i].kasittelija + "</td>" + "</tr>"
                         
                     )
@@ -43,6 +45,8 @@
         <div id="suodatusContainer">
             <div class="row justify-content-sm-center">
                 <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+                <button type="button" class="btn btn-dark">Tyhjennä kori</button>
+                <button type="button" class="btn btn-dark">Valitut varastosta</button>
             </div>
         </div>
 
