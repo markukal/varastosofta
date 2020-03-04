@@ -59,6 +59,9 @@ input {
 				<button id="submit" type="submit" name="submit" class="btn btn-light btn-lg">Kirjaudu</button>
 			</form>
 			</br>
+            <% if (message.length > 0) { %>
+            <div class="alert alert-warning" role="alert"><%= message %></div>
+            <% } %>
 		</div>
 
 	</body>
