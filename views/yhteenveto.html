@@ -18,6 +18,9 @@
         // Ehdotus: Nimettäisiinkö taulukot esim. tyyppiTaulu-kaavalla, niin ne eivät mene keskenään sekaisin?
         // Esimerkiksi. ostoskoritaulukon nimeksi annoin "koriTaulu". 
 
+        // Apumuuttuja muokattavan tarvikkeen valitsemista varten.
+        var tarID;
+
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
@@ -31,7 +34,8 @@
                         "<td>" + data[i].Nimi + "</td>" +
                         "<td>" + data[i].Kuvaus + "</td>" +
                         "<td>" + data[i].Määrä + "</td>" +
-                        "<td>" + data[i].Yksikkö + "</td>" + "</tr>"
+                        "<td>" + data[i].Yksikkö + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Muokkaa</a>" + "</td>" + "</tr>"
 
 
                     )
@@ -40,7 +44,15 @@
             })
         };
 
-        lataaTaulukko();
+        // Tallentaa muokkauspainiketta klikattaessa valitun tarvikkeen id:n muuttujaan ja avaa muokkausdialogin.
+        $(document).on("click", "a.editp", function (e) {
+                e.preventDefault();
+                tarID = $(this).parent().prev().prev().prev().prev().prev().text();
+                
+                //openProjectDialog();
+                
+            }); 
+
 
         // Listaa varastot pudotusvalikkoon.
         function haeVarastot() {
@@ -66,7 +78,8 @@
                         "<td>" + data[i].Nimi + "</td>" +
                         "<td>" + data[i].Kuvaus + "</td>" +
                         "<td>" + data[i].Määrä + "</td>" +
-                        "<td>" + data[i].Yksikkö + "</td>" + "</tr>"
+                        "<td>" + data[i].Yksikkö + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Muokkaa</a>" + "</td>" + "</tr>"
 
 
                     )
@@ -115,6 +128,7 @@
             }
         })
 
+        lataaTaulukko();
         haeVarastot();
 
 
@@ -132,11 +146,17 @@
 <body>
 
     <div id="yhteenvetodiv">
+
+        <!--Lohko suodatustyökaluille-->
         <div id="suodatusContainer">
             <div class="row justify-content-sm-center">
+
+                <!--Pudotusvalikko varaston valitseen-->
                 <select class="form-control" id="dropdown">
                     <option value="defaultval">Kaikki varastot</option>
                 </select>
+
+                <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
                 <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
             </div>
         </div>
