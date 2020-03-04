@@ -6,13 +6,11 @@ const connection = require('./connection')
 module.exports = function(passport) {
 
     passport.serializeUser(function(user, done) {
-        console.log('test serialize');
         done(null, user.kayttajaID);
     });
 
     passport.deserializeUser(function(id, done) {
         connection.query('SELECT * FROM kayttajat WHERE kayttajaID = ' + id, function(err, rows) {
-            console.log('test deserialize');
             done(err, rows[0]);
         });
     });
