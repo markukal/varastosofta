@@ -23,7 +23,6 @@ module.exports = function(passport) {
         },
         function(req, kayttajatunnus, salasana, done) {
             connection.query('SELECT * FROM kayttajat WHERE kayttajatunnus = ?', [kayttajatunnus], function(err, rows){
-
                 if (err)
                     return done(err);
                 if (!rows.length) {
