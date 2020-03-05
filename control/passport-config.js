@@ -22,15 +22,14 @@ module.exports = function(passport) {
             passReqToCallback : true
         },
         function(req, kayttajatunnus, salasana, done) {
-            connection.query('SELECT * FROM kayttajat WHERE kayttajatunnus = "' + kayttajatunnus + '"', function(err, rows){
-
+            connection.query('SELECT * FROM kayttajat WHERE kayttajatunnus = ?', [kayttajatunnus], function(err, rows){
                 if (err)
                     return done(err);
                 if (!rows.length) {
-                    return done(null, false, req.flash('loginMessage', 'Väärä käyttäjätunnus'));
+                    return done(null, false, req.flash('loginMessage', 'Virheellinen käyttäjätunnus tai salasana.'));
                 }
                 if (!bcrypt.compareSync(salasana, rows[0].salasana))
-                    return done(null, false, req.flash('loginMessage', 'Vaara salasana'));
+                    return done(null, false, req.flash('loginMessage', 'Virheellinen käyttäjätunnus tai salasana.'));
                 return done(null, rows[0]);
             });
         })

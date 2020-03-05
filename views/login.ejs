@@ -23,7 +23,7 @@ body {
 	transform: translate(-50%, -50%);
 	text-align: center;
 	position: absolute;
-	font-size: 20px;
+	font-size: 22px;
 }
 .input-group-addon {
 	padding: 0.5em 0.6em;
@@ -32,6 +32,8 @@ body {
 }
 .form-group {
     align-items: center;
+    padding-left: 50px;
+    padding-right: 50px;
 }
 input {
 	padding: 0.5em 0.6em;
@@ -47,18 +49,23 @@ input {
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						<input type="text" name="kayttajatunnus" id="kayttajatunnus" placeholder="Käyttäjätunnus">
+						<input type="text" name="kayttajatunnus" id="kayttajatunnus" required placeholder="Käyttäjätunnus" oninvalid="this.setCustomValidity('Syötä käyttäjätunnus')" oninput="this.setCustomValidity('')" />
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-						<input type="password" name="salasana" id="salasana" placeholder="Salasana">
+						<input type="password" name="salasana" id="salasana" required placeholder="Salasana" oninvalid="this.setCustomValidity('Syötä salasana')" oninput="this.setCustomValidity('')" />
+
 					</div>
 				</div>
+                </br>
 				<button id="submit" type="submit" name="submit" class="btn btn-light btn-lg">Kirjaudu</button>
 			</form>
 			</br>
+            <% if (message.length > 0) { %>
+            <div class="alert alert-warning" role="alert"><%= message %></div>
+            <% } %>
 		</div>
 
 	</body>
