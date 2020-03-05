@@ -47,6 +47,7 @@ module.exports =
         connection.escape(req.query.tyyppiID) + ", " + connection.escape(req.query.varastoID) +", " + connection.escape(req.query.nimi) + ", " 
         + connection.escape(req.query.kuvaus) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.hinta) + ", '"+ req.query.yksikkoID + "'" + ", "+ connection.escape(req.query.hpaikka) + ", "+ connection.escape(req.query.rarvo) + ");";
 
+        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);

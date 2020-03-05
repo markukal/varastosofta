@@ -21,6 +21,9 @@
         // Apumuuttuja muokattavan tarvikkeen valitsemista varten.
         var tarID;
 
+        // Muuttuja keinotekoisen viiveen määrittämiseen.
+        var timeOut = 500;
+
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
@@ -59,7 +62,7 @@
             $.get("http://localhost:3002/varastot", function (data, status) {
                 $.each(data, function (i, item) {
                     $("#" + dd).append(
-                        '<option value="' + item.varastoID + '">' + item.nimi + '</option>'
+                        '<option value=' + item.varastoID + '>' + item.nimi + '</option>'
                     )
                 });
             });
@@ -70,7 +73,19 @@
             $.get("http://localhost:3002/yksikot", function (data, status) {
                 $.each(data, function (i, item) {
                     $("#" + dd).append(
-                        '<option value="' + item.yksikkoID + '">' + item.nimi + '</option>'
+                        '<option value=' + item.yksikkoID + '>' + item.nimi + '</option>'
+                    )
+                });
+
+            });
+        }
+
+        // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+        function haeTarvikeTyypit(dd) {
+            $.get("http://localhost:3002/tarviketyypit", function (data, status) {
+                $.each(data, function (i, item) {
+                    $("#" + dd).append(
+                        '<option value=' + item.tyyppiID + '>' + item.nimi + '</option>'
                     )
                 });
             });
@@ -140,15 +155,35 @@
         })
 
         // Lisää tarvikkeen tietokantaan ja sulkee dialogin
-        $("#btnLuoTarvike").click(function () {
-            // to-do: Tarvikkeen lisäys dialogista.
-        })
+        $("#btnLuotarvike").click(function () {
+
+            //to-do: dropdown-valikoiden arvot eivät tallennu alla oleviin muuttujiin. En vielä löytänyt syytä ongelmalle.
+            //Dropdownit ovat dd-alkuisia komponetteja.
+            var nimi = $("#txbTarNim").val();
+            var kuvaus = $("#txbTarKuvaus").val();
+            var varasto = $("#ddVarastot").val();
+            var yksikko = $("#ddYksikot").val();
+            var hraja = $("txbHalRaja").val();
+            var hpaikka = $("#txbHPaikka").val();
+            var hinta = $("#txbHinta").val();
+            var maara = $("#txbMaara").val();
+            var tyyppi = $("#ddTyypit").val();
+
+            $.post('http://localhost:3002/tarvikkeet?nimi=' + nimike + '&kuvaus=' + kuvaus  + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
+            '&hraja=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
+            function (data) {
+            });
+            setTimeout(() => { lataaTaulukko() }, timeOut);
+            $("#tarvikeDialog").dialog('close');
+        });
+        
 
         // Avaa dialogin tarvikkeen luomista varten.
         $("#btnLisaaTarvike").click(function () {
             avaaLisaysDialog();
             haeVarastot("ddVarastot");
             haeYksikot("ddYksikot");
+            haeTarvikeTyypit("ddTyypit");
         })
 
         // Avaa dialogin tarvikkeen luomista varten.
@@ -201,9 +236,17 @@
 
         <!--Dialogi tarvikkeiden luomista varten-->
         <div id="tarvikeDialog" title="Luo tarvike" style="display: none">
-        <form id="frmLuotarvike">
-            Nimike <br> <input type="text" name="projektinimike"><br>
-            Kuvaus <br> <input type="text" name="projektinimike"><br>
+            Kategoria
+            <select class="form-control" id="ddTyypit">
+                <option value="defaultval">Valitse kategoria</option>
+            </select>
+            Nimike <br> <input type="text" id="txbTarNim"><br>
+            Kuvaus <br> <input type="text" id="txbTarKuvaus"><br>
+            Hälytysraja <br> <input type="number" id="txbHalRaja"><br>
+            Hankintapaikka <br> <input type="text" id="txbHPaikka"><br>
+            Hinta (€) <input type="number" id="txbHinta"><br>
+            Määrä <br> <input type="number" id="txbMaara"><br>
+            
             Yksikkö <br> 
             <select class="form-control" id="ddYksikot">
                 <option value="defaultval">Valitse yksikkö</option>
@@ -214,12 +257,11 @@
                 <option value="defaultval">Valitse varasto</option>
             </select>
             <br>
-        </form>
+        
         <button id="btnLuotarvike" class="btn btn-primary">Lisää</button>
 
     </div>
 
-    
 </div>
 
     <br>
