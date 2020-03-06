@@ -108,7 +108,7 @@ app.route('/users')
 app.get('/login',  function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
 })
-app.post('/login', passport.authenticate('local', {
+app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     successRedirect : '/' ,
     failureRedirect : '/login',
 	failureFlash: true
@@ -119,8 +119,11 @@ app.get('/logout', function(req, res) {
     res.redirect('/login');
 });
 
-app.get('/', function (req, res) {
-    res.render('index.html')
+app.get('/', checkAuthenticated, function (req, res) {
+    res.render('index.ejs', {
+	kayttoOikeus: req.user.kayttoOikeus,
+	luokka: req.user.luokkaID
+});
 });
 
 app.get('/yhteenveto', (req, res) => {
