@@ -163,14 +163,14 @@
             var kuvaus = $("#txbTarKuvaus").val();
             var varasto = $("#ddVarastot").val();
             var yksikko = $("#ddYksikot").val();
-            var hraja = $("txbHalRaja").val();
+            var hraja = $("#txbHalRaja").val();
             var hpaikka = $("#txbHPaikka").val();
             var hinta = $("#txbHinta").val();
             var maara = $("#txbMaara").val();
             var tyyppi = $("#ddTyypit").val();
 
-            $.post('http://localhost:3002/tarvikkeet?nimi=' + nimike + '&kuvaus=' + kuvaus  + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
-            '&hraja=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
+            $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus  + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
+            '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
             function (data) {
             });
             setTimeout(() => { lataaTaulukko() }, timeOut);
