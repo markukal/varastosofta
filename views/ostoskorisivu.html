@@ -11,10 +11,16 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <script>
+
+
     $(document).ready(function(){
-        
+
+        // Apumuuttuja kokonaishinnan laskemiselle.
+        var yhteensa = 0;
+
         // Hakee ostoskorin rivit taulukkoon.
         function listaaKori() {
+            yhteensa = 0;
             $("#koriTaulu").empty();
             $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th>' +
                 '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
@@ -33,6 +39,8 @@
                         
                     )
                     $("#taulu").append("</tbody>")
+
+                    yhteensa = yhteensa + data[i].hinta;
                 }
             })
         };
@@ -55,6 +63,9 @@
 
         <table class="table" id="koriTaulu">
         </table>
+
+        <p>Yhteensä</p>
+        <p id="pYhteensa"></p>
     </div>
 
 
