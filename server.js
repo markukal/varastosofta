@@ -63,7 +63,7 @@ app.route('/klistat')
     .post(klistat.addNew)
     .put(klistat.update)
     .delete(klistat.delete);
-    
+
 
 app.route('/tarvikkeet')
     .get(tarvikkeet.fetchAll)
@@ -111,7 +111,7 @@ app.get('/login',  function (req, res) {
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
     successRedirect : '/' ,
     failureRedirect : '/login',
-	failureFlash: true
+    failureFlash: true
 }));
 
 app.get('/logout', function(req, res) {
@@ -121,20 +121,23 @@ app.get('/logout', function(req, res) {
 
 app.get('/', checkAuthenticated, function (req, res) {
     res.render('index.ejs', {
-	kayttoOikeus: req.user.kayttoOikeus,
-	luokka: req.user.luokkaID
-});
+        kayttoOikeus: req.user.kayttoOikeus,
+        luokka: req.user.luokkaID
+    });
 });
 
-app.get('/yhteenveto', (req, res) => {
-    res.render('yhteenveto.html');
+app.get('/yhteenveto', checkAuthenticated, function (req, res) {
+    res.render('yhteenveto.ejs', {
+        kayttoOikeus: req.user.kayttoOikeus,
+        luokka: req.user.luokkaID
+    });
 });
 
 app.get('/asetukset', checkAuthenticated,( req, res) => {
     // opettajan kayttooikeus = 1 , oppilaan = 2
     console.log(req.user.kayttoOikeus)
     if (req.user.kayttoOikeus == "1") {
-        res.render('asetukset.html');
+        res.render('asetukset.ejs');
     }
     else {
         // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
@@ -144,15 +147,15 @@ app.get('/asetukset', checkAuthenticated,( req, res) => {
 });
 
 app.get('/kerailylista', (req, res) => {
-    res.render('kerailylista.html');
+    res.render('kerailylista.ejs');
 });
 
 app.get('/ostoskorisivu', (req, res) => {
-    res.render('ostoskorisivu.html');
+    res.render('ostoskorisivu.ejs');
 });
 
 app.get('/hallinnointi', (req, res) => {
-    res.render('hallinnointi.html');
+    res.render('hallinnointi.ejs');
 });
 
 
@@ -168,7 +171,7 @@ function checkNotAuthenticated(req, res, next) {
     }
     next()
 }
-     
-    app.listen(port, hostname, () => {
-        console.log(`Server running AT http://${hostname}:${port}/`);
-    });
+
+app.listen(port, hostname, () => {
+    console.log(`Server running AT http://${hostname}:${port}/`);
+});
