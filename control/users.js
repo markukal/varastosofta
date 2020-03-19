@@ -42,8 +42,29 @@ module.exports =
                     res.send({"status": 201});
                 }
             });
-        }
+        },
+        update: async function (req, res) {
+            var kayttajaID = req.query.kayttajaID;
+            var luokkaID = req.query.luokkaID;
+            var kayttajatunnus = req.query.kayttajatunnus;
+            var salasana = req.query.salasana;
+            var kayttoOikeus = req.query.kayttoOikeus;
+            
+            const hashedPassword = await bcrypt.hash(req.query.salasana, 10);
 
+            connection.query('UPDATE kayttajat SET luokkaID = ?, kayttajatunnus = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajaID = ?', [luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus, kayttajaID], function(error, results, fields) {
+                    if (error) {
+                    console.log("Virhe muokattaessa käyttäjää, syy " + error);
+                    res.send({"status":500, "error": error, "response": null});
+                }
+                else 
+                {
+                    console.log("Käyttäjän muokkaus onnistui.");
+                    res.send({"status": 201});
+                }
+        });
+
+    }
     }
 
 
