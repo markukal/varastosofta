@@ -104,7 +104,8 @@ app.route('/ostoskori')
 app.route('/users')
     .get(users.fetchAll)
     .post(users.register)
-    .put(users.update);
+    .put(users.update)
+    .delete(users.delete);
 
 app.get('/login',  function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
