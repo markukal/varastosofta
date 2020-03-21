@@ -64,7 +64,25 @@ module.exports =
                 }
         });
 
-    }
+    },
+        delete: function (req, res) {
+            // TODO: tarkistus ettei kirjautuneena oleva käyttäjä pysty poistamaan itseään
+            // TAI jonkinlainen pääkäyttäjä jota ei pysty poistamaan
+            //
+            var kayttajaID = req.query.kayttajaID;
+            connection.query('DELETE FROM kayttajat WHERE kayttajaID = ?', [kayttajaID], function(error, results, fields) {
+                if (error) {
+                    console.log("Virhe poistaessa käyttäjää, syy " + error);
+                    res.send({"status":500, "error": error, "response": null});
+                }
+                else 
+                {
+                    console.log("Käyttäjän poistaminen onnistui.");
+                    res.send({"status": 201});
+                }
+                });
+            }
+
     }
 
 
