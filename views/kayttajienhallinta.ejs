@@ -17,10 +17,15 @@
                     var len = data.length;
                     for (var i=0; i < len; i++) {
                         $("#kayttajat").append(
-                            "<button type='button' class='list-group-item list-group-item-action list-group-item-light'>" + data[i].kayttajatunnus + "</button> "
+                            "<tr>" + 
+                            "<td>" + data[i].kayttajatunnus + "</td>" +
+                            "<td>" + data[i].luokkaID + "</td>" +
+                            "<td>" + data[i].kayttoOikeus + "</td>" +
+                            "</tr>"
                         )
-
+                        
                     }
+                    $("#kayttajat").append("</tbody>")
                 })
             };
             tulostaKayttajat();
@@ -34,19 +39,21 @@
         <hr>
         <br>
         <div class="row" id="kayttajatContainer">
-            <div class="col-sm-6">
-                <div class="list-group" id="kayttajat">
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaKayttaja">Lisää</button>
-                <br>
-                <button type="button" id="muokkaabtn" class="btn btn-dark btn-md">Muokkaa</button>
-                <br>
-                <button type="button" id="poistabtn" class="btn btn-dark btn-md">Poista</button>
+                <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaKayttaja">Lisää käyttäjä</button>
+            <div class="col-sm-12">
+                <table class="table" id="kayttajat">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Käyttäjätunnus</th>
+                            <th scope="col">Luokka</th>
+                            <th scope="col">Käyttöoikeus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                 <br>
             </div>
         </div>
+
         <div class="modal fade" id="lisaaKayttaja" tabindex="-1" role="dialog" aria-labelledby="lisaaKayttajaLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
