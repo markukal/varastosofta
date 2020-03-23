@@ -52,7 +52,7 @@ module.exports =
             
             const hashedPassword = await bcrypt.hash(req.query.salasana, 10);
 
-            connection.query('UPDATE kayttajat SET luokkaID = ?, kayttajatunnus = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajaID = ?', [luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus, kayttajaID], function(error, results, fields) {
+            connection.query('UPDATE kayttajat SET luokkaID = ?, kayttajatunnus = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajatunnus = kayttajatunnus', [luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus], function(error, results, fields) {
                     if (error) {
                     console.log("Virhe muokattaessa käyttäjää, syy " + error);
                     res.send({"status":500, "error": error, "response": null});
@@ -70,7 +70,7 @@ module.exports =
             // TAI jonkinlainen pääkäyttäjä jota ei pysty poistamaan
             //
             var kayttajaID = req.query.kayttajaID;
-            connection.query('DELETE FROM kayttajat WHERE kayttajaID = ?', [kayttajaID], function(error, results, fields) {
+            connection.query('DELETE FROM kayttajat WHERE kayttajatunnus = ?', [kayttajatunnus], function(error, results, fields) {
                 if (error) {
                     console.log("Virhe poistaessa käyttäjää, syy " + error);
                     res.send({"status":500, "error": error, "response": null});
