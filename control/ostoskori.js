@@ -42,7 +42,8 @@ module.exports =
 
     //Uuden ostoskorin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara, kasittelija) VALUES (" + null + ", " + req.query.tarvikeID + ", " + req.query.maara + ", '" + req.query.kasittelija +"');";
+        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara, kasittelija) VALUES (" + null + ", " + connection.escape(req.query.tarvikeID) +
+         ", " + connection.escape(req.query.maara) + ", '" + connection.escape(req.query.kasittelija) +"');";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -60,7 +61,8 @@ module.exports =
 
     //Ostoskorin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE ostoskori SET tarvikeID="+ req.query.tarvikeID + ", maara ="+ req.query.maara + " WHERE ostosID=" + req.query.ostosID;
+        sqlQuery = "UPDATE ostoskori SET tarvikeID="+ connection.escape(req.query.tarvikeID) + ", maara ="+ connection.escape(req.query.maara) + 
+        " WHERE ostosID=" + connection.escape(req.query.ostosID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -78,7 +80,7 @@ module.exports =
 
     //Ostoskorin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + req.query.ostosID;
+        sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + connection.escape(req.query.ostosID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {

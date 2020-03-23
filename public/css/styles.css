@@ -12,6 +12,7 @@ body, html {
   background-color: rgb(235, 235, 235);
   margin-left: 8%;
   margin-right: 8%;
+  height: 100vh;
 
 }
 
@@ -67,4 +68,16 @@ body, html {
 
 .btn-dark {
   margin-left: 20px;
+}
+#kayttajat {
+    padding: 5px;
+    max-height: 300px;
+    margin-bottom: 12px;
+    overflow-y:scroll;
+}
+#kayttajatContainer {
+    width: 95%;
+    margin-left:auto;
+    margin-right:auto;
+    transition: all 0.5s;
 }

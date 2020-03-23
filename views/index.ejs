@@ -34,11 +34,6 @@
         })
 
 
-        $("#asetukset").click(function naytaAsetukset() {
-            $("#maindiv").empty();
-            $("#maindiv").load("/asetukset");
-        })
-
         $("#kerailylista").click(function naytaKerailylista() {
             $("#maindiv").empty();
             $("#maindiv").load("/kerailylista");
@@ -48,13 +43,13 @@
             $("#maindiv").empty();
             $("#maindiv").load("/ostoskorisivu");
         })
-        /*
-        function topFunction() {
-            $("body").scrollTop(0);
 
-        }
-        */
-        /*
+         $("#kayttajienhallinta").click(function naytaKayttajienhallinta() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/kayttajienhallinta");
+        })
+
+       /*
         function haeVarastot() {
             $.get("http://localhost:3002/varastot", function (data, status) {
                 $.each(data, function (i, item) {

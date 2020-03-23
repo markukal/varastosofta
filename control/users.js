@@ -9,16 +9,16 @@ module.exports =
     {
         // haetaan kaikki käyttäjän kentät paitsi salasana
         fetchAll: function (req, res) {
-            var columns = ['kayttajaID', 'luokkaID', 'kayttajatunnus', 'kayttoOikeus']
-            connection.query('SELECT ?? FROM kayttajat', [columns], function(error, results, fields) {
+            var columns = ['kayttajaID', 'luokat.nimi AS luokanNimi', 'kayttajatunnus', 'kayttoOikeus']
+            connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID', function(error, results, fields) {
                 if (error) {
                     console.log("Virhe haettaessa käyttäjiä, syy " + error);
                     res.send({"status":500, "error": error, "response": null});
                 }
                 else
                 {
+                    res.json(results);
                     console.log("Käyttäjien haku onnistui.");
-                    res.send({"status": 201});
                 }
             });
         },

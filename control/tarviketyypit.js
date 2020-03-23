@@ -6,7 +6,8 @@ module.exports =
     //Tietojen haku tarviketyypit taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tarviketyypit";
+        sqlQuery = "SELECT tarviketyypit.tyyppiID AS ID, tarviketyypit.nimi AS tyyppi FROM tarviketyypit";
+
 
         var i = 0;//Apumuuttuja
 
@@ -39,7 +40,8 @@ module.exports =
 
     //Uuden tarviketyypin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tarviketyypit (tyyppiID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
+        sqlQuery = "INSERT INTO tarviketyypit (tyyppiID, nimi) VALUES (" + null + ", " + connection.escape(req.query.nimi) + ")";
+
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -57,7 +59,7 @@ module.exports =
 
     //Tarviketyypin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarviketyypit SET nimi ='"+ req.query.nimi + "' WHERE tyyppiID=" + req.query.tyyppiID;
+        sqlQuery = "UPDATE tarviketyypit SET nimi ='"+ connection.escape(req.query.nimi) + "' WHERE tyyppiID=" + connection.escape(req.query.tyyppiID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -75,7 +77,7 @@ module.exports =
 
     //Tarviketyypin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tarviketyypit WHERE tyyppiID=" + req.query.tyyppiID;
+        sqlQuery = "DELETE FROM tarviketyypit WHERE tyyppiID=" + connection.escape(req.query.tyyppiID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {

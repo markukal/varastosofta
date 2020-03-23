@@ -6,7 +6,7 @@ module.exports =
     //Tietojen haku varastot taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM varastot";
+        sqlQuery = "SELECT varastot.varastoID AS ID, varastot.nimi AS nimi FROM varastot";
 
         var i = 0;//Apumuuttuja
 
@@ -39,7 +39,7 @@ module.exports =
 
     //Uuden varaston lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO varastot (varastoID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
+        sqlQuery = "INSERT INTO varastot (varastoID, nimi) VALUES (" + null + ", '" + connection.escape(req.query.nimi) + "')";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -57,7 +57,7 @@ module.exports =
 
     //Varaston tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE varastot SET nimi ='"+ req.query.nimi + "' WHERE varastoID=" + req.query.varastoID;
+        sqlQuery = "UPDATE varastot SET nimi ='"+ connection.escape(req.query.nimi) + "' WHERE varastoID=" + connection.escape(req.query.varastoID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -75,7 +75,7 @@ module.exports =
 
     //Varaston poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM varastot WHERE varastoID=" + req.query.varastoID;
+        sqlQuery = "DELETE FROM varastot WHERE varastoID=" + connection.escape(req.query.varastoID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
