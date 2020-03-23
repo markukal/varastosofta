@@ -6,7 +6,7 @@ module.exports =
     //Tietojen haku tapahtumatyypit taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM tapahtumatyypit";
+        sqlQuery = "SELECT tapahtumatyypit.ttyyppiID AS ID, tapahtumatyypit.nimi AS nimi FROM tapahtumatyypit";
 
         var i = 0;//Apumuuttuja
 
@@ -39,7 +39,7 @@ module.exports =
 
     //Uuden tapahtumatyypin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO tapahtumatyypit (ttyyppiID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
+        sqlQuery = "INSERT INTO tapahtumatyypit (ttyyppiID, nimi) VALUES (" + null + ", '" + connection.escape(req.query.nimi) + "')";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -57,7 +57,7 @@ module.exports =
 
     //Tapahtumatyypin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tapahtumatyypit SET nimi ='"+ req.query.nimi + "' WHERE ttyyppiID=" + req.query.ttyyppiID;
+        sqlQuery = "UPDATE tapahtumatyypit SET nimi ='"+ connection.escape(req.query.nimi) + "' WHERE ttyyppiID=" + connection.escape(req.query.ttyyppiID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -75,7 +75,7 @@ module.exports =
 
     //Tapahtumatyypin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM tapahtumatyypit WHERE ttyyppiID=" + req.query.ttyyppiID;
+        sqlQuery = "DELETE FROM tapahtumatyypit WHERE ttyyppiID=" + connection.escape(req.query.ttyyppiID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {

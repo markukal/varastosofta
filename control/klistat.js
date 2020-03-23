@@ -38,7 +38,7 @@ module.exports =
 
 
         //Lokitetaan hakulauseke palvelimelle debuggausta varten. Tietoturvasyistä oletuksena kommentoitu
-        //console.log(sqlQuery);
+        console.log(sqlQuery);
         
         // Suoritetaan muodostettu hakulauseke.
         connection.query(sqlQuery, function (error, results, fields) {

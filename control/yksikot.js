@@ -6,7 +6,7 @@ module.exports =
     //Tietojen haku yksikot taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT * FROM yksikot";
+        sqlQuery = "SELECT yksikot.yksikkoID AS ID, yksikot.nimi AS nimi FROM yksikot";
 
         var i = 0;//Apumuuttuja
 
@@ -39,7 +39,7 @@ module.exports =
 
     //Uuden yksikon lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO yksikot (yksikkoID, nimi) VALUES (" + null + ", '" + req.query.nimi + "')";
+        sqlQuery = "INSERT INTO yksikot (yksikkoID, nimi) VALUES (" + null + ", '" + connection.escape(req.query.nimi) + "')";
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -57,7 +57,7 @@ module.exports =
 
     //Yksikon tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE yksikot SET nimi ='"+ req.query.nimi + "' WHERE yksikkoID=" + req.query.yksikkoID;
+        sqlQuery = "UPDATE yksikot SET nimi ='"+ connection.escape(req.query.nimi) + "' WHERE yksikkoID=" + connection.escape(req.query.yksikkoID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -75,7 +75,7 @@ module.exports =
 
     //Varaston poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM yksikot WHERE yksikkoID=" + req.query.yksikkoID;
+        sqlQuery = "DELETE FROM yksikot WHERE yksikkoID=" + connection.escape(req.query.yksikkoID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
