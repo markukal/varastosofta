@@ -48,3 +48,9 @@ body, html {
 .btn-dark {
   margin-left: 20px;
 }
+#kayttajat {
+    padding: 5px;
+    max-height: 300px;
+    margin-bottom: 12px;
+    overflow: scroll;
+}
