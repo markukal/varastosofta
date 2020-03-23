@@ -21,6 +21,8 @@
                             "<td>" + data[i].kayttajatunnus + "</td>" +
                             "<td>" + data[i].luokanNimi + "</td>" +
                             "<td>" + data[i].kayttoOikeus + "</td>" +
+                            "<td><button type='button' id='muokkaabtn' class='btn btn-dark' data-toggle='modal' data-target='#muokkaaKayttajaa' data-kayttajatunnus='" + data[i].kayttajatunnus + "'>Muokkaa</button>" +
+                            "<td><button type='button' id='poistabtn' class='close' data-toggle='modal' data-target='#poistoVahvistus' aria-label='Close' data-kayttajatunnus='" + data[i].kayttajatunnus + "'><span aria-hidden='true'>&times;</span></button>" +
                             "</tr>"
                         )
                         
@@ -47,6 +49,8 @@
                             <th scope="col">Käyttäjätunnus</th>
                             <th scope="col">Luokka</th>
                             <th scope="col">Käyttöoikeus</th>
+                            <th scope="col">Muokkaa</th>
+                            <th scope="col">Poista</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,8 +94,31 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Sulje</button>
-                        <button type="button" class="btn btn-dark">Tallenna</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sulje</button>
+                        <button type="button" class="btn btn-primary">Tallenna</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog" aria-labelledby="poistaKayttajaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="poistaKayttajaLabel">Poista käyttäjä</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/users/delete">
+                            <div class="container">
+                                <p>Haluatko varmasti poistaa käyttäjän?</p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                    <button type="button" class="btn btn-primary">Kyllä</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
