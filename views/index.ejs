@@ -132,8 +132,7 @@
                     <a class="nav-link" href="#ostoskorisivu" id="ostoskorisivu">Ostoskori</a>
                 </li>
                  <% if (kayttoOikeus == 1) { %>
-                <li class="nav-item">
-                    <div class="dropdown show">
+                <li class="nav-item dropdown">
                         <a class="nav-link btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Asetukset
                         </a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -142,7 +141,6 @@
                             <a class="dropdown-item" href="#yksikot" id="yksikot">Yksiköt</a>
                             <a class="dropdown-item" href="#kayttajienhallinta" id="kayttajienhallinta">Käyttäjien hallinta</a>
                         </div>
-                   </div>
                 </li>
                 <% } %>
                 <li class="nav-item">
