@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+    </head>
+    <script>
+        $(document).ready(function(){
+            function tulostaKayttajat() {
+                $.getJSON( "http://127.0.0.1:3002/users", function (data) {
+                    var len = data.length;
+                    for (var i=0; i < len; i++) {
+                        $("#kayttajat").append(
+                            "<button type='button' class='list-group-item list-group-item-action list-group-item-light'>" + data[i].kayttajatunnus + "</button> "
+                        )
+
+                    }
+                })
+            };
+            tulostaKayttajat();
+        })
+    </script>
+
+    <body>
+        <br>
+        <br>
+        <h1>Käyttäjien hallinta</h1>
+        <hr>
+        <br>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="list-group" id="kayttajat">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <button type="button" id="lisaabtn" class="btn btn-dark btn-md">Lisää</button>
+                <br>
+                <button type="button" id="muokkaabtn" class="btn btn-dark btn-md">Muokkaa</button>
+                <br>
+                <button type="button" id="poistabtn" class="btn btn-dark btn-md">Poista</button>
+                <br>
+            </div>
+        </div>
+
+    </body>
+</html>
