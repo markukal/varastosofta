@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS `kayttajat` (
   `kayttajatunnus` varchar(30) NOT NULL,
   `salasana` char(60) NOT NULL,
   `kayttoOikeus` int(11) NOT NULL,
-  PRIMARY KEY (`kayttajaID`, `luokkaID`)
+  PRIMARY KEY (`kayttajaID`, `luokkaID`),
+  UNIQUE KEY `kayttajatunnus` (`kayttajatunnus`)
   -- KEY `luokkaID` (`luokkaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

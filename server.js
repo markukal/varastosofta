@@ -103,7 +103,9 @@ app.route('/ostoskori')
 
 app.route('/users')
     .get(users.fetchAll)
-    .post(users.register);
+    .post(users.register)
+    .put(users.update)
+    .delete(users.delete);
 
 app.get('/login',  function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
@@ -133,11 +135,13 @@ app.get('/yhteenveto', checkAuthenticated, function (req, res) {
     });
 });
 
-app.get('/asetukset', checkAuthenticated,( req, res) => {
+app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
     // opettajan kayttooikeus = 1 , oppilaan = 2
     console.log(req.user.kayttoOikeus)
     if (req.user.kayttoOikeus == "1") {
-        res.render('asetukset.ejs');
+        res.render('kayttajienhallinta.ejs', {
+            kayttajaID: req.user.kayttajaID
+        });
     }
     else {
         // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle

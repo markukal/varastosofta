@@ -27,11 +27,6 @@
         })
 
 
-        $("#asetukset").click(function naytaAsetukset() {
-            $("#maindiv").empty();
-            $("#maindiv").load("/asetukset");
-        })
-
         $("#kerailylista").click(function naytaKerailylista() {
             $("#maindiv").empty();
             $("#maindiv").load("/kerailylista");
@@ -41,7 +36,13 @@
             $("#maindiv").empty();
             $("#maindiv").load("/ostoskorisivu");
         })
-        /*
+
+         $("#kayttajienhallinta").click(function naytaKayttajienhallinta() {
+            $("#maindiv").empty();
+            $("#maindiv").load("/kayttajienhallinta");
+        })
+
+       /*
         function haeVarastot() {
             $.get("http://localhost:3002/varastot", function (data, status) {
                 $.each(data, function (i, item) {
@@ -125,17 +126,24 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="#etusivu" id="etusivu">Etusivu</a>
                 </li>
-                <% if (kayttoOikeus == 1) { %>
-                <li class="nav-item">
-                    <a class="nav-link" href="#asetukset" id="asetukset">Asetukset</a>
-                </li>
-                <% } %>
-                <li class="nav-item">
+               <li class="nav-item">
                     <a class="nav-link" href="#kerailylista" id="kerailylista">Keräilylista</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#ostoskorisivu" id="ostoskorisivu">Ostoskori</a>
                 </li>
+                 <% if (kayttoOikeus == 1) { %>
+                <li class="nav-item dropdown">
+                        <a class="nav-link btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Asetukset
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#varastot" id="varastot">Varastot</a>
+                            <a class="dropdown-item" href="#tarviketyypit" id="tarviketyypit">Tarviketyypit</a>
+                            <a class="dropdown-item" href="#yksikot" id="yksikot">Yksiköt</a>
+                            <a class="dropdown-item" href="#kayttajienhallinta" id="kayttajienhallinta">Käyttäjien hallinta</a>
+                        </div>
+                </li>
+                <% } %>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout" id="logout">Kirjaudu ulos</a>
                 </li>
