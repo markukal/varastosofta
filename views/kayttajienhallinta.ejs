@@ -94,8 +94,8 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-dark" data-dismiss="modal">Sulje</button>
-                        <button type="button" class="btn btn-dark">Tallenna</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sulje</button>
+                        <button type="button" class="btn btn-primary">Tallenna</button>
                     </div>
                 </div>
             </div>
@@ -111,10 +111,12 @@
                     </div>
                     <div class="modal-body">
                         <form action="/users/delete">
-                            <div class=container">
+                            <div class="container">
                                 <p>Haluatko varmasti poistaa käyttäjän?</p>
-                                <button type="button" class="btn btn-dark">Kyllä</button>
-                                <button type="button" class="btn btn-dark" data-dismiss="modal">Peruuta</button>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                    <button type="button" class="btn btn-primary">Kyllä</button>
+                                </div>
                             </div>
                         </form>
                     </div>
