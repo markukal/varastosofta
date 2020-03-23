@@ -17,8 +17,8 @@ module.exports =
                 }
                 else
                 {
+                    res.json(results);
                     console.log("Käyttäjien haku onnistui.");
-                    res.send({"status": 201});
                 }
             });
         },
