@@ -148,7 +148,7 @@ app.get('/asetukset', checkAuthenticated,( req, res) => {
 
 app.get('/kerailylista', (req, res) => {
     res.render('kerailylista.ejs');
-});
+}); 
 
 app.get('/ostoskorisivu', (req, res) => {
     res.render('ostoskorisivu.ejs');
