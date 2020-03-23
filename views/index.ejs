@@ -14,6 +14,13 @@
     <title>Varastosofta</title>
 </head>
 <script>
+    
+    // TODO: muokkaa jqueryyn käypäseksi. 
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+    
     $(document).ready(function () {
 
         function lataaEtusivu() {
@@ -41,6 +48,12 @@
             $("#maindiv").empty();
             $("#maindiv").load("/ostoskorisivu");
         })
+        /*
+        function topFunction() {
+            $("body").scrollTop(0);
+
+        }
+        */
         /*
         function haeVarastot() {
             $.get("http://localhost:3002/varastot", function (data, status) {
@@ -110,8 +123,9 @@
     });
 
 </script>
+
 <body>
-    
+
     <!-- Ylänavi alkaa -->
 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" id="ylanavi">
@@ -125,22 +139,24 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="#etusivu" id="etusivu">Etusivu</a>
                 </li>
-               <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" href="#kerailylista" id="kerailylista">Keräilylista</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#ostoskorisivu" id="ostoskorisivu">Ostoskori</a>
                 </li>
-                 <% if (kayttoOikeus == 1) { %>
+                <% if (kayttoOikeus == 1) { %>
                 <li class="nav-item dropdown">
-                        <a class="nav-link btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Asetukset
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <a class="dropdown-item" href="#varastot" id="varastot">Varastot</a>
-                            <a class="dropdown-item" href="#tarviketyypit" id="tarviketyypit">Tarviketyypit</a>
-                            <a class="dropdown-item" href="#yksikot" id="yksikot">Yksiköt</a>
-                            <a class="dropdown-item" href="#kayttajienhallinta" id="kayttajienhallinta">Käyttäjien hallinta</a>
-                        </div>
+                    <a class="nav-link btn dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">Asetukset
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#varastot" id="varastot">Varastot</a>
+                        <a class="dropdown-item" href="#tarviketyypit" id="tarviketyypit">Tarviketyypit</a>
+                        <a class="dropdown-item" href="#yksikot" id="yksikot">Yksiköt</a>
+                        <a class="dropdown-item" href="#kayttajienhallinta" id="kayttajienhallinta">Käyttäjien
+                            hallinta</a>
+                    </div>
                 </li>
                 <% } %>
                 <li class="nav-item">
@@ -157,6 +173,9 @@
             <!-- Tämän divin sisälle ladataan kaikki toiminnot muista html:istä -->
         </div>
     </div>
+
+            <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+            <button onclick="topFunction()" id="topBtn" title="Go to top">Ylös</button>
 
 </body>
 

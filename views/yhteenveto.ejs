@@ -49,12 +49,12 @@
 
         // Tallentaa muokkauspainiketta klikattaessa valitun tarvikkeen id:n muuttujaan ja avaa muokkausdialogin.
         $(document).on("click", "a.editp", function (e) {
-                e.preventDefault();
-                tarID = $(this).parent().prev().prev().prev().prev().prev().text();
-                
-                //openProjectDialog();
-                
-            }); 
+            e.preventDefault();
+            tarID = $(this).parent().prev().prev().prev().prev().prev().text();
+
+            //openProjectDialog();
+
+        });
 
 
         // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
@@ -134,7 +134,7 @@
 
         // Lisää tarvikkeen tietokantaan ja sulkee dialogin
         $("#btnLuotarvike").click(function () {
-            
+
             var nimi = $("#txbTarNim").val();
             var kuvaus = $("#txbTarKuvaus").val();
             var varasto = $("#ddVarastot").val();
@@ -145,14 +145,14 @@
             var maara = $("#txbMaara").val();
             var tyyppi = $("#ddTyypit").val();
 
-            $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus  + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
-            '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
-            function (data) {
-            });
+            $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
+                '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
+                function (data) {
+                });
             setTimeout(() => { lataaTaulukko() }, timeOut);
             $("#tarvikeDialog").dialog('close');
         });
-        
+
 
         // Avaa dialogin tarvikkeen luomista varten.
         $("#btnLisaaTarvike").click(function () {
@@ -163,7 +163,7 @@
         })
 
         // Avaa dialogin tarvikkeen luomista varten.
-        function avaaLisaysDialog () {
+        function avaaLisaysDialog() {
             $("#tarvikeDialog").dialog({
                 modal: true
             })
@@ -175,9 +175,19 @@
         // Lataa sivun avautuessa varastot pudotusvalikkoon.
         haeVarastot("dropdown");
 
+        // Top-buttonin skripti alkaa. TODO: Muokkaa muotoon jquery. 
+        var topbutton = document.getElementById("topBtn");
 
-
-
+        // Kun käyttäjä scrollaa 20 px sivua alaspäin, button ilmestyy
+        window.onscroll = function () { scrollFunction() };
+        
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                topbutton.style.display = "block";
+            } else {
+                topbutton.style.display = "none";
+            }
+        }
 
     });
 
@@ -202,7 +212,7 @@
 
                 <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
                 <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
-                <% if (kayttoOikeus == 1) { %> 
+                <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark">Uusi tarvike</button>
                 <% } %>
@@ -223,23 +233,23 @@
             Hankintapaikka <br> <input type="text" id="txbHPaikka"><br>
             Hinta (€) <input type="number" id="txbHinta"><br>
             Määrä <br> <input type="number" id="txbMaara"><br>
-            
-            Yksikkö <br> 
+
+            Yksikkö <br>
             <select class="form-control" id="ddYksikot">
                 <option value="defaultval">Valitse yksikkö</option>
-            </select> 
-            
+            </select>
+
             Varasto <br>
             <select class="form-control" id="ddVarastot">
                 <option value="defaultval">Valitse varasto</option>
             </select>
             <br>
-        
-        <button id="btnLuotarvike" class="btn btn-primary">Lisää</button>
+
+            <button id="btnLuotarvike" class="btn btn-primary">Lisää</button>
+
+        </div>
 
     </div>
-
-</div>
 </body>
 
 </html>
