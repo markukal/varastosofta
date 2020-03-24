@@ -7,9 +7,56 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
+
+<script>
+    $(document).ready(function () {
+  
+        // Listaa tarvikkeet taulukkoon.
+        function listaaKlista() { 
+            $("#taulu").empty();
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+            $.getJSON("http://127.0.0.1:3002/klistat", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#taulu").append(
+                        "<tr>" +
+                        "<th scope='row'>" + data[i].ID + "</th>" +
+                        "<td>" + data[i].nimi + "</td>" +
+                        "<td>" + data[i].kuvaus + "</td>" +
+                        "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].yksikko + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
+
+
+                    )
+                    $("#taulu").append("</tbody>")
+                }
+            })
+        };
+
+    });
+</script>
 <body>
     
+    <div id="yhteenvetodiv">
+        <div id="suodatusContainer">
+            <div class="row justify-content-sm-center">
+                <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+                <button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>
+                
+            </div>
+        </div>
+
+
+        <table class="table" id="koriTaulu">
+        </table>
+
+        <!--
+        <p>Yhteensä</p>
+        <input type="text" id="txbYhteensa" readonly>
+        -->
+    </div>
     
-    Tähän tulee tavaraa
 </body>
 </html>
