@@ -80,7 +80,19 @@ module.exports =
 
     //Ostoskorin poisto
     delete: function (req, res){
-        sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + connection.escape(req.query.ostosID);
+
+        if (req.query.ostosID != null && req.query.ostosID != undefined) {
+            sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + connection.escape(req.query.ostosID);
+        }
+        else if (req.body.ostosID == 0) {
+            sqlQuery = "DELETE FROM ostoskori;"
+        }
+        else {
+            sqlQuery = "";
+        }
+
+        console.log(sqlQuery);
+        
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
