@@ -6,12 +6,28 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/styles.css">
     </head>
     <script>
         $(document).ready(function(){
+
+            <!-- EI TOIMI -->
+            $('#muokkaaKayttajaa').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget)
+                var kayttajatunnus = button.data('kayttajatunnus')
+                console.log(kayttajatunnus);
+                console.log("test");
+                var modal = $(this)
+                $.get( "http:127.0.0.1:3002/users", { "mkayttajatunnus" : kayttajatunnus }).done(function(data) {
+                    modal.find('.modal-body #mkayttajatunnus').val(kayttajatunnus)
+                    modal.find('.modal-body #msalasana').val(data[0].salasana)
+                    modal.find('.modal-body #msalasanauudelleen').val(data[0].salasana)
+                    modal.find('.modal-body #mluokkaID').val(data[0].luokanNimi)
+                    modal.find('.modal-body #mkayttoOikeus').val(data[0].kayttoOikeus)
+                })
+            });
+ 
             function tulostaKayttajat() {
                 $.getJSON( "http://127.0.0.1:3002/users", function (data) {
                     var len = data.length;
@@ -30,6 +46,9 @@
                     $("#kayttajat").append("</tbody>")
                 })
             };
+
+       
+            
             tulostaKayttajat();
         })
     </script>
@@ -70,8 +89,8 @@
                     <div class="modal-body">
                         <form>
                             <div class="form-group">
-                                <label for="kayttajanimi" class="col-form-label">Käyttäjänimi</label>
-                                <input type="text" class="form-control" id="kayttajanimi">
+                                <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                                <input type="text" class="form-control" id="kayttajatunnus">
                             </div>
                             <div class="form-group">
                                 <label for="salasana" class="col-form-label">Salasana</label>
@@ -117,8 +136,8 @@
                         <div class="modal-body">
                             <form>
                                 <div class="form-group">
-                                    <label for="kayttajanimi" class="col-form-label">Käyttäjänimi</label>
-                                    <input type="text" class="form-control" id="mkayttajanimi">
+                                    <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                                    <input type="text" class="form-control" id="mkayttajatunnus">
                                 </div>
                                 <div class="form-group">
                                     <label for="salasana" class="col-form-label">Salasana</label>
