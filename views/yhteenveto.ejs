@@ -27,7 +27,7 @@
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
             $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -38,7 +38,8 @@
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" + "</tr>"
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
 
 
                     )
@@ -94,7 +95,7 @@
         // Suodattaa tarvikkeet valitun varaston perusteella.
         function suodataTaulukko(vid) {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">(painikesarake)</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
             $.get("http://127.0.0.1:3002/tarvikkeet", { "tarvikkeet.varastoID": vid }).done(function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
