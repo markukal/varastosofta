@@ -15,8 +15,6 @@
 
     $(document).ready(function(){
 
-        
-
         // Hakee ostoskorin rivit taulukkoon.
         function listaaKori() {
             var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
@@ -43,7 +41,7 @@
 
                     //$("#taulu").append("</tbody>")
 
-                    yhteensa = yhteensa + data[i].hinta;
+                    yhteensa += Number(data[i].hinta);
                 }
 
                 // Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
@@ -92,7 +90,7 @@
             <div class="row justify-content-sm-center">
                 <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
                 <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
-                <button type="button" class="btn btn-dark">Valitut varastosta</button>
+                <button type="button" class="btn btn-dark">Ota varastosta</button>
             </div>
         </div>
 
