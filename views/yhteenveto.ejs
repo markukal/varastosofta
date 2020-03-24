@@ -176,20 +176,6 @@
         // Lataa sivun avautuessa varastot pudotusvalikkoon.
         haeVarastot("dropdown");
 
-        // Top-buttonin skripti alkaa. TODO: Muokkaa muotoon jquery. 
-        var topbutton = document.getElementById("topBtn");
-
-        // Kun käyttäjä scrollaa 20 px sivua alaspäin, button ilmestyy
-        window.onscroll = function () { scrollFunction() };
-        
-        function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                topbutton.style.display = "block";
-            } else {
-                topbutton.style.display = "none";
-            }
-        }
-
     });
 
 
