@@ -8,8 +8,28 @@ module.exports =
 
     {
         // haetaan kaikki käyttäjän kentät paitsi salasana
+        
         fetchAll: function (req, res) {
-            var columns = ['kayttajaID', 'luokat.nimi AS luokanNimi', 'kayttajatunnus', 'kayttoOikeus']
+
+            // tulostetaan vain halutun käyttäjän kentät muokkaamista varten
+            if (typeof req.query.mkayttajatunnus !== 'undefined' && req.query.mkayttajatunnus !== null) {
+            connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, salasana, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID WHERE kayttajat.kayttajatunnus = "' + req.query.mkayttajatunnus + '"', function(error, results, fields) {
+                if (error) {
+                    console.log("Virhe haettaessa käyttäjiä, syy " + error);
+                    res.send({"status":500, "error": error, "response": null});
+                }
+                else
+                {
+                    res.json(results);
+                    console.log("Käyttäjien haku onnistui.");
+                }
+            });
+ 
+ 
+            }
+            // jos hakuehtoja ei ole tulostetaan kaikki käyttäjät
+            else
+            {
             connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, salasana, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID', function(error, results, fields) {
                 if (error) {
                     console.log("Virhe haettaessa käyttäjiä, syy " + error);
@@ -21,6 +41,7 @@ module.exports =
                     console.log("Käyttäjien haku onnistui.");
                 }
             });
+            }
         },
         register: async function (req, res) {
             var luokkaID = req.query.luokkaID;
