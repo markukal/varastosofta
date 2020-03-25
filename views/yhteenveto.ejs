@@ -86,7 +86,7 @@
             $.get("http://localhost:3002/tarviketyypit", function (data, status) {
                 $.each(data, function (i, item) {
                     $("#" + dd).append(
-                        '<option value=' + item.tyyppiID + '>' + item.nimi + '</option>'
+                        '<option value=' + item.ID + '>' + item.tyyppi + '</option>'
                     )
                 });
             });
@@ -102,12 +102,11 @@
                     $("#taulu").append(
                         "<tr>" +
                         "<th scope='row'>" + data[i].ID + "</th>" +
-                        "<td>" + data[i].Nimi + "</td>" +
-                        "<td>" + data[i].Kuvaus + "</td>" +
-                        "<td>" + data[i].Määrä + "</td>" +
-                        "<td>" + data[i].Yksikkö + "</td>" +
+                        "<td>" + data[i].nimi + "</td>" +
+                        "<td>" + data[i].kuvaus + "</td>" +
+                        "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].yksikko + "</td>" +
                         "<td>" + "<a href='javascript:void(0);' class='editp'>Muokkaa</a>" + "</td>" + "</tr>"
-
 
                     )
                     $("#taulu").append("</tbody>")
