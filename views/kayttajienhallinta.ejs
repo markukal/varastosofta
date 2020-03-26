@@ -20,13 +20,14 @@
                     modal.find('.modal-body #mkayttajatunnus').val(kayttajatunnus)
                     modal.find('.modal-body #mluokkaID').val(data[0].luokanNimi)
                     modal.find('.modal-body #mkayttoOikeus').val(data[0].kayttoOikeus)
+                    modal.find('.modal-body #mluokkaID').val(data[0].luokanNimi)
                 })
             });
             function kayttoOikeudet(arvo) {
                 return (arvo === 1 ? 'Täydet käyttöoikeudet' : 'Rajoitetut käyttöoikeudet');
             }
 
-            function tulostaKayttajat() {
+            function paivita() {
                 $.getJSON( "http://127.0.0.1:3002/users", function (data) {
                     var len = data.length;
                     for (var i=0; i < len; i++) {
@@ -44,10 +45,33 @@
                     }
                     $("#kayttajat").append("</tbody>")
                 })
-            };
+                $.getJSON( "http://127.0.0.1:3002/luokat", function (data) {
+                    $.each(data, function (i, item) {
+                        $('#luokkaID').append($('<option>', {
+                            value: item.luokkaID,
+                            text: item.nimi
+                        }));
+                         $('#mluokkaID').append($('<option>', {
+                            value: item.luokkaID,
+                            text: item.nimi
+                        }));
+                        
+                    });
+                });
+                        }
 
-            tulostaKayttajat();
-        })
+                        $(document).on("click", "#luoKayttaja", function() {
+                            var kayttajatunnus = document.getElementById("kayttajatunnus").value;
+                            var salasana = document.getElementById("salasana").value;
+                            var salasanauudelleen = document.getElementById("salasanauudelleen").value;
+                            var luokkaID = document.getElementById("luokkaID").value;
+                            var kayttoOikeus = document.getElementById("kayttoOikeus").value;
+                            $.post("http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus  + "&luokkaID=" + luokkaID + "&salasana=" + salasana + "&salasanauudelleen=" + salasanauudelleen + "&kayttoOikeus=" + kayttoOikeus);
+
+                        });
+
+                        paivita();
+                    })
     </script>
 
     <body>
@@ -84,38 +108,39 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form action="/users" method="POST" id="laheta">
                             <div class="form-group">
                                 <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
-                                <input type="text" class="form-control" id="kayttajatunnus">
+                                <input type="text" class="form-control" name="kayttajatunnus" id="kayttajatunnus">
                             </div>
                             <div class="form-group">
                                 <label for="salasana" class="col-form-label">Salasana</label>
-                                <input type="password" class="form-control" id="salasana">
+                                <input type="password" class="form-control" name="salasana" id="salasana">
                             </div>
                             <div class="form-group">
                                 <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
-                                <input type="password" class="form-control" id="salasanauudelleen">
+                                <input type="password" class="form-control" name="salasanauudelleen" id="salasanauudelleen">
                             </div>
                             <div class="form-group">
                                 <label for="luokkaID" class="col-form-label">Luokka</label>
-                                <select class="custom-select" class="form-control" id="luokkaID">
+                                <select class="custom-select" required class="form-control" name="luokkaID" id="luokkaID">
                                     <option value="">Valitse luokka</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
-                                <select class="custom-select" required id="kayttoOikeus">
+                                <select class="custom-select" required name="kayttoOikeus" id="kayttoOikeus">
                                     <option value="">Valitse käyttöoikeudet</option>
                                     <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
                                     <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
                                 </select>
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                <button type="button" class="btn btn-primary" id="luoKayttaja">Tallenna</button>
+                            </div>
+
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                        <button type="button" class="btn btn-primary">Tallenna</button>
                     </div>
                 </div>
             </div>
@@ -131,33 +156,32 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
-                                <input type="text" class="form-control" id="mkayttajatunnus">
-                            </div>
-                            <div class="form-group">
-                                <label for="salasana" class="col-form-label">Salasana</label>
-                                <input type="password" class="form-control" id="msalasana">
-                            </div>
-                            <div class="form-group">
-                                <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
-                                <input type="password" class="form-control" id="msalasanauudelleen">
-                            </div>
-                            <div class="form-group">
-                                <label for="luokkaID" class="col-form-label">Luokka</label>
-                                <select class="custom-select" class="form-control" id="mluokkaID">
-                                    <option value="">Valitse luokka</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
-                                <select class="custom-select" required id="mkayttoOikeus">
-                                    <option value="">Valitse käyttöoikeudet</option>
-                                    <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
-                                    <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                            <input type="text" class="form-control" id="mkayttajatunnus">
+                        </div>
+                        <div class="form-group">
+                            <label for="salasana" class="col-form-label">Salasana</label>
+                            <input type="password" class="form-control" id="msalasana">
+                        </div>
+                        <div class="form-group">
+                            <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
+                            <input type="password" class="form-control" id="msalasanauudelleen">
+                        </div>
+                        <div class="form-group">
+                            <label for="luokkaID" class="col-form-label">Luokka</label>
+                            <select class="custom-select" required name="mluokkaID" id="mluokkaID">
+                                <option value="">Valitse luokka</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
+                            <select class="custom-select" required name="kayttoOikeus" id="mkayttoOikeus">
+                                <option value="">Valitse käyttöoikeudet</option>
+                                <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
+                                <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
+                            </select>
+                        </div>
                         </form>
                     </div>
                     <div class="modal-footer">
