@@ -46,8 +46,9 @@ module.exports =
         register: async function (req, res) {
             var luokkaID = req.query.luokkaID;
             var kayttajatunnus = req.query.kayttajatunnus;
-
-            if(req.query.salasana === req.query.salasanauudelleen) {
+            
+            console.log(req.query.kayttajatunnus);
+            if(req.query.salasana === req.query.salasanauudelleen && req.query.salasana !== undefined && req.query.salasana !== null) {
 
                 // salasanan suolaus + hashaus
                 const hashedPassword = await bcrypt.hash(req.query.salasana, 10);
@@ -70,7 +71,6 @@ module.exports =
             else // jos salasana ja salasana uudelleen eivät täsmää 
             {
                 console.log("salasanat ei tasmaa");
-                res.send();
             }
         },
         update: async function (req, res) {
