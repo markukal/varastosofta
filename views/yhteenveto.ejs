@@ -97,7 +97,7 @@
             $.get("http://localhost:3002/yksikot", function (data, status) {
                 $.each(data, function (i, item) {
                     $("#" + dd).append(
-                        '<option value=' + item.yksikkoID + '>' + item.nimi + '</option>'
+                        '<option value=' + item.ID + '>' + item.nimi + '</option>'
                     )
                 });
 
