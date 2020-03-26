@@ -13,7 +13,7 @@ module.exports =
 
             // tulostetaan vain halutun käyttäjän kentät muokkaamista varten
             if (typeof req.query.mkayttajatunnus !== 'undefined' && req.query.mkayttajatunnus !== null) {
-            connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, salasana, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID WHERE kayttajat.kayttajatunnus = "' + req.query.mkayttajatunnus + '"', function(error, results, fields) {
+            connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID WHERE kayttajat.kayttajatunnus = "' + req.query.mkayttajatunnus + '"', function(error, results, fields) {
                 if (error) {
                     console.log("Virhe haettaessa käyttäjiä, syy " + error);
                     res.send({"status":500, "error": error, "response": null});
