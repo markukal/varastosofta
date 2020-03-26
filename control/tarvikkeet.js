@@ -26,7 +26,10 @@ module.exports =
                     i++;
                 }
             }
+            
         }
+
+        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
