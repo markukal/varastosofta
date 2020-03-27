@@ -47,13 +47,11 @@ module.exports =
             var luokkaID = req.query.luokkaID;
             var kayttajatunnus = req.query.kayttajatunnus;
             
-            console.log(req.query.kayttajatunnus);
             if(req.query.salasana === req.query.salasanauudelleen && req.query.salasana !== undefined && req.query.salasana !== null) {
 
                 // salasanan suolaus + hashaus
                 const hashedPassword = await bcrypt.hash(req.query.salasana, 10);
                 var kayttoOikeus = req.query.kayttoOikeus;
-                // console.log(hashedPassword);
 
                 var columns = ['luokkaID', 'kayttajatunnus', 'salasana', 'kayttoOikeus']
                 connection.query('INSERT INTO ?? (??) VALUES (?,?,?,?)', ['kayttajat', columns, luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus], function(error, results, fields) {
@@ -77,17 +75,15 @@ module.exports =
             var kayttajaID = req.query.mkayttajaID;
             var luokkaID = req.query.mluokkaID;
             var kayttajatunnus = req.query.mkayttajatunnus;
-            var salasana = req.query.msalasana;
             var kayttoOikeus = req.query.mkayttoOikeus;
 
 
-            if(req.query.msalasana === req.query.msalasanauudelleen) {
+            if(req.query.msalasana === req.query.msalasanauudelleen && req.query.msalasana !== undefined && req.query.msalasana !== null) {
                 const hashedPassword = await bcrypt.hash(req.query.msalasana, 10);
 
                 // tarkastetaan onko käyttäjän antama käyttäjätunnus sama kuin jo ennestään oleva
                 connection.query('SELECT * FROM kayttajat WHERE kayttajatunnus = ?', [kayttajatunnus], function(error, rows, fields) {
                     if (error) {
-                        console.log("testtesttest");
                         console.log("Virhe muokattaessa käyttäjää, syy " + error);
                         res.send({"status":500, "error": error, "response": null});
                     }
@@ -102,7 +98,7 @@ module.exports =
                     {
 
                         // jos käyttäjän syöttämä käyttäjätunnus on eri kuin ennestään oleva, päivitetään se
-                        connection.query('UPDATE kayttajat SET luokkaID = ?, kayttajatunnus = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajatunnus = kayttajatunnus', [luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus], function(error, results, fields) {
+                        connection.query('UPDATE kayttajat SET luokkaID = ?, kayttajatunnus = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajatunnus = ?', [luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus, kayttajatunnus], function(error, results, fields) {
                             if (error) {
                                 console.log("Virhe muokattaessa käyttäjää, syy " + error);
                                 res.send({"status":500, "error": error, "response": null});
@@ -127,7 +123,7 @@ module.exports =
             // TODO: tarkistus ettei kirjautuneena oleva käyttäjä pysty poistamaan itseään
             // TAI jonkinlainen pääkäyttäjä jota ei pysty poistamaan
             //
-            var kayttajaID = req.query.kayttajaID;
+            var kayttajatunnus = req.query.kayttajatunnus;
             connection.query('DELETE FROM kayttajat WHERE kayttajatunnus = ?', [kayttajatunnus], function(error, results, fields) {
                 if (error) {
                     console.log("Virhe poistaessa käyttäjää, syy " + error);
