@@ -132,7 +132,8 @@ app.get('/', checkAuthenticated, function (req, res) {
 app.get('/yhteenveto', checkAuthenticated, function (req, res) {
     res.render('yhteenveto.ejs', {
         kayttoOikeus: req.user.kayttoOikeus,
-        luokka: req.user.luokkaID
+        luokka: req.user.luokkaID,
+        kayttajatunnus: req.user.kayttajatunnus
     });
 });
 

@@ -6,7 +6,7 @@ module.exports =
     //Tietojen haku ostoskori taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, yksikot.nimi AS yksikko, tarvikkeet.maara as varastossa, ostoskori.maara as maara, tarvikkeet.hinta AS hinta, ostoskori.kasittelija as kasittelija FROM ostoskori " +
+        sqlQuery = "SELECT ostoskori.ostosID as id, tarvikkeet.nimi as nimi, yksikot.nimi AS yksikko, tarvikkeet.maara as varastossa, tarvikkeet.hinta AS hinta, ostoskori.kasittelija as kasittelija FROM ostoskori " +
                 "INNER JOIN tarvikkeet ON ostoskori.tarvikeID = tarvikkeet.tarvikeID " +
                 "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID;"; 
                 
@@ -42,8 +42,9 @@ module.exports =
 
     //Uuden ostoskorin lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, maara, kasittelija) VALUES (" + null + ", " + connection.escape(req.query.tarvikeID) +
-         ", " + connection.escape(req.query.maara) + ", '" + connection.escape(req.query.kasittelija) +"');";
+        sqlQuery = "INSERT INTO ostoskori (ostosID, tarvikeID, kasittelija) VALUES (" + null + ", " + connection.escape(req.query.tarvikeID) + ", " + connection.escape(req.query.kasittelija) +");";
+
+        console.log(sqlQuery);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
@@ -61,7 +62,7 @@ module.exports =
 
     //Ostoskorin tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE ostoskori SET tarvikeID="+ connection.escape(req.query.tarvikeID) + ", maara ="+ connection.escape(req.query.maara) + 
+        sqlQuery = "UPDATE ostoskori SET tarvikeID="+ connection.escape(req.query.tarvikeID) + "," +
         " WHERE ostosID=" + connection.escape(req.query.ostosID);
 
         connection.query(sqlQuery, function (error, results, fields) {

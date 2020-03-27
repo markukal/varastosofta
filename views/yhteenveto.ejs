@@ -33,13 +33,13 @@
                 for (var i = 0; i < len; i++) {
                     $("#taulu").append(
                         "<tr>" +
-                        "<th scope='row'>" + data[i].ID + "</th>" +
+                        "<td>" + data[i].ID + "</td>" +
                         "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
+                        "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike'>Valitse</a>" + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
                 }
@@ -56,13 +56,13 @@
                 for (var i = 0; i < len; i++) {
                     $("#taulu").append(
                         "<tr>" +
-                        "<th scope='row'>" + data[i].ID + "</th>" +
+                        "<td>" + data[i].ID + "</td>" +
                         "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Muokkaa</a>" + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
+                        "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike'>Muokkaa</a>" + "</td>" +
+                        "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
                 }
@@ -70,16 +70,32 @@
 
 
         };
-
-        // Tallentaa muokkauspainiketta klikattaessa valitun tarvikkeen id:n muuttujaan ja avaa muokkausdialogin.
-        $(document).on("click", "a.editp", function (e) {
+        
+        /*
+        // Tallentaa muokkauslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja avaa muokkausdialogin.
+        $(document).on("click", "a.muokkaaTarvike", function (e) {
+            
             e.preventDefault();
-            tarID = $(this).parent().prev().prev().prev().prev().prev().text();
+            tarID = $(this).parent().prev().prev().prev().prev().text();
 
             //openProjectDialog(); // TO-DO: Muokkausdialogi puuttuu vielä.
 
         });
+        */
+        
 
+        
+        
+        // TO-DO: Koriin-linkkien klikkauksesta ei vielä tapahdu mitään.
+        // Tallentaa lisäyslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja lisää sen koriin.
+        $(document).on("click", "a.tarvikeKoriin", function (e) {
+            e.preventDefault();
+            var tarID = $(this).closest('tr').children('td:first').text();
+            var kayttaja = $("#pKayttaja").text();
+            setTimeout(() => { $.post('http://localhost:3002/ostoskori?tarvikeID=' + tarID + '&kasittelija=' + kayttaja ,{}); }, timeOut);
+            
+        });
+        
 
         // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
         function haeVarastot(dd) {
@@ -162,6 +178,7 @@
             haeTarvikeTyypit("ddTyypit");
         })
 
+
         // Avaa dialogin tarvikkeen luomista varten.
         function avaaLisaysDialog() {
             $("#tarvikeDialog").dialog({
@@ -177,14 +194,13 @@
 
     });
 
-
-
+    
 
 
 </script>
 
 <body>
-
+    
     <div id="yhteenvetodiv">
 
         <!--Lohko suodatustyökaluille-->
@@ -207,6 +223,7 @@
         <table class="table" id="taulu">
         </table>
 
+        <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
         <!--Dialogi tarvikkeiden luomista varten-->
         <div id="tarvikeDialog" title="Luo tarvike" style="display: none">
             Kategoria
