@@ -13,7 +13,7 @@ module.exports =
 
             // tulostetaan vain halutun käyttäjän kentät muokkaamista varten
             if (typeof req.query.mkayttajatunnus !== 'undefined' && req.query.mkayttajatunnus !== null) {
-            connection.query('SELECT kayttajaID, luokat.nimi AS luokanNimi, kayttajatunnus, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID WHERE kayttajat.kayttajatunnus = "' + req.query.mkayttajatunnus + '"', function(error, results, fields) {
+            connection.query('SELECT kayttajaID, kayttajat.luokkaID, luokat.nimi AS luokanNimi, kayttajatunnus, kayttoOikeus FROM kayttajat INNER JOIN luokat ON kayttajat.luokkaID = luokat.luokkaID WHERE kayttajat.kayttajatunnus = "' + req.query.mkayttajatunnus + '"', function(error, results, fields) {
                 if (error) {
                     console.log("Virhe haettaessa käyttäjiä, syy " + error);
                     res.send({"status":500, "error": error, "response": null});
@@ -93,7 +93,7 @@ module.exports =
                     }
                     // jos käyttäjätunnus on sama niin päivitetään kaikki muut kentät paitsi kayttajatunnus
                     if (rows[0].kayttajatunnus === kayttajatunnus) {
-                        connection.query('UPDATE kayttajat SET luokkaID = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajatunnus = kayttajatunnus', [luokkaID, hashedPassword, kayttoOikeus], function(error, results, fields) {
+                        connection.query('UPDATE kayttajat SET luokkaID = ?, salasana = ?, kayttoOikeus = ? WHERE kayttajatunnus = ?', [luokkaID, hashedPassword, kayttoOikeus, kayttajatunnus], function(error, results, fields) {
                             console.log("Käyttäjän muokkaus onnistui.");
                             res.send({"status": 201});
                         });
