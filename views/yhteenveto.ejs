@@ -27,7 +27,7 @@
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
             $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -50,7 +50,7 @@
         // Suodattaa tarvikkeet valitun varaston perusteella.       
         function suodataTaulukko(vid) {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
             $.getJSON("http://127.0.0.1:3002/tarvikkeet?tarvikkeet.varastoID=" + vid, function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -94,6 +94,23 @@
             var kayttaja = $("#pKayttaja").text();
             setTimeout(() => { $.post('http://localhost:3002/ostoskori?tarvikeID=' + tarID + '&kasittelija=' + kayttaja ,{}); }, timeOut);
             
+        });
+
+        // Hakukentän toiminnallisuus
+
+        $("#hakuInput").on("keyup", function () {
+            var filter = $(this).val();
+
+            $("table tr").each(function() {
+                if ($(this).text().match(filter)) {
+                    $("#tableRow").show();
+                    $(this).show();
+                } else {
+                    $("#tableRow").show();
+                    $(this).hide();
+                }
+
+            })
         });
         
 
@@ -213,7 +230,7 @@
                 </select>
 
                 <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
-                <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+                <input type="text" id="hakuInput" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
                 <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark">Uusi tarvike</button>
