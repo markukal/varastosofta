@@ -100,8 +100,12 @@
 
         $("#hakuInput").on("keyup", function () {
             var filter = $(this).val();
+            
+            // TODO: hakukenttä hakee kaikista lohkoista tällä hetkellä. Haku täytyy rajata
+            // Id:n, nimikkeen ja kuvauksen välille. Lisäksi haun case sensitive-täytyy poistaa.
 
             $("table tr").each(function() {
+                console.log($(this).text());
                 if ($(this).text().match(filter)) {
                     $("#tableRow").show();
                     $(this).show();
@@ -111,6 +115,7 @@
                 }
 
             })
+
         });
         
 
