@@ -15,6 +15,7 @@ var yksikot = require('./control/yksikot');
 var tarviketyypit = require('./control/tarviketyypit');
 var tapahtumatyypit = require('./control/tapahtumatyypit');
 var ostoskori = require('./control/ostoskori');
+var luokat = require('./control/luokat');
 
 const http = require('http');
 const hostname = '127.0.0.1';
@@ -100,6 +101,9 @@ app.route('/ostoskori')
     .post(ostoskori.addNew)
     .put(ostoskori.update)
     .delete(ostoskori.delete);
+
+app.route('/luokat')
+    .get(luokat.fetchAll)
 
 app.route('/users')
     .get(users.fetchAll)
