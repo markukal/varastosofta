@@ -253,8 +253,9 @@ INSERT INTO `tarviketyypit` (`tyyppiID`, `nimi`) VALUES
 -- Lisätään dataa varastot-tauluun.
 --
 INSERT INTO `varastot` (`varastoID`, `nimi`) VALUES
-(1, 'Puuvarasto'),
-(2, 'Metallivarasto');
+(1, 'Riistaveden koulu'),
+(2, 'Melalahden koulu'),
+(3, 'Vehkalammin koulu');
 
 --
 -- Lisätään dataa yksikot-tauluun.
