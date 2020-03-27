@@ -18,9 +18,8 @@
                 var modal = $(this)
                 $.get( "http://127.0.0.1:3002/users", { "mkayttajatunnus" : kayttajatunnus }).done(function(data) {
                     modal.find('.modal-body #mkayttajatunnus').val(kayttajatunnus)
-                    modal.find('.modal-body #mluokkaID').val(data[0].luokanNimi)
+                    modal.find('.modal-body #mluokkaID').val(data[0].luokkaID)
                     modal.find('.modal-body #mkayttoOikeus').val(data[0].kayttoOikeus)
-                    modal.find('.modal-body #mluokkaID').val(data[0].luokanNimi)
                 })
             });
             function kayttoOikeudet(arvo) {
@@ -170,7 +169,7 @@
                         </div>
                         <div class="form-group">
                             <label for="luokkaID" class="col-form-label">Luokka</label>
-                            <select class="custom-select" required name="mluokkaID" id="mluokkaID">
+                            <select class="custom-select" required class="form-control" name="mluokkaID" id="mluokkaID">
                                 <option value="">Valitse luokka</option>
                             </select>
                         </div>
