@@ -102,7 +102,7 @@
             var filter = $(this).val().toUpperCase();
             
             // TODO: hakukenttä hakee kaikista lohkoista tällä hetkellä. Haku täytyy rajata
-            // Id:n, nimikkeen ja kuvauksen välille. Lisäksi haun case sensitive-täytyy poistaa.
+            // Id:n, nimikkeen ja kuvauksen välille.
 
             $("table tr").each(function() {
                 console.log($(this).text());
@@ -224,6 +224,11 @@
 <body>
     
     <div id="yhteenvetodiv">
+
+        <br>
+        <br>
+        <h1>Yhteenveto</h1>
+        <hr>
 
         <!--Lohko suodatustyökaluille-->
         <div id="suodatusContainer">
