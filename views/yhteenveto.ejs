@@ -88,6 +88,7 @@
         
         // TO-DO: Koriin-linkkien klikkauksesta ei vielä tapahdu mitään.
         // Tallentaa lisäyslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja lisää sen koriin.
+        
         $(document).on("click", "a.tarvikeKoriin", function (e) {
             e.preventDefault();
             var tarID = $(this).closest('tr').children('td:first').text();
@@ -100,22 +101,22 @@
 
         $("#hakuInput").on("keyup", function () {
             var filter = $(this).val().toUpperCase();
-            
-            // TODO: hakukenttä hakee kaikista lohkoista tällä hetkellä. Haku täytyy rajata
-            // Id:n, nimikkeen ja kuvauksen välille.
+
+            // haku tapahtuu kolmen ensimmäisen kolumnin välillä.
 
             $("table tr").each(function() {
                 console.log($(this).text());
-                if ($(this).text().toUpperCase().match(filter)) {
+                if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
+                ) {
                     $("#tableRow").show();
                     $(this).show();
                 } else {
                     $("#tableRow").show();
                     $(this).hide();
                 }
-
             })
-
         });
         
 
@@ -240,7 +241,7 @@
                 </select>
 
                 <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
-                <input type="text" id="hakuInput" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+                <input type="text" id="hakuInput" placeholder="Hae...">
                 <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark">Uusi tarvike</button>
