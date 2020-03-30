@@ -102,10 +102,9 @@
         $("#hakuInput").on("keyup", function () {
             var filter = $(this).val().toUpperCase();
 
-            // haku tapahtuu kolmen ensimmäisen kolumnin välillä.
+            // haku tapahtuu kolmen ensimmäisen sarakkeen välillä.
 
             $("table tr").each(function() {
-                console.log($(this).text());
                 if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
                     || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
                     || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
