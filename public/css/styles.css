@@ -21,6 +21,9 @@ body, html {
     text-align: center;
 }
 
+.modal-dialog {
+    text-align: left;
+}
 
 #sidebar {
     width: 15%;
@@ -87,5 +90,5 @@ h1 {
     /* transition: all 0.5s; */
 }
 .modal {
-    top: 200px;
+    top: 100px;
 }
