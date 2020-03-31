@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/styles.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
     </head>
     <script>
         $(document).ready(function(){
@@ -30,7 +30,7 @@
 
             });
             // TODO: EI TOIMI FIREFOXILLA?
-//            $(document).on("click", "#vahvistaPoisto", function() {
+            //            $(document).on("click", "#vahvistaPoisto", function() {
             $('#vahvistaPoisto').click(function() {
 
                 //                    var kayttajatunnus = $(this).data('kayttaja');
@@ -49,7 +49,7 @@
                     type: 'DELETE',
                     success: function(results) {
                         $('#poistoVahvistus').modal('toggle');
-                        paivita();
+                        setTimeout(paivita(), 500);
                     }
                 })
             }
@@ -122,7 +122,7 @@
                     type: 'POST',
                     success: function(result) {
                         $('#lisaaKayttaja').modal('toggle');
-                        paivita();
+                        setTimeout(paivita(), 500);
                     }
                 });
 
@@ -137,170 +137,173 @@
                     url: "http://127.0.0.1:3002/users?mkayttajatunnus=" + kayttajatunnus  + "&mluokkaID=" + luokkaID + "&msalasana=" + salasana + "&msalasanauudelleen=" + salasanauudelleen + "&mkayttoOikeus=" + kayttoOikeus,
                     type: 'PUT',
                     success: function(result) {
-                        paivita();
                         $('#muokkaaKayttajaa').modal('toggle');
+                        setTimeout(paivita(), 500);
                     }
                 });
             });
             $(document).on("click", "#paivita", function() {
-                paivitaLuokat();
-                paivita();
+                setTimeout(paivitaLuokat(), 200);
+                setTimeout(paivita(), 200);
             });
             paivitaLuokat();
             paivita();
         })
     </script>
 
-    <body>
-        <br>
-        <br>
-        <h1>Käyttäjien hallinta</h1>
-        <hr>
-        <br>
-        <div class="row" id="kayttajatContainer">
-            <div class="col-sm-10">
-                <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaKayttaja">Lisää käyttäjä</button>
-            </div>
-            <div class="col-sm-2">
-                <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
-            </div>
-            <div class="col-sm-12">
-                <table class="table" id="kayttajat">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Käyttäjätunnus</th>
-                            <th scope="col">Luokka</th>
-                            <th scope="col">Käyttöoikeudet</th>
-                            <th scope="col">Muokkaa</th>
-                            <th scope="col">Poista</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <br>
-            </div>
-        </div>
-
-        <div class="modal fade" id="lisaaKayttaja" tabindex="-1" role="dialog" aria-labelledby="lisaaKayttajaLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="lisaaKayttajaLabel">Luo uusi käyttäjä</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+    <div id="kayttajienHallinta">
+        <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+        <div class="mainwrapper">
+            <body>
+                <br>
+                <br>
+                <h1>Käyttäjien hallinta</h1>
+                <hr>
+                <br>
+                <div class="row" id="kayttajatContainer">
+                    <div class="col-sm-10">
+                        <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaKayttaja">Lisää käyttäjä</button>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
-                                <input type="text" class="form-control" name="kayttajatunnus" id="kayttajatunnus">
+                    <div class="col-sm-2">
+                        <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table" id="kayttajat">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Käyttäjätunnus</th>
+                                    <th scope="col">Luokka</th>
+                                    <th scope="col">Käyttöoikeudet</th>
+                                    <th scope="col">Muokkaa</th>
+                                    <th scope="col">Poista</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <br>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="lisaaKayttaja" tabindex="-1" role="dialog" aria-labelledby="lisaaKayttajaLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="lisaaKayttajaLabel">Luo uusi käyttäjä</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="salasana" class="col-form-label">Salasana</label>
-                                <input type="password" class="form-control" name="salasana" id="salasana">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                                        <input type="text" class="form-control" name="kayttajatunnus" id="kayttajatunnus">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salasana" class="col-form-label">Salasana</label>
+                                        <input type="password" class="form-control" name="salasana" id="salasana">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
+                                        <input type="password" class="form-control" name="salasanauudelleen" id="salasanauudelleen">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="luokkaID" class="col-form-label">Luokka</label>
+                                        <select class="custom-select" required class="form-control" name="luokkaID" id="luokkaID">
+                                            <option value="">Valitse luokka</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
+                                        <select class="custom-select" required name="kayttoOikeus" id="kayttoOikeus">
+                                            <option value="">Valitse käyttöoikeudet</option>
+                                            <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
+                                            <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="button" class="btn btn-primary" id="luoKayttaja">Tallenna</button>
+                                    </div>
+
+                                </form>
                             </div>
-                            <div class="form-group">
-                                <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
-                                <input type="password" class="form-control" name="salasanauudelleen" id="salasanauudelleen">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="muokkaaKayttajaa" tabindex="-1" role="dialog" aria-labelledby="muokkaaKayttajaaLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="muokkaaKayttajaaLabel">Muokkaa käyttäjää</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="luokkaID" class="col-form-label">Luokka</label>
-                                <select class="custom-select" required class="form-control" name="luokkaID" id="luokkaID">
-                                    <option value="">Valitse luokka</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
-                                <select class="custom-select" required name="kayttoOikeus" id="kayttoOikeus">
-                                    <option value="">Valitse käyttöoikeudet</option>
-                                    <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
-                                    <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
-                                </select>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                                        <input type="text" class="form-control" id="mkayttajatunnus">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salasana" class="col-form-label">Salasana</label>
+                                        <input type="password" class="form-control" id="msalasana">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
+                                        <input type="password" class="form-control" id="msalasanauudelleen">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="luokkaID" class="col-form-label">Luokka</label>
+                                        <select class="custom-select" required class="form-control" name="mluokkaID" id="mluokkaID">
+                                            <option value="">Valitse luokka</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
+                                        <select class="custom-select" required name="kayttoOikeus" id="mkayttoOikeus">
+                                            <option value="">Valitse käyttöoikeudet</option>
+                                            <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
+                                            <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
+                                        </select>
+                                    </div>
+                                </form>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                <button type="button" class="btn btn-primary" id="luoKayttaja">Tallenna</button>
+                                <button type="button" class="btn btn-primary" id="muokkaaKayttaja">Tallenna</button>
                             </div>
-
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="modal fade" id="muokkaaKayttajaa" tabindex="-1" role="dialog" aria-labelledby="muokkaaKayttajaaLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="muokkaaKayttajaaLabel">Muokkaa käyttäjää</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
-                                <input type="text" class="form-control" id="mkayttajatunnus">
+                <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog" aria-labelledby="poistaKayttajaLabel" aria-hidden="true" style='display: none'>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="poistaKayttajaLabel">Poista käyttäjä</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="form-group">
-                                <label for="salasana" class="col-form-label">Salasana</label>
-                                <input type="password" class="form-control" id="msalasana">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="container">
+                                        <p>Haluatko varmasti poistaa käyttäjän?</p>
+                                        <p id="poistettavaKayttaja" hidden>" "</p>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                            <button type="button" class="btn btn-primary" data-kayttaja="" id="vahvistaPoisto">Kyllä</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="form-group">
-                                <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
-                                <input type="password" class="form-control" id="msalasanauudelleen">
-                            </div>
-                            <div class="form-group">
-                                <label for="luokkaID" class="col-form-label">Luokka</label>
-                                <select class="custom-select" required class="form-control" name="mluokkaID" id="mluokkaID">
-                                    <option value="">Valitse luokka</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
-                                <select class="custom-select" required name="kayttoOikeus" id="mkayttoOikeus">
-                                    <option value="">Valitse käyttöoikeudet</option>
-                                    <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
-                                    <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
-                                </select>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                        <button type="button" class="btn btn-primary" id="muokkaaKayttaja">Tallenna</button>
+                        </div>
                     </div>
                 </div>
-            </div>
         </div>
+    </div>
 
-        <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog" aria-labelledby="poistaKayttajaLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="poistaKayttajaLabel">Poista käyttäjä</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="container">
-                                <p>Haluatko varmasti poistaa käyttäjän?</p>
-                                <p id="poistettavaKayttaja" hidden>" "</p>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                    <button type="button" class="btn btn-primary" data-kayttaja="" id="vahvistaPoisto">Kyllä</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-    </body>
+            </body>
 </html>

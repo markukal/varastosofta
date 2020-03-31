@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Varastokirjanpitosovellus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Varastokirjanpitosovellus</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <script>
 
 
-    $(document).ready(function(){
+        $(document).ready(function(){
 
-        // Hakee ostoskorin rivit taulukkoon.
-        function listaaKori() {
-            var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
-            $("#koriTaulu").empty();
-            $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th>' +
-                '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
-            $.getJSON("http://127.0.0.1:3002/ostoskori", function (data) {
-                
-                
-                var len = data.length;
+            // Hakee ostoskorin rivit taulukkoon.
+            function listaaKori() {
+                var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
+                $("#koriTaulu").empty();
+                $("#koriTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimi</th>' +
+                    '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
+                $.getJSON("http://127.0.0.1:3002/ostoskori", function (data) {
 
-                for (var i = 0; i < len; i++) {
+
+                    var len = data.length;
+
+                    for (var i = 0; i < len; i++) {
+                        $("#koriTaulu").append(
+                            "<tr>" +
+                            "<th scope='row'>" + data[i].id + "</th>" +
+                            "<td>" + data[i].nimi + "</td>" +
+                            "<td>" + data[i].varastossa + "</td>" +
+                            "<td>" + "<input type='number' placeholder='0'>" + "</td>" +
+                            "<td>" + data[i].yksikko + "</td>" +
+                            "<td>" + data[i].hinta + "</td>" +
+                            "<td>" + data[i].kasittelija + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='editp'>Poista</a>" + "</td>" + "</tr>"
+                        )
+
+                        //$("#taulu").append("</tbody>")
+
+                        yhteensa += Number(data[i].hinta);
+                    }
+
+                    // Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
                     $("#koriTaulu").append(
                         "<tr>" +
-                        "<th scope='row'>" + data[i].id + "</th>" +
-                        "<td>" + data[i].nimi + "</td>" +
-                        "<td>" + data[i].varastossa + "</td>" +
-                        "<td>" + "<input type='number' placeholder='0'>" + "</td>" +
-                        "<td>" + data[i].yksikko + "</td>" +
-                        "<td>" + data[i].hinta + "</td>" +
-                        "<td>" + data[i].kasittelija + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Poista</a>" + "</td>" + "</tr>"
-                    )
-
-                    //$("#taulu").append("</tbody>")
-
-                    yhteensa += Number(data[i].hinta);
-                }
-
-                // Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
-                $("#koriTaulu").append(
-                "<tr>" +
                         "<th scope='row'>" + "</th>" +
                         "<td>" + "</td>" +
                         "<td>" + "</td>" +
@@ -55,60 +56,63 @@
                         "<td>" + yhteensa + "</td>" +
                         "<td>" + "</td>" +
                         "<td>" + "</td>" + "</tr>"
-                )
-                
-            })
+                    )
 
-            
-        };
-        
-        // Tyhjentää ostoskori-taulun.
-        function tyhjennaKori () {
+                })
 
-            $.ajax({
-                url: 'http://localhost:3002/ostoskori',
-                method: 'DELETE',
-                data: {ostosID : 0}
-            })
-            setTimeout(() => {   listaaKori(); }, 500);
-        }
 
-        // Click-funktio painikkeelle, josta tyhjennetään ostoskori.
-        $("#btnTyhjennaKori").click(function () {
-            tyhjennaKori();
+            };
+
+            // Tyhjentää ostoskori-taulun.
+            function tyhjennaKori () {
+
+                $.ajax({
+                    url: 'http://localhost:3002/ostoskori',
+                    method: 'DELETE',
+                    data: {ostosID : 0}
+                })
+                setTimeout(() => {   listaaKori(); }, 500);
+            }
+
+            // Click-funktio painikkeelle, josta tyhjennetään ostoskori.
+            $("#btnTyhjennaKori").click(function () {
+                tyhjennaKori();
+            });
+
+
+            // Suorittaa listaaKori-funktion
+            listaaKori();  
         });
 
+    </script>
+    <body>
+        <div id="yhteenvetodiv">
+            <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+            <div class="mainwrapper">
+                <br>
+                <br>
+                <h1>Noutolista</h1>
+                <hr>
 
-        // Suorittaa listaaKori-funktion
-        listaaKori();  
-    });
+                <div id="suodatusContainer">
+                    <div class="row justify-content-sm-center">
+                        <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
+                        <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
+                        <button type="button" class="btn btn-dark">Ota varastosta</button>
+                    </div>
+                </div>
 
-</script>
-<body>
-    <div id="yhteenvetodiv">
-        <br>
-        <br>
-        <h1>Noutolista</h1>
-        <hr>
 
-        <div id="suodatusContainer">
-            <div class="row justify-content-sm-center">
-                <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
-                <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
-                <button type="button" class="btn btn-dark">Ota varastosta</button>
+                <table class="table" id="koriTaulu">
+                </table>
+
+                <!--
+                    <p>Yhteensä</p>
+                    <input type="text" id="txbYhteensa" readonly>
+                -->
             </div>
         </div>
 
 
-        <table class="table" id="koriTaulu">
-        </table>
-
-        <!--
-        <p>Yhteensä</p>
-        <input type="text" id="txbYhteensa" readonly>
-        -->
-    </div>
-
-
-</body>
+    </body>
 </html>

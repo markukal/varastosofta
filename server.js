@@ -126,14 +126,6 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/', checkAuthenticated, function (req, res) {
-    res.render('index.ejs', {
-        kayttoOikeus: req.user.kayttoOikeus,
-        luokka: req.user.luokkaID,
-        kayttajatunnus: req.user.kayttajatunnus
-    });
-});
-
-app.get('/yhteenveto', checkAuthenticated, function (req, res) {
     res.render('yhteenveto.ejs', {
         kayttoOikeus: req.user.kayttoOikeus,
         luokka: req.user.luokkaID,
@@ -143,9 +135,10 @@ app.get('/yhteenveto', checkAuthenticated, function (req, res) {
 
 app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
     // opettajan kayttooikeus = 1 , oppilaan = 2
-    console.log(req.user.kayttoOikeus)
     if (req.user.kayttoOikeus == "1") {
         res.render('kayttajienhallinta.ejs', {
+            kayttajatunnus: req.user.kayttajatunnus,
+            kayttoOikeus: req.user.kayttoOikeus,
             kayttajaID: req.user.kayttajaID
         });
     }
@@ -157,11 +150,19 @@ app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
 });
 
 app.get('/kerailylista', (req, res) => {
-    res.render('kerailylista.ejs');
+    res.render('kerailylista.ejs', {
+            kayttajatunnus: req.user.kayttajatunnus,
+            kayttoOikeus: req.user.kayttoOikeus,
+            kayttajaID: req.user.kayttajaID
+        }); 
 }); 
 
 app.get('/ostoskorisivu', (req, res) => {
-    res.render('ostoskorisivu.ejs');
+    res.render('ostoskorisivu.ejs', {
+            kayttajatunnus: req.user.kayttajatunnus,
+            kayttoOikeus: req.user.kayttoOikeus,
+            kayttajaID: req.user.kayttajaID
+        }); 
 });
 
 app.get('/hallinnointi', (req, res) => {
