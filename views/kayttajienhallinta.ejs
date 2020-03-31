@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/styles.css">
+        <link rel="stylesheet" href="/css/styles.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> 
@@ -24,30 +24,36 @@
             });
             $('#poistoVahvistus').on('shown.bs.modal', function(event) {
 
-                var button = $(event.relatedTarget)
-                var kayttajatunnus = button.data('kayttajatunnus')
-                console.log(kayttajatunnus);
+                var button = $(event.relatedTarget);
+                var kayttajatunnus = button.data('kayttajatunnus');
+                $('#vahvistaPoisto').data('kayttaja', kayttajatunnus)
 
+            });
             // TODO: EI TOIMI FIREFOXILLA?
-                $(document).on("click", "#vahvistaPoisto", function() {
+//            $(document).on("click", "#vahvistaPoisto", function() {
+            $('#vahvistaPoisto').click(function() {
 
-                    $.ajax({
-                        url: "http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus,
-                        type: 'DELETE',
-                        success: function(results) {
-                            $('.modal').modal('hide');
-                            paivita();
-                        }
-                    });
-                });
+                //                    var kayttajatunnus = $(this).data('kayttaja');
+                poistaKayttaja($(this).data('kayttaja'));
+            });
 
 
-            })
-                // TODO: EI TOIMI, modal dialogit bugaa tokalla käynnistyksellä, formit ei tyhjene.
+            // TODO: EI TOIMI, modal dialogit bugaa tokalla käynnistyksellä, formit ei tyhjene.
             $('.modal').on('hidden.bs.modal', function() {
                 $('.modal-backdrop').hide();
                 $(this).find('form').trigger('reset');
             })
+            function poistaKayttaja(kayttajatunnus) {
+                $.ajax({
+                    url: "http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus,
+                    type: 'DELETE',
+                    success: function(results) {
+                        $('#poistoVahvistus').modal('toggle');
+                        paivita();
+                    }
+                })
+            }
+
 
 
             function kayttoOikeudet(arvo) {
@@ -77,7 +83,7 @@
 
             }
             function paivitaLuokat() {
-                
+
                 $('#luokkaID').empty();
                 $('#mluokkaID').empty();
                 $('#luokkaID').append($('<option>', {
@@ -115,9 +121,8 @@
                     url: "http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus  + "&luokkaID=" + luokkaID + "&salasana=" + salasana + "&salasanauudelleen=" + salasanauudelleen + "&kayttoOikeus=" + kayttoOikeus,
                     type: 'POST',
                     success: function(result) {
+                        $('#lisaaKayttaja').modal('toggle');
                         paivita();
-                        $('.modal-backdrop').hide();
-                        $('.modal').modal('hide');
                     }
                 });
 
@@ -133,8 +138,7 @@
                     type: 'PUT',
                     success: function(result) {
                         paivita();
-                        $('.modal-backdrop').hide();
-                        $('.modal').modal('hide');
+                        $('#muokkaaKayttajaa').modal('toggle');
                     }
                 });
             });
@@ -186,7 +190,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/users" method="POST" id="laheta">
+                        <form>
                             <div class="form-group">
                                 <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
                                 <input type="text" class="form-control" name="kayttajatunnus" id="kayttajatunnus">
@@ -234,32 +238,33 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
-                            <input type="text" class="form-control" id="mkayttajatunnus">
-                        </div>
-                        <div class="form-group">
-                            <label for="salasana" class="col-form-label">Salasana</label>
-                            <input type="password" class="form-control" id="msalasana">
-                        </div>
-                        <div class="form-group">
-                            <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
-                            <input type="password" class="form-control" id="msalasanauudelleen">
-                        </div>
-                        <div class="form-group">
-                            <label for="luokkaID" class="col-form-label">Luokka</label>
-                            <select class="custom-select" required class="form-control" name="mluokkaID" id="mluokkaID">
-                                <option value="">Valitse luokka</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
-                            <select class="custom-select" required name="kayttoOikeus" id="mkayttoOikeus">
-                                <option value="">Valitse käyttöoikeudet</option>
-                                <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
-                                <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
-                            </select>
-                        </div>
+                        <form>
+                            <div class="form-group">
+                                <label for="kayttajatunnus" class="col-form-label">Käyttäjätunnus</label>
+                                <input type="text" class="form-control" id="mkayttajatunnus">
+                            </div>
+                            <div class="form-group">
+                                <label for="salasana" class="col-form-label">Salasana</label>
+                                <input type="password" class="form-control" id="msalasana">
+                            </div>
+                            <div class="form-group">
+                                <label for="salasanauudelleen" class="col-form-label">Kirjoita salasana uudelleen</label>
+                                <input type="password" class="form-control" id="msalasanauudelleen">
+                            </div>
+                            <div class="form-group">
+                                <label for="luokkaID" class="col-form-label">Luokka</label>
+                                <select class="custom-select" required class="form-control" name="mluokkaID" id="mluokkaID">
+                                    <option value="">Valitse luokka</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="kayttoOikeus" class="col-form-label">Käyttöoikeudet</label>
+                                <select class="custom-select" required name="kayttoOikeus" id="mkayttoOikeus">
+                                    <option value="">Valitse käyttöoikeudet</option>
+                                    <option value="1">Täydet käyttöoikeudet (Opettajille)</option>
+                                    <option value="2">Rajoitetut käyttöoikeudet (Oppilaille)</option>
+                                </select>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -280,12 +285,13 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/users/delete">
+                        <form>
                             <div class="container">
                                 <p>Haluatko varmasti poistaa käyttäjän?</p>
+                                <p id="poistettavaKayttaja" hidden>" "</p>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                    <button type="button" class="btn btn-primary" id="vahvistaPoisto">Kyllä</button>
+                                    <button type="button" class="btn btn-primary" data-kayttaja="" id="vahvistaPoisto">Kyllä</button>
                                 </div>
                             </div>
                         </form>
