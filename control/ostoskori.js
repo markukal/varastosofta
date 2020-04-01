@@ -85,6 +85,9 @@ module.exports =
         if (req.query.ostosID != null && req.query.ostosID != undefined) {
             sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + connection.escape(req.query.ostosID);
         }
+        else if (req.body.ostosID != null && req.body.ostosID != undefined && req.body.ostosID != 0) {
+            sqlQuery = "DELETE FROM ostoskori WHERE ostosID=" + connection.escape(req.body.ostosID);
+        }
         else if (req.body.ostosID == 0) {
             sqlQuery = "DELETE FROM ostoskori;"
         }

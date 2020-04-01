@@ -16,6 +16,8 @@
 
         $(document).ready(function(){
 
+            var timeOut = 500;
+
             // Hakee ostoskorin rivit taulukkoon.
             function listaaKori() {
                 var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
@@ -37,7 +39,7 @@
                             "<td>" + data[i].yksikko + "</td>" +
                             "<td>" + data[i].hinta + "</td>" +
                             "<td>" + data[i].kasittelija + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='editp'>Poista</a>" + "</td>" + "</tr>"
+                            "<td>" + "<a href='javascript:void(0);' class='poistaListasta'>Poista</a>" + "</td>" + "</tr>"
                         )
 
                         //$("#taulu").append("</tbody>")
@@ -63,6 +65,20 @@
 
             };
 
+            $(document).on("click", "a.poistaListasta", function (e) {
+                e.preventDefault();
+                var listID = $(this).closest('tr').children('th:first').text();
+                
+                $.ajax({
+                    url: 'http://localhost:3002/ostoskori',
+                    method: 'DELETE',
+                    data: {"ostosID" : listID}
+                })
+                setTimeout(() => { listaaKori(); }, timeOut);
+
+            });
+
+
             // Tyhjentää ostoskori-taulun.
             function tyhjennaKori () {
 
@@ -83,6 +99,8 @@
             // Suorittaa listaaKori-funktion
             listaaKori();  
         });
+
+        
 
     </script>
     <body>
