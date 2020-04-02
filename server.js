@@ -186,3 +186,5 @@ function checkNotAuthenticated(req, res, next) {
 app.listen(port, hostname, () => {
     console.log(`Server running AT http://${hostname}:${port}/`);
 });
+
+module.exports = app.listen(port, () => console.log("Serveri pyörii portissa " + port));
