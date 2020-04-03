@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Luokkien hallinta</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <script>
+        $(document).ready(function(){
+
+            $('#muokkaaLuokkaa').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget)
+                var luokkaID = button.data('luokkaid')
+                var modal = $(this)
+                modal.find('.modal-body #mluokkaID').val(luokkaID);
+                $.get( "http://127.0.0.1:3002/luokat", { "mluokkaID" : luokkaID }).done(function(data) {
+                    modal.find('.modal-body #mnimi').val(data[0].nimi)
+                })
+            });
+            $('#poistoVahvistus').on('shown.bs.modal', function(event) {
+
+                var button = $(event.relatedTarget);
+                var luokkaID = button.data('luokkaid');
+                $('#vahvistaPoisto').data('luokka', luokkaID)
+
+            });
+            $('#vahvistaPoisto').click(function() {
+
+                poistaLuokka($(this).data('luokka'));
+            });
+
+
+            $('.modal').on('hidden.bs.modal', function() {
+                $('.modal-backdrop').hide();
+                $(this).find('form').trigger('reset');
+            })
+            function poistaLuokka(luokkaID) {
+                $.ajax({
+                    url: "http://127.0.0.1:3002/luokat?luokkaID=" + luokkaID,
+                    type: 'DELETE',
+                    success: function(results) {
+                        $('#poistoVahvistus').modal('toggle');
+                        setTimeout(paivita(), 500);
+                    }
+                })
+            }
+
+
+
+
+            function paivita() {
+
+                $("#luokat tbody tr").remove();
+                $.getJSON( "http://127.0.0.1:3002/luokat", function (data) {
+                    var len = data.length;
+                    for (var i=0; i < len; i++) {
+                        $("#luokat").append(
+                            "<tr>" + 
+                            "<td>" + data[i].luokkaID + "</td>" +
+                            "<td>" + data[i].nimi + "</td>" +
+                            "<td><button type='button' id='muokkaabtn' class='btn btn-dark' data-toggle='modal' data-target='#muokkaaLuokkaa' data-luokkaID='" + data[i].luokkaID + "'>Muokkaa</button>" +
+                            "<td><button type='button' id='poistabtn' class='close' data-toggle='modal' data-target='#poistoVahvistus' aria-label='Close' data-luokkaID='" + data[i].luokkaID + "'><span aria-hidden='true'>&times;</span></button>" +
+                            "</tr>"
+                        )
+
+                    }
+                    $("#luokat").append("</tbody>")
+                })
+
+            }
+            $(document).on("click", "#luoLuokka", function() {
+                var nimi = document.getElementById("nimi").value;
+                $.ajax({
+                    url: "http://127.0.0.1:3002/luokat?nimi=" + nimi,
+                    type: 'POST',
+                    success: function(result) {
+                        $('#lisaaLuokka').modal('toggle');
+                        setTimeout(paivita(), 500);
+                    }
+                });
+
+            });
+            $(document).on("click", "#muokkaaLuokkaabtn", function() {
+                var nimi = document.getElementById("mnimi").value;
+                var luokkaID = document.getElementById("mluokkaID").value;
+                $.ajax({
+                    url: "http://127.0.0.1:3002/luokat?mnimi=" + nimi + "&mluokkaID=" + luokkaID,
+                    type: 'PUT',
+                    success: function(result) {
+                        $('#muokkaaLuokkaa').modal('toggle');
+                        setTimeout(paivita(), 500);
+                    }
+                });
+            });
+            $(document).on("click", "#paivita", function() {
+                setTimeout(paivita(), 200);
+            });
+            paivita();
+        })
+    </script>
+
+    <div id="luokkienHallinta">
+        <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+        <div class="mainwrapper">
+            <body>
+                <br>
+                <br>
+                <h1>Luokkien hallinta</h1>
+                <hr>
+                <br>
+                <div class="row" id="luokatContainer">
+                    <div class="col-sm-10">
+                        <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaLuokka">Lisää luokka</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
+                    </div>
+                    <div class="col-sm-12">
+                        <table class="table" id="luokat">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Luokan nimi</th>
+                                    <th scope="col">Muokkaa</th>
+                                    <th scope="col">Poista</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <br>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="lisaaLuokka" tabindex="-1" role="dialog" aria-labelledby="lisaaLuokkaLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="lisaaLuokkaLabel">Luo uusi luokka</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="nimi" class="col-form-label">Luokan nimi</label>
+                                        <input type="text" class="form-control" name="nimi" id="nimi">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="button" class="btn btn-primary" id="luoLuokka">Tallenna</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="muokkaaLuokkaa" tabindex="-1" role="dialog" aria-labelledby="muokkaaLuokkaaLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="muokkaaLuokkaaLabel">Muokkaa luokkaa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <input type="text" class="form-control" id="mluokkaID" hidden>
+                                    <div class="form-group">
+                                        <label for="nimi" class="col-form-label">Luokan nimi</label>
+                                        <input type="text" class="form-control" id="mnimi">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                <button type="button" class="btn btn-primary" id="muokkaaLuokkaabtn">Tallenna</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog" aria-labelledby="poistaLuokkaLabel" aria-hidden="true" style='display: none'>
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="poistaLuokkaLabel">Poista luokka</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="container">
+                                        <p>Haluatko varmasti poistaa luokan?</p>
+                                        <p id="poistettavaLuokka" hidden>" "</p>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                            <button type="button" class="btn btn-primary" data-luokka="" id="vahvistaPoisto">Kyllä</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+
+            </body>
+</html>
