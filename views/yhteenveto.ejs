@@ -127,7 +127,7 @@
                 });
             }
 
-            // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+            // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeYksikot(dd) {
                 $.get("http://localhost:3002/yksikot", function (data, status) {
                     $.each(data, function (i, item) {
@@ -256,47 +256,47 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="ID" class="col-form-label">ID</label>
-                                    <input type="text" class="form-control" id="txbTarID" readonly>
+                                    <input type="text" class="form-control" id="mtxbTarID" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="kategoria" class="col-form-label">Kategoria</label>
-                                    <select class="form-control custom-select" id="ddTyypit">
+                                    <select class="form-control custom-select" id="mddTyypit">
                                         <option value="defaultval">Valitse kategoria</option>
                                     </select>
                                 </div> 
                                 <div class="form-group">
                                     <label for="nimike" class="col-form-label">Nimike</label>
-                                    <input type="text" class="form-control" id="txbTarNim">
+                                    <input type="text" class="form-control" id="mtxbTarNim">
                                 </div>
                                 <div class="form-group">
                                     <label for="kuvaus" class="col-form-label">Kuvaus</label>
-                                    <input type="text" class="form-control" id="txbTarKuvaus">
+                                    <input type="text" class="form-control" id="mtxbTarKuvaus">
                                 </div>
                                 <div class="form-group">
                                     <label for="halytysraja" class="col-form-label">Hälytysraja</label>
-                                    <input type="number" class="form-control" id="txbHalRaja">
+                                    <input type="number" class="form-control" id="mtxbHalRaja">
                                 </div>
                                 <div class="form-group">
                                     <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
-                                    <input type="text" class="form-control" id="txbHPaikka">
+                                    <input type="text" class="form-control" id="mtxbHPaikka">
                                 </div>
                                 <div class="form-group">
                                     <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="txbHinta">
+                                    <input type="number" class="form-control" id="mtxbHinta">
                                 </div>
                                 <div class="form-group">
                                     <label for="maara" class="form-control-label">Määrä</label>
-                                    <input type="number" class="form-control" id="txbMaara">
+                                    <input type="number" class="form-control" id="mtxbMaara">
                                 </div>
                                 <div class="form-group">
                                     <label for="yksikko" class="form-control-label">Yksikko</label>
-                                    <select class="form-control custom-select" id="ddYksikot">
+                                    <select class="form-control custom-select" id="mddYksikot">
                                         <option value="defaultval">Valitse yksikkö</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="varasto" class="form-control-label">Varasto</label>
-                                    <select class="form-control custom-select" id="ddVarastot">
+                                    <select class="form-control custom-select" id="mddVarastot">
                                         <option value="defaultval">Valitse varasto</option>
                                     </select>
                                 </div>
