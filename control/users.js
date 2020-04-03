@@ -46,7 +46,8 @@ module.exports =
         register: async function (req, res) {
             var luokkaID = req.query.luokkaID;
             var kayttajatunnus = req.query.kayttajatunnus;
-            
+
+           
             if(req.query.salasana === req.query.salasanauudelleen && req.query.salasana !== undefined && req.query.salasana !== null) {
 
                 // salasanan suolaus + hashaus
@@ -57,7 +58,7 @@ module.exports =
                 connection.query('INSERT INTO ?? (??) VALUES (?,?,?,?)', ['kayttajat', columns, luokkaID, kayttajatunnus, hashedPassword, kayttoOikeus], function(error, results, fields) {
                     if (error) {
                         console.log("Virhe lisättäessä uutta käyttäjää, syy " + error);
-                        res.send({"status":500, "error": error, "response": null});
+                        res.status(400);
                     }
                     else
                     {
