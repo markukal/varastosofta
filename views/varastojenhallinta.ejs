@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<script>
+    $(document).ready(function () {
+
+    })
+</script>
+
+<div id="varastonHallinta">
+    <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+    <div class="mainwrapper">
+
+        <body>
+            <br>
+            <br>
+            <h1>Varastot</h1>
+            <hr>
+            <br>
+            <div class="row" id="varastotContainer">
+                <div class="col-sm-10">
+                    <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal"
+                        data-target="#lisaaVarasto">Lisää varasto</button>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
+                </div>
+                <div class="col-sm-12">
+                    <table class="table" id="varastot">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Varasto</th>
+                                <th scope="col">Muokkaa</th>
+                                <th scope="col">Poista</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    <br>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+
+</body>
+
+</html>

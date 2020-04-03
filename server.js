@@ -149,6 +149,22 @@ app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
     }
 });
 
+app.get('/varastojenhallinta', checkAuthenticated,( req, res) => {
+    // opettajan kayttooikeus = 1 , oppilaan = 2
+    if (req.user.kayttoOikeus == "1") {
+        res.render('varastojenhallinta.ejs', {
+            kayttajatunnus: req.user.kayttajatunnus,
+            kayttoOikeus: req.user.kayttoOikeus,
+            kayttajaID: req.user.kayttajaID
+        });
+    }
+    else {
+        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
+        // res.redirect('back')
+        res.redirect('/login')
+    }
+});
+
 app.get('/kerailylista', (req, res) => {
     res.render('kerailylista.ejs', {
             kayttajatunnus: req.user.kayttajatunnus,
