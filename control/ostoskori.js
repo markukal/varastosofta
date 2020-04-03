@@ -79,6 +79,7 @@ module.exports =
         });
     },
 
+
     //Ostoskorin poisto
     delete: function (req, res){
 
