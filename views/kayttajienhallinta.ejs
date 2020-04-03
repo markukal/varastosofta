@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Käyttäjien hallinta</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
@@ -29,16 +30,12 @@
                 $('#vahvistaPoisto').data('kayttaja', kayttajatunnus)
 
             });
-            // TODO: EI TOIMI FIREFOXILLA?
-            //            $(document).on("click", "#vahvistaPoisto", function() {
             $('#vahvistaPoisto').click(function() {
 
-                //                    var kayttajatunnus = $(this).data('kayttaja');
                 poistaKayttaja($(this).data('kayttaja'));
             });
 
 
-            // TODO: EI TOIMI, modal dialogit bugaa tokalla käynnistyksellä, formit ei tyhjene.
             $('.modal').on('hidden.bs.modal', function() {
                 $('.modal-backdrop').hide();
                 $(this).find('form').trigger('reset');
