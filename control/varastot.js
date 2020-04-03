@@ -90,7 +90,7 @@ module.exports =
     delete: function (req, res) {
         var varastoID = req.query.varastoID;
 
-        sqlQuery = "DELETE FROM varastot WHERE varastoID=" + connection.escape(req.query.varastoID);
+        //sqlQuery = "DELETE FROM varastot WHERE varastoID=" + connection.escape(req.query.varastoID);
 
         connection.query('DELETE FROM varastot WHERE varastoID = ?', [varastoID], function (error, results) {
             if (error) {

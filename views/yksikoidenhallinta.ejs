@@ -11,9 +11,101 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <script>
-    $(document).ready(function () {
+ $(document).ready(function () {
 
+$('#muokkaaYksikkoa').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var yksikkoID = button.data('yksikkoid');
+    var modal = $(this)
+    modal.find('.modal-body #myksikkoID').val(yksikkoID);
+    $.get("http://127.0.0.1:3002/yksikot", { "myksikkoID": yksikkoID }).done(function (data) {
+        modal.find('.modal-body #mnimi').val(data[0].nimi)
     })
+});
+$('#poistoVahvistus').on('shown.bs.modal', function (event) {
+
+    var button = $(event.relatedTarget);
+    var yksikkoID = button.data('yksikkoid');
+    $('#vahvistaPoisto').data('yksikko', yksikkoID)
+
+});
+$('#vahvistaPoisto').click(function () {
+
+    poistaYksikko($(this).data('yksikko'));
+});
+
+
+$('.modal').on('hidden.bs.modal', function () {
+    $('.modal-backdrop').hide();
+    $(this).find('form').trigger('reset');
+})
+function poistaYksikko(yksikkoID) {
+    $.ajax({
+        url: "http://127.0.0.1:3002/yksikot?yksikkoID=" + yksikkoID,
+        type: 'DELETE',
+        success: function (results) {
+            $('#poistoVahvistus').modal('toggle');
+            setTimeout(paivita(), 500);
+        }
+    })
+}
+
+
+
+
+function paivita() {
+
+    $("#yksikkoTaulu tbody tr").remove();
+    $.getJSON("http://127.0.0.1:3002/yksikot", function (data) {
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            $("#yksikkoTaulu").append(
+                "<tr>" +
+                "<td>" + data[i].ID + "</td>" +
+                "<td>" + data[i].nimi + "</td>" +
+                "<td><button type='button' id='muokkaabtn' class='btn btn-dark' data-toggle='modal' data-target='#muokkaaYksikkoa' data-yksikkoID='" + data[i].ID + "'>Muokkaa</button>" +
+                "<td><button type='button' id='poistabtn' class='close' data-toggle='modal' data-target='#poistoVahvistus' aria-label='Close' data-yksikkoID='" + data[i].ID + "'><span aria-hidden='true'>&times;</span></button>" +
+                "</tr>"
+            )
+
+        }
+        $("#yksikkoTaulu").append("</tbody>")
+    })
+
+}
+
+
+$(document).on("click", "#luoYksikko", function () {
+    var nimi = document.getElementById("nimi").value;
+    $.ajax({
+        url: "http://127.0.0.1:3002/yksikot?nimi=" + nimi,
+        type: 'POST',
+        success: function (result) {
+            $('#lisaaYksikko').modal('toggle');
+            setTimeout(paivita(), 500);
+        }
+    });
+
+});
+$(document).on("click", "#muokkaaYksikkoabtn", function () {
+    var nimi = document.getElementById("mnimi").value;
+    var yksikkoID = document.getElementById("myksikkoID").value;
+    $.ajax({
+        url: "http://127.0.0.1:3002/yksikot?mnimi=" + nimi + "&myksikkoID=" + yksikkoID,
+        type: 'PUT',
+        success: function (result) {
+            $('#muokkaaYksikkoa').modal('toggle');
+            setTimeout(paivita(), 500);
+        }
+    });
+});
+
+$(document).on("click", "#paivita", function () {
+    setTimeout(paivita(), 200);
+});
+
+paivita();
+})
 </script>
 
 <div id="yksikotHallinta">
@@ -35,7 +127,7 @@
                     <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
                 </div>
                 <div class="col-sm-12">
-                    <table class="table" id="tarviketyypit">
+                    <table class="table" id="yksikkoTaulu">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Id</th>
@@ -48,6 +140,89 @@
                     <br>
                 </div>
             </div>
+
+            <div class="modal fade" id="lisaaYksikko" tabindex="-1" role="dialog" aria-labelledby="lisaaYksikkoLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="lisaaYksikkoLabel">Luo uusi yksikkö</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="nimi" class="col-form-label">Yksikön nimi</label>
+                                <input type="text" class="form-control" name="nimi" id="nimi">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-dismiss="modal">Peruuta</button>
+                                <button type="button" class="btn btn-primary" id="luoYksikko">Tallenna</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="muokkaaYksikkoa" tabindex="-1" role="dialog"
+            aria-labelledby="muokkaaYksikkoaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="muokkaaYksikkoaLabel">Muokkaa yksikköä</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="text" class="form-control" id="myksikkoID" hidden>
+                            <div class="form-group">
+                                <label for="nimi" class="col-form-label">Yksikön nimi</label>
+                                <input type="text" class="form-control" id="mnimi">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                        <button type="button" class="btn btn-primary" id="muokkaaYksikkoabtn">Tallenna</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog"
+            aria-labelledby="poistaYksikkoLabel" aria-hidden="true" style='display: none'>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="poistaYksikkoLabel">Poista yksikkö</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="container">
+                                <p>Haluatko varmasti poistaa yksikön?</p>
+                                <p id="poistettavaYksikko" hidden>" "</p>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Peruuta</button>
+                                    <button type="button" class="btn btn-primary" data-yksikko=""
+                                        id="vahvistaPoisto">Kyllä</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
