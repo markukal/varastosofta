@@ -92,14 +92,14 @@ module.exports =
 
         sqlQuery = "DELETE FROM varastot WHERE varastoID=" + connection.escape(req.query.varastoID);
 
-        connection.query('DELETE FROM varastot WHERE varastoID = ?', [varastoID], function(error, results) {
+        connection.query('DELETE FROM varastot WHERE varastoID = ?', [varastoID], function (error, results) {
             if (error) {
                 console.log("Virhe poistaessa dataa varastot-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
                 console.log("Varaston poistaminen onnistui.");
-                res.send({"status": 201});
+                res.send({ "status": 201 });
             }
         });
     }
