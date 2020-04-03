@@ -38,7 +38,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike'>Valitse</a>" + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog'>Valitse</a>" + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                         )
                         $("#taulu").append("</tbody>")
@@ -71,17 +71,14 @@
 
             };
 
-            /*
-                // Tallentaa muokkauslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja avaa muokkausdialogin.
-        $(document).on("click", "a.muokkaaTarvike", function (e) {
+          // Poistaa noutolistasta yksittäisen tuotteen.
+          $(document).on("click", "a.muokkaaTarvike", function (e) {
+                e.preventDefault();
+                var tarID = $(this).closest('tr').children('th:first').text();
+                
 
-            e.preventDefault();
-            tarID = $(this).parent().prev().prev().prev().prev().text();
+            });
 
-            //openProjectDialog(); // TO-DO: Muokkausdialogi puuttuu vielä.
-
-        });
-             */
 
 
 
@@ -245,6 +242,73 @@
                 
 
                 <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
+                
+                <!--Dialogi tarvikkeiden muokkaamista varten-->
+                <div class="modal fade" id="muokkausDialog" tabindex="-1" role="dialog" aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="muokkaaTarvikeLabel">Muokkaa tarviketta</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </buttoN>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="ID" class="col-form-label">ID</label>
+                                    <input type="text" class="form-control" id="txbTarID" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kategoria" class="col-form-label">Kategoria</label>
+                                    <select class="form-control custom-select" id="ddTyypit">
+                                        <option value="defaultval">Valitse kategoria</option>
+                                    </select>
+                                </div> 
+                                <div class="form-group">
+                                    <label for="nimike" class="col-form-label">Nimike</label>
+                                    <input type="text" class="form-control" id="txbTarNim">
+                                </div>
+                                <div class="form-group">
+                                    <label for="kuvaus" class="col-form-label">Kuvaus</label>
+                                    <input type="text" class="form-control" id="txbTarKuvaus">
+                                </div>
+                                <div class="form-group">
+                                    <label for="halytysraja" class="col-form-label">Hälytysraja</label>
+                                    <input type="number" class="form-control" id="txbHalRaja">
+                                </div>
+                                <div class="form-group">
+                                    <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
+                                    <input type="text" class="form-control" id="txbHPaikka">
+                                </div>
+                                <div class="form-group">
+                                    <label for="hinta" class="col-form-label">Hinta (€)</label>
+                                    <input type="number" class="form-control" id="txbHinta">
+                                </div>
+                                <div class="form-group">
+                                    <label for="maara" class="form-control-label">Määrä</label>
+                                    <input type="number" class="form-control" id="txbMaara">
+                                </div>
+                                <div class="form-group">
+                                    <label for="yksikko" class="form-control-label">Yksikko</label>
+                                    <select class="form-control custom-select" id="ddYksikot">
+                                        <option value="defaultval">Valitse yksikkö</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="varasto" class="form-control-label">Varasto</label>
+                                    <select class="form-control custom-select" id="ddVarastot">
+                                        <option value="defaultval">Valitse varasto</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                    <button type="button" id="btnMuokkaatarvike" class="btn btn-primary">Tallenna</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                            
                 <!--Dialogi tarvikkeiden luomista varten-->
                 <div class="modal fade" id="tarvikeDialog" tabindex="-1" role="dialog" aria-labelledby="lisaaTarvikeLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -255,6 +319,7 @@
                                     <span aria-hidden="true">&times;</span>
                                     </buttoN>
                             </div>
+                            
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="kategoria" class="col-form-label">Kategoria</label>
