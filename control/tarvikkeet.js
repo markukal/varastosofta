@@ -67,9 +67,16 @@ module.exports =
 
     //Tarvikkeen tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ connection.escape(req.query.tyyppiID) + ", varastoID =" + connection.escape(req.query.varastoID) + ", nimi ='" + connection.escape(req.query.nimi) + 
-        "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
 
+        if (req.body.nimi != undefined && req.body.maara != undefined) {
+            sqlQuery = "UPDATE tarvikkeet SET maara ="+ connection.escape(req.body.maara) + " WHERE nimi=" + connection.escape(req.body.nimi);
+        }
+        else {
+            sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ connection.escape(req.query.tyyppiID) + ", varastoID =" + connection.escape(req.query.varastoID) + ", nimi ='" + connection.escape(req.query.nimi) + 
+            "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
+        }
+        
+        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
@@ -83,6 +90,8 @@ module.exports =
             }
         });
     },
+
+    
 
     //Tarvikkeen poisto
     delete: function (req, res){

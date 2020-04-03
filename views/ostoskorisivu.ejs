@@ -32,7 +32,7 @@
                     for (var i = 0; i < len; i++) {
                         $("#koriTaulu").append(
                             "<tr>" +
-                            "<th scope='row'>" + data[i].id + "</th>" +
+                            "<td>" + data[i].id + "</th>" +
                             "<td>" + data[i].nimi + "</td>" +
                             "<td>" + data[i].varastossa + "</td>" +
                             "<td>" + "<input type='number' placeholder='0'>" + "</td>" +
@@ -65,6 +65,7 @@
 
             };
 
+            // Poistaa noutolistasta yksittäisen tuotteen.
             $(document).on("click", "a.poistaListasta", function (e) {
                 e.preventDefault();
                 var listID = $(this).closest('tr').children('th:first').text();
@@ -90,15 +91,49 @@
                 setTimeout(() => {   listaaKori(); }, 500);
             }
 
-            // Click-funktio painikkeelle, josta tyhjennetään ostoskori.
-            $("#btnTyhjennaKori").click(function () {
-                tyhjennaKori();
-            });
+            
+            // Poistaa noutolistassa olevat tarvikkeet varastosta määritetyn määrän mukaisesti.
+            function otaVarastosta () {
 
+                $("#koriTaulu").find('tr').each(function (i) {
 
-            // Suorittaa listaaKori-funktion
-            listaaKori();  
+                    var $tds = $(this).find('td');
+                    var poistettava = $tds.eq(1).text();
+                    var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
+
+                    $.ajax({
+                        url: 'http://localhost:3002/tarvikkeet',
+                        method: 'PUT',
+                        data: {
+                        "nimi" : poistettava,
+                        "maara"     : maara
+                    }
+                }) 
+                
+            })      
+            setTimeout(() => { tyhjennaKori(); }, timeOut)
+        }
+
+      
+        
+        $("#btnOtaVarastosta").click(function () {
+            otaVarastosta();
         });
+
+
+        // Click-funktio painikkeelle, josta tyhjennetään ostoskori.
+        $("#btnTyhjennaKori").click(function () {
+                tyhjennaKori();
+        });
+
+
+        // Suorittaa listaaKori-funktion
+        listaaKori();  
+        
+        
+    });
+
+        
 
         
 
@@ -116,7 +151,7 @@
                     <div class="row justify-content-sm-center">
                         <input type="text" placeholder="Hakukenttä (ei vielä toiminnallisuutta)">
                         <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
-                        <button type="button" class="btn btn-dark">Ota varastosta</button>
+                        <button type="button" id="btnOtaVarastosta" class="btn btn-dark">Ota varastosta</button>
                     </div>
                 </div>
 

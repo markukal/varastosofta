@@ -31,7 +31,6 @@ module.exports =
             else {
                 //console.log("Data = " + JSON.stringify(results));
                 //console.log("Params = " + JSON.stringify(req.query));
-
                 res.json(results);
             }
         });
