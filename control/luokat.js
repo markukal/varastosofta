@@ -6,7 +6,6 @@ module.exports =
     {
         fetchAll: function (req, res) {
 
-            console.log(req.query.mluokkaID);
             // haetaan vain halutun luokan nimi muokkaamista varten
             if (typeof req.query.mluokkaID !== 'undefined' && req.query.mluokkaID !== null) {
                 connection.query('SELECT nimi FROM luokat WHERE luokkaID = "' + req.query.mluokkaID + '"', function (error, results) {
