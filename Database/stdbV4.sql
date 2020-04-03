@@ -154,16 +154,15 @@ CREATE TABLE IF NOT EXISTS `tarvikkeet` (
 DROP TABLE IF EXISTS `varastotapahtumat`;
 CREATE TABLE IF NOT EXISTS `varastotapahtumat` (
   `tapahtumaID` int(30) NOT NULL AUTO_INCREMENT,
-  `ttyyppiID` int(30) NOT NULL,
-  `luokkaID` int(30) NOT NULL,
-  `tarvikeID` int(30) NOT NULL,
+  `ttyyppinimi` varchar(50) NOT NULL,
+  `luokkanimi` varchar(50) NOT NULL,
+  `tarvikenimi` varchar(50) NOT NULL,
+  `tarvikehpaikka` varchar(50) NOT NULL,
   `maara` int(4) NOT NULL,
+  `yksikkonimi` varchar(50) NOT NULL,
   `kasittelija` varchar(30) NOT NULL,
   `pvm` datetime NOT NULL,
   PRIMARY KEY (`tapahtumaID`)
-  -- KEY `ttyyppiID` (`ttyyppiID`),
-  -- KEY `luokkaID1` (`luokkaID`),
-  -- KEY `tarvikeID1` (`tarvikeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -212,10 +211,7 @@ ALTER TABLE `tarvikkeet`
 --
 -- Rajoitteet taululle `varastotapahtumat`
 --
-ALTER TABLE `varastotapahtumat`
-  ADD CONSTRAINT `luokat_varastotapahtumat` FOREIGN KEY (`luokkaID`) REFERENCES `luokat` (`luokkaID`),
-  ADD CONSTRAINT `tarvikkeet_varastotapahtumat` FOREIGN KEY (`tarvikeID`) REFERENCES `tarvikkeet` (`tarvikeID`),
-  ADD CONSTRAINT `tapahtumatyypit_varastotapahtumat` FOREIGN KEY (`ttyyppiID`) REFERENCES `tapahtumatyypit` (`ttyyppiID`);
+
   
 --
 -- Lisätään dataa luokat-tauluun.
