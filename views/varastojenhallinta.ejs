@@ -13,7 +13,100 @@
 <script>
     $(document).ready(function () {
 
+        $('#muokkaaVarastoa').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var varastoID = button.data('varastoid');
+            var modal = $(this)
+            modal.find('.modal-body #mvarastoID').val(varastoID);
+            $.get("http://127.0.0.1:3002/varastot", { "mvarastoID": varastoID }).done(function (data) {
+                modal.find('.modal-body #mnimi').val(data[0].nimi)
+            })
+        });
+        $('#poistoVahvistus').on('shown.bs.modal', function (event) {
+
+            var button = $(event.relatedTarget);
+            var varastoID = button.data('varastoid');
+            $('#vahvistaPoisto').data('varasto', varastoID)
+
+        });
+        $('#vahvistaPoisto').click(function () {
+
+            poistaVarasto($(this).data('varasto'));
+        });
+
+
+        $('.modal').on('hidden.bs.modal', function () {
+            $('.modal-backdrop').hide();
+            $(this).find('form').trigger('reset');
+        })
+        function poistaVarasto(varastoID) {
+            $.ajax({
+                url: "http://127.0.0.1:3002/varastot?varastoID=" + varastoID,
+                type: 'DELETE',
+                success: function (results) {
+                    $('#poistoVahvistus').modal('toggle');
+                    setTimeout(paivita(), 500);
+                }
+            })
+        }
+
+
+
+
+        function paivita() {
+
+            $("#varastotTaulu tbody tr").remove();
+            $.getJSON("http://127.0.0.1:3002/varastot", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#varastotTaulu").append(
+                        "<tr>" +
+                        "<td>" + data[i].ID + "</td>" +
+                        "<td>" + data[i].nimi + "</td>" +
+                        "<td><button type='button' id='muokkaabtn' class='btn btn-dark' data-toggle='modal' data-target='#muokkaaVarastoa' data-varastoID='" + data[i].ID + "'>Muokkaa</button>" +
+                        "<td><button type='button' id='poistabtn' class='close' data-toggle='modal' data-target='#poistoVahvistus' aria-label='Close' data-varastoID='" + data[i].ID + "'><span aria-hidden='true'>&times;</span></button>" +
+                        "</tr>"
+                    )
+
+                }
+                $("#varastot").append("</tbody>")
+            })
+
+        }
+
+
+        $(document).on("click", "#luoVarasto", function () {
+            var nimi = document.getElementById("nimi").value;
+            $.ajax({
+                url: "http://127.0.0.1:3002/varastot?nimi=" + nimi,
+                type: 'POST',
+                success: function (result) {
+                    $('#lisaaVarasto').modal('toggle');
+                    setTimeout(paivita(), 500);
+                }
+            });
+
+        });
+        $(document).on("click", "#muokkaaVarastoabtn", function () {
+            var nimi = document.getElementById("mnimi").value;
+            var varastoID = document.getElementById("mvarastoID").value;
+            $.ajax({
+                url: "http://127.0.0.1:3002/varastot?mnimi=" + nimi + "&mvarastoID=" + varastoID,
+                type: 'PUT',
+                success: function (result) {
+                    $('#muokkaaVarastoa').modal('toggle');
+                    setTimeout(paivita(), 500);
+                }
+            });
+        });
+
+        $(document).on("click", "#paivita", function () {
+            setTimeout(paivita(), 200);
+        });
+
+        paivita();
     })
+
 </script>
 
 <div id="varastotHallinta">
@@ -35,7 +128,7 @@
                     <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
                 </div>
                 <div class="col-sm-12">
-                    <table class="table" id="varastot">
+                    <table class="table" id="varastotTaulu">
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Id</th>
@@ -45,9 +138,93 @@
                             </tr>
                         </thead>
                         <tbody>
-                    <br>
+                            <br>
                 </div>
             </div>
+
+            <div class="modal fade" id="lisaaVarasto" tabindex="-1" role="dialog" aria-labelledby="lisaaVarastoLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="lisaaVarastoLabel">Luo uusi varasto</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="nimi" class="col-form-label">Varaston nimi</label>
+                                    <input type="text" class="form-control" name="nimi" id="nimi">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Peruuta</button>
+                                    <button type="button" class="btn btn-primary" id="luoVarasto">Tallenna</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="muokkaaVarastoa" tabindex="-1" role="dialog"
+                aria-labelledby="muokkaaVarastoaLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="muokkaaVarastoaLabel">Muokkaa varastoa</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <input type="text" class="form-control" id="mvarastoID" hidden>
+                                <div class="form-group">
+                                    <label for="nimi" class="col-form-label">Varaston nimi</label>
+                                    <input type="text" class="form-control" id="mnimi">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                            <button type="button" class="btn btn-primary" id="muokkaaVarastoabtn">Tallenna</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog"
+                aria-labelledby="poistaVarastoLabel" aria-hidden="true" style='display: none'>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="poistaVarastoLabel">Poista varasto</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="container">
+                                    <p>Haluatko varmasti poistaa varaston?</p>
+                                    <p id="poistettavaVarasto" hidden>" "</p>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Peruuta</button>
+                                        <button type="button" class="btn btn-primary" data-varasto=""
+                                            id="vahvistaPoisto">Kyllä</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
 
     </div>
