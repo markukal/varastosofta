@@ -72,23 +72,49 @@ body, html {
 .btn-dark {
     margin-left: 20px;
 }
+
 h1 {
     text-align: center;
 }
+
 #kayttajat {
     padding: 5px;
     margin-bottom: 12px;
     overflow-y:scroll;
 }
+
 #kayttajat .btn-dark {
     margin: 0px;
 }
+
 #kayttajatContainer {
     width:80%;
     margin-left:auto;
     margin-right:auto;
     /* transition: all 0.5s; */
 }
+
+#varastotContainer {
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+    /* transition: all 0.5s; */
+}
+
+#tarviketyypitContainer {
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+    /* transition: all 0.5s; */
+}
+
+#yksikotContainer {
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+    /* transition: all 0.5s; */
+}
+
 .modal {
     top: 100px;
 }
