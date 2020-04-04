@@ -13,7 +13,6 @@ module.exports =
         "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID";
 
         var i = 0;//Apumuuttuja
-        console.log(sqlQuery);
         //Käydään req.query läpi ja lisätään hakuun ehdot 
         for (var key in req.query){
 
@@ -29,16 +28,12 @@ module.exports =
             
         }
 
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
-                //console.log("Data = " + JSON.stringify(results));
-                //console.log("Params = " + JSON.stringify(req.query));
-
                 res.json(results);
             }
         });
@@ -50,7 +45,6 @@ module.exports =
         connection.escape(req.query.tyyppiID) + ", " + connection.escape(req.query.varastoID) +", " + connection.escape(req.query.nimi) + ", " 
         + connection.escape(req.query.kuvaus) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.hinta) + ", '"+ req.query.yksikkoID + "'" + ", "+ connection.escape(req.query.hpaikka) + ", "+ connection.escape(req.query.rarvo) + ");";
 
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);
@@ -76,7 +70,6 @@ module.exports =
             "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
         }
         
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
