@@ -31,7 +31,7 @@
             });
 
 
-            // Suoritetaan uutta luokkaa luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+            // Suoritetaan uutta tarviketta luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
             $('#lisays').submit(function(event) {
                 event.preventDefault();
                 if ($('#lisays')[0].checkValidity() === false) {
@@ -56,11 +56,64 @@
                 }
                 $('#lisays').addClass('was-validated');
             });
+			
+            // Suoritetaan tarviketta muokatessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+            $('#muokkaus').submit(function(event) {
+                event.preventDefault();
+                if ($('#muokkaus')[0].checkValidity() === false) {
+                    event.stopPropagation();
+                } else {
+                var nimi = $("#mtxbTarNim").val();
+                var kuvaus = $("#mtxbTarKuvaus").val();
+                var varasto = $("#mddVarastot").val();
+                var yksikko = $("#mddYksikot").val();
+                var hraja = $("#mtxbHalRaja").val();
+                var hpaikka = $("#mtxbHPaikka").val();
+                var hinta = $("#mtxbHinta").val();
+                var maara = $("#mtxbMaara").val();
+                var tyyppi = $("#mddTyypit").val();
+                    $.ajax({
+                        url: "http://127.0.0.1:3002/tarvikkeet?nimi" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
+                        type: 'PUT',
+                        success: function(result) {
+                            $('#muokkausDialog').modal('toggle');
+                            setTimeout(lataaTaulukko(), 500);
+                        }
+                    });
+                }
+                $('#muokkaus').addClass('was-validated');
+            });
+			
+
+
+            $('#muokkausDialog').on('show.bs.modal', function(event) {
+				haeVarastot("mddVarastot");
+                haeYksikot("mddYksikot");
+                haeTarvikeTyypit("mddTyypit");
+                var button = $(event.relatedTarget)
+                var tarvikeID = button.data('tarvikeid')
+                var modal = $(this)
+				var muokkaus = "muokkaus"
+                modal.find('.modal-body #mtxbTarID').val(tarvikeID);
+                $.get( "http://127.0.0.1:3002/tarvikkeet", { "tarvikeID" : tarvikeID, "muokkaus" : muokkaus}).done(function(data) {
+                    modal.find('.modal-body #mtxbTarNim').val(data[0].nimi)
+					modal.find('.modal-body #mtxbTarKuvaus').val(data[0].kuvaus)
+					modal.find('.modal-body #mddVarastot').val(data[0].varastoID)
+					modal.find('.modal-body #mddYksikot').val(data[0].yksikkoID)
+					modal.find('.modal-body #mtxbHalRaja').val(data[0].rarvo)
+					modal.find('.modal-body #mtxbHPaikka').val(data[0].hpaikka)
+					modal.find('.modal-body #mtxbHinta').val(data[0].hinta)
+					modal.find('.modal-body #mtxbMaara').val(data[0].maara)
+					modal.find('.modal-body #mddTyypit').val(data[0].tyyppiID)
+                })
+            });
+
+
 			$('.modal').on('hidden.bs.modal', function() {
                 $('.modal-backdrop').hide();
                 $(this).find('form').trigger('reset');
             })
-			
 			
             // Apumuuttuja muokattavan tarvikkeen valitsemista varten.
             var tarID;
@@ -81,7 +134,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog'>Valitse</a>" + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                         )
                         $("#taulu").append("</tbody>")
@@ -104,7 +157,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike'>Muokkaa</a>" + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                         )
                         $("#taulu").append("</tbody>")
@@ -253,7 +306,7 @@
                                 <h5 class="modal-title" id="muokkaaTarvikeLabel">Muokkaa tarviketta</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                    </buttoN>
+                                </button>
                             </div>
                             <div class="modal-body">
 							<form class="needs-validation" id="muokkaus" novalidate>
