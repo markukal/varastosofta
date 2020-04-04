@@ -29,6 +29,48 @@
                 $(document.documentElement).scrollTop(0);
             });		
 
+            // Suoritetaan uutta luokkaa luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+            $('#lisays').submit(function(event) {
+                event.preventDefault();
+                if ($('#lisays')[0].checkValidity() === false) {
+                    event.stopPropagation();
+                } else {
+                    var nimi = document.getElementById("nimi").value;
+                    $.ajax({
+                        url: "http://127.0.0.1:3002/luokat?nimi=" + nimi,
+                        type: 'POST',
+                        success: function(result) {
+                            $('#lisaaLuokka').modal('toggle');
+                            setTimeout(paivita(), 500);
+                        }
+                    });
+                }
+                $('#lisays').addClass('was-validated');
+            });
+
+
+            // Suoritetaan luokkaa muokatessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+            $('#muokkaus').submit(function(event) {
+                event.preventDefault();
+                if ($('#muokkaus')[0].checkValidity() === false) {
+                    event.stopPropagation();
+                } else {
+                    var nimi = document.getElementById("mnimi").value;
+                    var luokkaID = document.getElementById("mluokkaID").value;
+                    $.ajax({
+                        url: "http://127.0.0.1:3002/luokat?mnimi=" + nimi + "&mluokkaID=" + luokkaID,
+                        type: 'PUT',
+                        success: function(result) {
+                            $('#muokkaaLuokkaa').modal('toggle');
+                            setTimeout(paivita(), 500);
+                        }
+                    });
+                }
+                $('#muokkaus').addClass('was-validated');
+            });
+
 
             $('#muokkaaLuokkaa').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget)
@@ -89,29 +131,9 @@
                 })
 
             }
-            $(document).on("click", "#luoLuokka", function() {
-                var nimi = document.getElementById("nimi").value;
-                $.ajax({
-                    url: "http://127.0.0.1:3002/luokat?nimi=" + nimi,
-                    type: 'POST',
-                    success: function(result) {
-                        $('#lisaaLuokka').modal('toggle');
-                        setTimeout(paivita(), 500);
-                    }
-                });
 
-            });
             $(document).on("click", "#muokkaaLuokkaabtn", function() {
-                var nimi = document.getElementById("mnimi").value;
-                var luokkaID = document.getElementById("mluokkaID").value;
-                $.ajax({
-                    url: "http://127.0.0.1:3002/luokat?mnimi=" + nimi + "&mluokkaID=" + luokkaID,
-                    type: 'PUT',
-                    success: function(result) {
-                        $('#muokkaaLuokkaa').modal('toggle');
-                        setTimeout(paivita(), 500);
-                    }
-                });
+
             });
             $(document).on("click", "#paivita", function() {
                 setTimeout(paivita(), 200);
@@ -163,14 +185,15 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form>
+                                <form class="needs-validation" id="lisays" novalidate>
                                     <div class="form-group">
                                         <label for="nimi" class="col-form-label">Luokan nimi</label>
-                                        <input type="text" class="form-control" name="nimi" id="nimi">
+                                        <input type="text" class="form-control" name="nimi" id="nimi" required>
+                                        <div class="valid-feedback"></div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                        <button type="button" class="btn btn-primary" id="luoLuokka">Tallenna</button>
+                                        <button type="submit" class="btn btn-primary" id="luoLuokka">Tallenna</button>
                                     </div>
 
                                 </form>
@@ -189,17 +212,20 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form>
+                                <form class="needs-validation" id="muokkaus" novalidate>
                                     <input type="text" class="form-control" id="mluokkaID" hidden>
                                     <div class="form-group">
                                         <label for="nimi" class="col-form-label">Luokan nimi</label>
-                                        <input type="text" class="form-control" id="mnimi">
+                                        <input type="text" class="form-control" id="mnimi" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="submit" class="btn btn-primary" id="muokkaaLuokkaabtn">Tallenna</button>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                <button type="button" class="btn btn-primary" id="muokkaaLuokkaabtn">Tallenna</button>
                             </div>
                         </div>
                     </div>

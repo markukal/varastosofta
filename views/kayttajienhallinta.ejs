@@ -31,6 +31,7 @@
 
 			// Suoritetaan uutta käyttäjää luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
 			// TODO: salasanojen tarkistus. Jos salasana ja salasanauudelleen on eri -> invalid luokka kentälle
+            // TODO: jos kayttajatunnus on jo olemassa, jonkinlainen virheviesti käyttäjälle
 			$('#lisays').submit(function(event) {
 				event.preventDefault();
 				if ($('#lisays')[0].checkValidity() === false) {
