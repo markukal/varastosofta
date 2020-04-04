@@ -15,6 +15,21 @@
     </head>
     <script>
         $(document).ready(function () {
+		
+        // Koodi top-buttonin ilmestymiselle/piilottamiselle
+
+        $(window).scroll(function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                $("#topBtn").css("display", "block");
+            } else {
+                $("#topBtn").css("display", "none");
+            }
+        });
+
+        $("#topBtn").click(function topFunction() {
+            $(document.body).scrollTop(0);
+            $(document.documentElement).scrollTop(0);
+        });
 
             // Ehdotus: Nimettäisiinkö taulukot esim. tyyppiTaulu-kaavalla, niin ne eivät mene keskenään sekaisin?
             // Esimerkiksi. ostoskoritaulukon nimeksi annoin "koriTaulu". 
@@ -376,6 +391,8 @@
 
             </div>
         </div>
+    <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+    <button id="topBtn">Ylös</button>
     </body>
 
 </html>
