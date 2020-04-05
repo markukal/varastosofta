@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/styles.css">
+
     </head>
 
     <script>
@@ -27,11 +28,13 @@
         $("#topBtn").click(function topFunction() {
             $(document.body).scrollTop(0);
             $(document.documentElement).scrollTop(0);
+        
         });
             // Listaa tarvikkeet taulukkoon.
+            
             function listaaKlista() { 
-                $("#taulu").empty();
-                $("#taulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+                $("#kerailyTaulu").empty();
+                $("#kerailyTaulu").html('<thead class="thead-dark"><tr><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Kori</th></tr>');
                 $.getJSON("http://127.0.0.1:3002/klistat", function (data) {
                     var len = data.length;
                     for (var i = 0; i < len; i++) {
@@ -42,7 +45,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='editp'>Valitse</a>" + "</td>" +
+                            "<td>" + data[i].varasto + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
 
 
@@ -51,6 +54,8 @@
                     }
                 })
             };
+
+            listaaKlista();
 
         });
     </script>
@@ -73,7 +78,7 @@
                 </div>
 
 
-                <table class="table" id="koriTaulu">
+                <table class="table" id="kerailyTaulu">
                 </table>
 
                 <!--
