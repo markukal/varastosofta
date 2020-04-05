@@ -208,6 +208,7 @@
 
             // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeVarastot(dd) {
+                $("#" + dd).empty();
                 $.get("http://localhost:3002/varastot", function (data, status) {
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
@@ -219,6 +220,7 @@
 
             // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeYksikot(dd) {
+                $("#" + dd).empty();
                 $.get("http://localhost:3002/yksikot", function (data, status) {
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
@@ -231,6 +233,7 @@
 
             // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeTarvikeTyypit(dd) {
+                $("#" + dd).empty();
                 $.get("http://localhost:3002/tarviketyypit", function (data, status) {
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
