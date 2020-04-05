@@ -79,18 +79,21 @@ module.exports =
 
     //Tarvikkeen tietojen päivitys
     update: function (req, res){
+        var tyyppiID = req.query.tyyppiID;
+        var varastoID = req.query.varastoID;
+        var yksikkoID = req.query.yksikkoID;
+        var nimi = req.query.nimi;
+        var kuvaus = req.query.kuvaus;
+        var maara = req.query.maara;
+        var hinta = req.query.hinta;
+        var hpaikka = req.query.hpaikka;
+        var rarvo = req.query.rarvo;
+        var tarvikeID = req.query.tarvikeID;
 
         // päivitetään tarvikemäärää noutolistasta
         if (req.body.nimi !== undefined && req.body.maara !== undefined && req.body.noutolista !== undefined && req.body.noutolista !== null) {
             sqlQuery = "UPDATE tarvikkeet SET maara ="+ connection.escape(req.body.maara) + " WHERE nimi=" + connection.escape(req.body.nimi);
-        }
-        // päivitetään tarvikemäärää tarvikkeet sivun muokkaa valikon kautta (opettajan toimesta)
-        else {
-            sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ connection.escape(req.query.tyyppiID) + ", varastoID =" + connection.escape(req.query.varastoID) + ", nimi ='" + connection.escape(req.query.nimi) + 
-            "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
-        }
-        
-        connection.query(sqlQuery, function (error, results, fields) {
+         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
@@ -102,7 +105,23 @@ module.exports =
                 res.json(results);
             }
         });
-    },
+        }
+        // päivitetään tarvikemäärää tarvikkeet sivun muokkaa valikon kautta (opettajan toimesta)
+        else {
+            connection.query('UPDATE tarvikkeet SET tyyppiID = ?, varastoID = ?, yksikkoID = ?, nimi = ?, kuvaus = ?, maara = ?, hinta = ?, hpaikka = ?, rarvo = ? WHERE tarvikeID = ?', [tyyppiID, varastoID, yksikkoID, nimi, kuvaus, maara, hinta, hpaikka, rarvo, tarvikeID], function (error,results) {
+                if (error) {
+                    console.log("Virhe muokatessa tarviketta, syy " + error);
+                    res.send({"status":500, "error": error, "response": null});
+                }
+                else 
+                {
+                console.log("Tarvikkeen muokkaus onnistui.");
+                res.send({"status": 201});
+                }
+        });
+        }
+        
+   },
 
     
 

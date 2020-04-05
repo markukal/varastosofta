@@ -64,6 +64,7 @@
                 if ($('#muokkaus')[0].checkValidity() === false) {
                     event.stopPropagation();
                 } else {
+                var tarvikeID = $("#mtxbTarID").val();
                 var nimi = $("#mtxbTarNim").val();
                 var kuvaus = $("#mtxbTarKuvaus").val();
                 var varasto = $("#mddVarastot").val();
@@ -74,7 +75,7 @@
                 var maara = $("#mtxbMaara").val();
                 var tyyppi = $("#mddTyypit").val();
                     $.ajax({
-                        url: "http://127.0.0.1:3002/tarvikkeet?nimi" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
+                        url: "http://127.0.0.1:3002/tarvikkeet?tarvikeID=" + tarvikeID + "&nimi=" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
                         type: 'PUT',
                         success: function(result) {
                             $('#muokkausDialog').modal('toggle');
