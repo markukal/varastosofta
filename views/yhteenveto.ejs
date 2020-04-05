@@ -207,79 +207,85 @@
 
 
             // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-            function haeVarastot(dd) {
-                $("#" + dd).empty();
-                $.get("http://localhost:3002/varastot", function (data, status) {
-                    if (dd === "dropdown") {
-                        $("#" + dd).append(
-                            '<option value="defaultval">Kaikki varastot</option>'
-                        )
-                    }
-                    $.each(data, function (i, item) {
-                        $("#" + dd).append(
-                            '<option value=' + item.ID + '>' + item.nimi + '</option>'
-                        )
+                function haeVarastot(dd) {
+                    $("#" + dd).empty();
+                    $.get("http://localhost:3002/varastot", function (data, status) {
+                        if (dd === "dropdown") {
+                            $("#" + dd).append(
+                                '<option value="defaultval">Kaikki varastot</option>'
+                            )
+                        }
+                        if (dd === "ddVarastot" || dd === "mddVarastot") {
+                            $("#" + dd).append(
+                                '<option value="">Valitse varasto</option>'
+                            )
+                        }
+
+                        $.each(data, function (i, item) {
+                            $("#" + dd).append(
+                                '<option value=' + item.ID + '>' + item.nimi + '</option>'
+                            )
+                        });
                     });
-                });
-            }
+                }
 
             // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-            function haeYksikot(dd) {
-                $("#" + dd).empty();
-                $("#" + dd).append(
-                    '<option value="defaultval">Valitse yksikkö</option>'
-                )
-                $.get("http://localhost:3002/yksikot", function (data, status) {
-                    $.each(data, function (i, item) {
-                        $("#" + dd).append(
-                            '<option value=' + item.ID + '>' + item.nimi + '</option>'
-                        )
-                    });
+                function haeYksikot(dd) {
+                    $("#" + dd).empty();
+                    $("#" + dd).append(
+                        '<option value="">Valitse yksikkö</option>'
+                    )
+                    $.get("http://localhost:3002/yksikot", function (data, status) {
+                        $.each(data, function (i, item) {
+                            $("#" + dd).append(
+                                '<option value=' + item.ID + '>' + item.nimi + '</option>'
+                            )
+                        });
 
-                });
-            }
+                    });
+                }
 
             // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-            function haeTarvikeTyypit(dd) {
-                $("#" + dd).empty();
-                $("#" + dd).append(
-                    '<option value="defaultval">Valitse kategoria</option>'
-                )
-                $.get("http://localhost:3002/tarviketyypit", function (data, status) {
-                    $.each(data, function (i, item) {
-                        $("#" + dd).append(
-                            '<option value=' + item.ID + '>' + item.tyyppi + '</option>'
-                        )
+                function haeTarvikeTyypit(dd) {
+                    $("#" + dd).empty();
+                    $("#" + dd).append(
+                        '<option value="">Valitse kategoria</option>'
+                    )
+                    $.get("http://localhost:3002/tarviketyypit", function (data, status) {
+                        $.each(data, function (i, item) {
+                            $("#" + dd).append(
+                                '<option value=' + item.ID + '>' + item.tyyppi + '</option>'
+                            )
+                        });
                     });
-                });
-            }
+                }
 
             // Suorittaa pudotusvalikosta valitun varaston perusteella suodatustoiminnon.
-            $("#dropdown").change(function () {
+                $("#dropdown").change(function () {
 
-                var vid = $("#dropdown option:selected").val();
+                    var vid = $("#dropdown option:selected").val();
 
-                // Jos pudotusvalikosta on valittu muu kuin oletusarvo, suoritetaan suodatus.
-                if (vid != "defaultval") {
-                    suodataTaulukko(vid);
-                }
-                // Jos pudotusvalikosta on valittu oletusarvo, listataan kaikki tarvikkeet.
-                else {
-                    lataaTaulukko();
-                }
-            })
+                    // Jos pudotusvalikosta on valittu muu kuin oletusarvo, suoritetaan suodatus.
+                        if (vid != "defaultval") {
+                            suodataTaulukko(vid);
+                        }
+                    // Jos pudotusvalikosta on valittu oletusarvo, listataan kaikki tarvikkeet.
+                        else {
+                            lataaTaulukko();
+                        }
+                })
 
             // Avaa dialogin tarvikkeen luomista varten.
-            $("#btnLisaaTarvike").click(function () {
-                haeVarastot("ddVarastot");
-                haeYksikot("ddYksikot");
-                haeTarvikeTyypit("ddTyypit");
-            })
+                $("#btnLisaaTarvike").click(function () {
+                    haeVarastot("ddVarastot");
+                    haeYksikot("ddYksikot");
+                    haeTarvikeTyypit("ddTyypit");
+                })
 
             // Lataa sivun avautuessa tarvikkeet taulukkoon.
-            lataaTaulukko();
+                lataaTaulukko();
             // Lataa sivun avautuessa varastot pudotusvalikkoon.
-            haeVarastot("dropdown");
+                haeVarastot("dropdown");
         });
 
     </script>
