@@ -74,8 +74,16 @@
           // Poistaa noutolistasta yksittäisen tuotteen.
           $(document).on("click", "a.muokkaaTarvike", function (e) {
                 e.preventDefault();
-                var tarID = $(this).closest('tr').children('th:first').text();
-                
+                $("#txbTarNim").val() = $(this).eq(0).text();
+                $("#txbTarNim").val() = $(this).eq(1).text();
+                $("#txbTarKuvaus").val() = $(this).eq(2).text();
+                $("#txbMaara").val() = $(this).eq(3).text();
+                $("#ddYksikot").val();
+                var varasto = $("#ddVarastot").val();
+                var hraja = $("#txbHalRaja").val();
+                var hpaikka = $("#txbHPaikka").val();
+                var hinta = $("#txbHinta").val();
+                var tyyppi = $("#ddTyypit").val();
 
             });
 
