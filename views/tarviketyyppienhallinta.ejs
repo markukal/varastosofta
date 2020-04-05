@@ -1,77 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/css/styles.css">
-    </head>
-    <script>
-        $(document).ready(function () {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<script>
+    $(document).ready(function () {
 
-            // Koodi top-buttonin ilmestymiselle/piilottamiselle
+        // Koodi top-buttonin ilmestymiselle/piilottamiselle
 
-            $(window).scroll(function scrollFunction() {
-                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                    $("#topBtn").css("display", "block");
-                } else {
-                    $("#topBtn").css("display", "none");
-                }
-            });
+        $(window).scroll(function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                $("#topBtn").css("display", "block");
+            } else {
+                $("#topBtn").css("display", "none");
+            }
+        });
 
-            $("#topBtn").click(function topFunction() {
-                $(document.body).scrollTop(0);
-                $(document.documentElement).scrollTop(0);
-            });
+        $("#topBtn").click(function topFunction() {
+            $(document.body).scrollTop(0);
+            $(document.documentElement).scrollTop(0);
+        });
 
+        // Suoritetaan uutta tarviketyyppiä luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+        $('#lisays').submit(function (event) {
+            event.preventDefault();
+            if ($('#lisays')[0].checkValidity() === false) {
+                event.stopPropagation();
+            } else {
+                var nimi = document.getElementById("nimi").value;
+                $.ajax({
+                    url: "http://127.0.0.1:3002/tarviketyypit?nimi=" + nimi,
+                    type: 'POST',
+                    success: function (result) {
+                        $('#lisaaTtyyppi').modal('toggle');
+                        setTimeout(paivita(), 500);
+                    }
+                });
+            }
+            $('#lisays').addClass('was-validated');
+        });
+
+
+        // Suoritetaan tarviketyyppiä muokatessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+        $('#muokkaus').submit(function (event) {
+            event.preventDefault();
+            if ($('#muokkaus')[0].checkValidity() === false) {
+                event.stopPropagation();
+            } else {
+                var nimi = document.getElementById("mnimi").value;
+                var ttyyppiID = document.getElementById("mttyyppiID").value;
+                $.ajax({
+                    url: "http://127.0.0.1:3002/tarviketyypit?mnimi=" + nimi + "&mttyyppiID=" + ttyyppiID,
+                    type: 'PUT',
+                    success: function (result) {
+                        $('#muokkaaTtyyppia').modal('toggle');
+                        setTimeout(paivita(), 500);
+                    }
+                });
+            }
+            $('#muokkaus').addClass('was-validated');
+        });
+
+        $('#muokkaaTtyyppia').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var ttyyppiID = button.data('ttyyppiid');
+            var modal = $(this)
+            modal.find('.modal-body #mttyyppiID').val(ttyyppiID);
+            $.get("http://127.0.0.1:3002/tarviketyypit", { "mttyyppiID": ttyyppiID }).done(function (data) {
+                modal.find('.modal-body #mnimi').val(data[0].nimi)
+            })
+        });
+        $('#poistoVahvistus').on('shown.bs.modal', function (event) {
+
+            var button = $(event.relatedTarget);
+            var ttyyppiID = button.data('ttyyppiid');
+            $('#vahvistaPoisto').data('ttyyppi', ttyyppiID)
+
+        });
+        $('#vahvistaPoisto').click(function () {
+
+            poistaTtyyppi($(this).data('ttyyppi'));
+        });
+
+
+        $('.modal').on('hidden.bs.modal', function () {
+            $('.modal-backdrop').hide();
+            $(this).find('form').trigger('reset');
         })
-    </script>
+        function poistaTtyyppi(ttyyppiID) {
+            $.ajax({
+                url: "http://127.0.0.1:3002/tarviketyypit?tyyppiID=" + ttyyppiID,
+                type: 'DELETE',
+                success: function (results) {
+                    $('#poistoVahvistus').modal('toggle');
+                    setTimeout(paivita(), 500);
+                }
+            })
+        }
 
-    <body>
-        <div id="tarviketyypitHallinta">
-            <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
-            <div class="mainwrapper">
 
-                <br>
-                <br>
-                <h1>Tarviketyypit</h1>
-                <hr>
-                <br>
-                <div class="row" id="tarviketyypitContainer">
-                    <div class="col-sm-10">
-                        <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal" data-target="#lisaaTarviketyyppi">Lisää tarviketyyppi</button>
-                    </div>
-                    <div class="col-sm-2">
-                        <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
-                    </div>
-                    <div class="col-sm-12">
-                        <br>
-                        <table class="table" id="tarviketyypit">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Nimi</th>
-                                    <th scope="col">Muokkaa</th>
-                                    <th scope="col">Poista</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+
+
+        function paivita() {
+
+            $("#tarviketyypitTaulu tbody tr").remove();
+            $.getJSON("http://127.0.0.1:3002/tarviketyypit", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#tarviketyypitTaulu").append(
+                        "<tr>" +
+                        "<td>" + data[i].ID + "</td>" +
+                        "<td>" + data[i].tyyppi + "</td>" +
+                        "<td><button type='button' id='muokkaabtn' class='btn btn-dark' data-toggle='modal' data-target='#muokkaaTtyyppia' data-ttyyppiID='" + data[i].ID + "'>Muokkaa</button>" +
+                        "<td><button type='button' id='poistabtn' class='close' data-toggle='modal' data-target='#poistoVahvistus' aria-label='Close' data-ttyyppiID='" + data[i].ID + "'><span aria-hidden='true'>&times;</span></button>" +
+                        "</tr>"
+                    )
+
+                }
+            })
+
+        }
+
+        $(document).on("click", "#paivita", function () {
+            setTimeout(paivita(), 200);
+        });
+
+        paivita();
+
+    })
+</script>
+
+<body>
+    <div id="tarviketyypitHallinta">
+        <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+        <div class="mainwrapper">
+
+            <br>
+            <br>
+            <h1>Tarviketyypit</h1>
+            <hr>
+            <br>
+            <div class="row" id="tarviketyypitContainer">
+                <div class="col-sm-10">
+                    <button type="button" id="lisaabtn" class="btn btn-dark btn-md" data-toggle="modal"
+                        data-target="#lisaaTtyyppi">Lisää tarviketyyppi</button>
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-md btn-dark fa fa-refresh" id="paivita" aria-hidden="true"></button>
+                </div>
+                <div class="col-sm-12">
+                    <br>
+                    <table class="table" id="tarviketyypitTaulu">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Nimi</th>
+                                <th scope="col">Muokkaa</th>
+                                <th scope="col">Poista</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal fade" id="lisaaTtyyppi" tabindex="-1" role="dialog" aria-labelledby="lisaaTtyyppiLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="lisaaTtyyppiLabel">Luo uusi tarviketyyppi</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" id="lisays" novalidate>
+                                <div class="form-group">
+                                    <label for="nimi" class="col-form-label">Tarviketyypin nimi</label>
+                                    <input type="text" class="form-control" name="nimi" id="nimi" required>
+                                    <div class="valid-feedback"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Peruuta</button>
+                                    <button type="submit" class="btn btn-primary" id="luoTtyyppi">Tallenna</button>
+                                </div>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
-        </div>
-        <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
-        <button id="topBtn">Ylös</button>
 
-    </body>
+            <div class="modal fade" id="muokkaaTtyyppia" tabindex="-1" role="dialog"
+                aria-labelledby="muokkaaTtyyppiaLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="muokkaaTtyyppiaLabel">Muokkaa tarviketyyppiä</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="needs-validation" id="muokkaus" novalidate>
+                                <input type="text" class="form-control" id="mttyyppiID" hidden>
+                                <div class="form-group">
+                                    <label for="nimi" class="col-form-label">Tarviketyypinn nimi</label>
+                                    <input type="text" class="form-control" id="mnimi" required>
+                                    <div class="valid-feedback"></div>
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Peruuta</button>
+                                    <button type="submit" class="btn btn-primary"
+                                        id="muokkaaTtyyppiabtn">Tallenna</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="poistoVahvistus" tabindex="-1" role="dialog"
+                aria-labelledby="poistaTtyyppiLabel" aria-hidden="true" style='display: none'>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="poistaTtyyppiLabel">Poista tarviketyyppi</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="container">
+                                    <p>Haluatko varmasti poistaa tarviketyypin?</p>
+                                    <p id="poistettavaTtyyppi" hidden>" "</p>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Peruuta</button>
+                                        <button type="button" class="btn btn-primary" data-ttyyppi=""
+                                            id="vahvistaPoisto">Kyllä</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+    <button id="topBtn">Ylös</button>
+
+</body>
 
 </html>
