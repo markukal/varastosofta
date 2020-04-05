@@ -1,6 +1,5 @@
 // Määritetään tarvittavat moduulit
 var express = require('express');
-var cookieparser = require('cookie-parser');
 var passport = require('passport');
 var session = require('express-session');
 var flash = require('connect-flash');
@@ -34,7 +33,6 @@ var allowCrossDomain = function (req, res, next) {
 }
 
 app.use(allowCrossDomain);
-//app.use(cookieparser);
 
 // ejs
 app.set('view-engine', 'ejs')
@@ -42,7 +40,6 @@ app.set('view-engine', 'ejs')
 
 app.use(express.urlencoded({ extended: true}));
 
-//app.use(express.static('/'));
 // staattiset tiedostot haetaan public kansion alta. esim css tiedostot
 app.use(express.static(path.join(__dirname, './public')));
 
@@ -104,6 +101,9 @@ app.route('/ostoskori')
 
 app.route('/luokat')
     .get(luokat.fetchAll)
+    .post(luokat.addNew)
+    .put(luokat.update)
+    .delete(luokat.delete);
 
 app.route('/users')
     .get(users.fetchAll)
@@ -165,6 +165,23 @@ app.get('/varastojenhallinta', checkAuthenticated,( req, res) => {
     }
 });
 
+app.get('/luokkienhallinta', checkAuthenticated,( req, res) => {
+    // opettajan kayttooikeus = 1 , oppilaan = 2
+    if (req.user.kayttoOikeus == "1") {
+        res.render('luokkienhallinta.ejs', {
+            kayttajatunnus: req.user.kayttajatunnus,
+            kayttoOikeus: req.user.kayttoOikeus,
+            kayttajaID: req.user.kayttajaID
+        });
+    }
+    else {
+        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
+        // res.redirect('back')
+        res.redirect('/login')
+    }
+});
+
+
 app.get('/tarviketyyppienhallinta', checkAuthenticated,( req, res) => {
     // opettajan kayttooikeus = 1 , oppilaan = 2
     if (req.user.kayttoOikeus == "1") {
@@ -205,18 +222,13 @@ app.get('/kerailylista', (req, res) => {
         }); 
 }); 
 
-app.get('/ostoskorisivu', (req, res) => {
+app.get('/noutolista', (req, res) => {
     res.render('ostoskorisivu.ejs', {
             kayttajatunnus: req.user.kayttajatunnus,
             kayttoOikeus: req.user.kayttoOikeus,
             kayttajaID: req.user.kayttajaID
         }); 
 });
-
-app.get('/hallinnointi', (req, res) => {
-    res.render('hallinnointi.ejs');
-});
-
 
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {

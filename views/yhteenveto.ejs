@@ -7,20 +7,116 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Varastokirjanpitosovellus</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <script>
         $(document).ready(function () {
 
-            // Ehdotus: Nimettäisiinkö taulukot esim. tyyppiTaulu-kaavalla, niin ne eivät mene keskenään sekaisin?
-            // Esimerkiksi. ostoskoritaulukon nimeksi annoin "koriTaulu". 
+            // Koodi top-buttonin ilmestymiselle/piilottamiselle
+            $(window).scroll(function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    $("#topBtn").css("display", "block");
+                } else {
+                    $("#topBtn").css("display", "none");
+                }
+            });
 
+            $("#topBtn").click(function topFunction() {
+                $(document.body).scrollTop(0);
+                $(document.documentElement).scrollTop(0);
+            });
+
+
+            // Suoritetaan uutta tarviketta luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+            $('#lisays').submit(function(event) {
+                event.preventDefault();
+                if ($('#lisays')[0].checkValidity() === false) {
+                    event.stopPropagation();
+                } else {
+                var nimi = $("#txbTarNim").val();
+                var kuvaus = $("#txbTarKuvaus").val();
+                var varasto = $("#ddVarastot").val();
+                var yksikko = $("#ddYksikot").val();
+                var hraja = $("#txbHalRaja").val();
+                var hpaikka = $("#txbHPaikka").val();
+                var hinta = $("#txbHinta").val();
+                var maara = $("#txbMaara").val();
+                var tyyppi = $("#ddTyypit").val();
+
+                $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
+                    '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
+                    function (data) {
+                    });
+                setTimeout(() => { lataaTaulukko() }, timeOut);
+                $("#tarvikeDialog").modal('toggle');
+                }
+                $('#lisays').addClass('was-validated');
+            });
+			
+            // Suoritetaan tarviketta muokatessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
+
+            $('#muokkaus').submit(function(event) {
+                event.preventDefault();
+                if ($('#muokkaus')[0].checkValidity() === false) {
+                    event.stopPropagation();
+                } else {
+                var nimi = $("#mtxbTarNim").val();
+                var kuvaus = $("#mtxbTarKuvaus").val();
+                var varasto = $("#mddVarastot").val();
+                var yksikko = $("#mddYksikot").val();
+                var hraja = $("#mtxbHalRaja").val();
+                var hpaikka = $("#mtxbHPaikka").val();
+                var hinta = $("#mtxbHinta").val();
+                var maara = $("#mtxbMaara").val();
+                var tyyppi = $("#mddTyypit").val();
+                    $.ajax({
+                        url: "http://127.0.0.1:3002/tarvikkeet?nimi" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
+                        type: 'PUT',
+                        success: function(result) {
+                            $('#muokkausDialog').modal('toggle');
+                            setTimeout(lataaTaulukko(), 500);
+                        }
+                    });
+                }
+                $('#muokkaus').addClass('was-validated');
+            });
+			
+
+
+            $('#muokkausDialog').on('show.bs.modal', function(event) {
+				haeVarastot("mddVarastot");
+                haeYksikot("mddYksikot");
+                haeTarvikeTyypit("mddTyypit");
+                var button = $(event.relatedTarget)
+                var tarvikeID = button.data('tarvikeid')
+                var modal = $(this)
+				var muokkaus = "muokkaus"
+                modal.find('.modal-body #mtxbTarID').val(tarvikeID);
+                $.get( "http://127.0.0.1:3002/tarvikkeet", { "tarvikeID" : tarvikeID, "muokkaus" : muokkaus}).done(function(data) {
+                    modal.find('.modal-body #mtxbTarNim').val(data[0].nimi)
+					modal.find('.modal-body #mtxbTarKuvaus').val(data[0].kuvaus)
+					modal.find('.modal-body #mddVarastot').val(data[0].varastoID)
+					modal.find('.modal-body #mddYksikot').val(data[0].yksikkoID)
+					modal.find('.modal-body #mtxbHalRaja').val(data[0].rarvo)
+					modal.find('.modal-body #mtxbHPaikka').val(data[0].hpaikka)
+					modal.find('.modal-body #mtxbHinta').val(data[0].hinta)
+					modal.find('.modal-body #mtxbMaara').val(data[0].maara)
+					modal.find('.modal-body #mddTyypit').val(data[0].tyyppiID)
+                })
+            });
+
+
+			$('.modal').on('hidden.bs.modal', function() {
+                $('.modal-backdrop').hide();
+                $(this).find('form').trigger('reset');
+            })
+			
             // Apumuuttuja muokattavan tarvikkeen valitsemista varten.
             var tarID;
-
             // Muuttuja keinotekoisen viiveen määrittämiseen.
             var timeOut = 500;
 
@@ -38,7 +134,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog'>Valitse</a>" + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                         )
                         $("#taulu").append("</tbody>")
@@ -61,7 +157,7 @@
                             "<td>" + data[i].kuvaus + "</td>" +
                             "<td>" + data[i].maara + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike'>Muokkaa</a>" + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                         )
                         $("#taulu").append("</tbody>")
@@ -71,25 +167,12 @@
 
             };
 
-          // Poistaa noutolistasta yksittäisen tuotteen.
-          $(document).on("click", "a.muokkaaTarvike", function (e) {
+            // Poistaa noutolistasta yksittäisen tuotteen.
+            $(document).on("click", "a.muokkaaTarvike", function (e) {
                 e.preventDefault();
-                $("#txbTarNim").val() = $(this).eq(0).text();
-                $("#txbTarNim").val() = $(this).eq(1).text();
-                $("#txbTarKuvaus").val() = $(this).eq(2).text();
-                $("#txbMaara").val() = $(this).eq(3).text();
-                $("#ddYksikot").val();
-                var varasto = $("#ddVarastot").val();
-                var hraja = $("#txbHalRaja").val();
-                var hpaikka = $("#txbHPaikka").val();
-                var hinta = $("#txbHinta").val();
-                var tyyppi = $("#ddTyypit").val();
+                var tarID = $(this).closest('tr').children('th:first').text();
 
             });
-
-
-
-
 
             // TO-DO: Koriin-linkkien klikkauksesta ei vielä tapahdu mitään.
             // Tallentaa lisäyslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja lisää sen koriin.
@@ -103,12 +186,10 @@
             });
 
             // Hakukentän toiminnallisuus
-
             $("#hakuInput").on("keyup", function () {
                 var filter = $(this).val().toUpperCase();
 
                 // haku tapahtuu kolmen ensimmäisen sarakkeen välillä.
-
                 $("table tr").each(function() {
                     if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
                         || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
@@ -135,7 +216,7 @@
                 });
             }
 
-            // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+            // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeYksikot(dd) {
                 $.get("http://localhost:3002/yksikot", function (data, status) {
                     $.each(data, function (i, item) {
@@ -158,8 +239,6 @@
                 });
             }
 
-
-
             // Suorittaa pudotusvalikosta valitun varaston perusteella suodatustoiminnon.
             $("#dropdown").change(function () {
 
@@ -175,28 +254,6 @@
                 }
             })
 
-            // Lisää tarvikkeen tietokantaan ja sulkee dialogin
-            $("#btnLuotarvike").click(function () {
-
-                var nimi = $("#txbTarNim").val();
-                var kuvaus = $("#txbTarKuvaus").val();
-                var varasto = $("#ddVarastot").val();
-                var yksikko = $("#ddYksikot").val();
-                var hraja = $("#txbHalRaja").val();
-                var hpaikka = $("#txbHPaikka").val();
-                var hinta = $("#txbHinta").val();
-                var maara = $("#txbMaara").val();
-                var tyyppi = $("#ddTyypit").val();
-
-                $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
-                    '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
-                    function (data) {
-                    });
-                setTimeout(() => { lataaTaulukko() }, timeOut);
-                $("#tarvikeDialog").modal('toggle');
-            });
-
-
             // Avaa dialogin tarvikkeen luomista varten.
             $("#btnLisaaTarvike").click(function () {
                 haeVarastot("ddVarastot");
@@ -204,33 +261,23 @@
                 haeTarvikeTyypit("ddTyypit");
             })
 
-
             // Lataa sivun avautuessa tarvikkeet taulukkoon.
             lataaTaulukko();
-
             // Lataa sivun avautuessa varastot pudotusvalikkoon.
             haeVarastot("dropdown");
-
         });
-
-
-
 
     </script>
 
     <body>
-
         <div id="yhteenvetodiv">
             <%- include('partials/navbar', {kayttoOikeudet: kayttoOikeus, navKayttajatunnus: kayttajatunnus}) %>
 
             <!--Lohko suodatustyökaluille-->
             <div class="mainwrapper" id="suodatusContainer">
                 <br>
-                <br>
-                <h1>Yhteenveto</h1>
+                <h1>Tarvikkeet</h1>
                 <hr>
-
-
                 <div class="row justify-content-sm-center">
 
                     <!--Pudotusvalikko varaston valitseen-->
@@ -247,10 +294,10 @@
                 </div>
                 <table class="table" id="taulu">
                 </table>
-                
+
 
                 <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
-                
+
                 <!--Dialogi tarvikkeiden muokkaamista varten-->
                 <div class="modal fade" id="muokkausDialog" tabindex="-1" role="dialog" aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -259,64 +306,66 @@
                                 <h5 class="modal-title" id="muokkaaTarvikeLabel">Muokkaa tarviketta</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                    </buttoN>
+                                </button>
                             </div>
                             <div class="modal-body">
+							<form class="needs-validation" id="muokkaus" novalidate>
                                 <div class="form-group">
                                     <label for="ID" class="col-form-label">ID</label>
-                                    <input type="text" class="form-control" id="txbTarID" readonly>
+                                    <input type="text" class="form-control" id="mtxbTarID" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="kategoria" class="col-form-label">Kategoria</label>
-                                    <select class="form-control custom-select" id="ddTyypit">
-                                        <option value="defaultval">Valitse kategoria</option>
+                                    <select class="form-control custom-select" id="mddTyypit" required>
+                                        <option value="">Valitse kategoria</option>
                                     </select>
                                 </div> 
                                 <div class="form-group">
                                     <label for="nimike" class="col-form-label">Nimike</label>
-                                    <input type="text" class="form-control" id="txbTarNim">
+                                    <input type="text" class="form-control" id="mtxbTarNim" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="kuvaus" class="col-form-label">Kuvaus</label>
-                                    <input type="text" class="form-control" id="txbTarKuvaus">
+                                    <input type="text" class="form-control" id="mtxbTarKuvaus" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="halytysraja" class="col-form-label">Hälytysraja</label>
-                                    <input type="number" class="form-control" id="txbHalRaja">
+                                    <input type="number" class="form-control" id="mtxbHalRaja" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
-                                    <input type="text" class="form-control" id="txbHPaikka">
+                                    <input type="text" class="form-control" id="mtxbHPaikka" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="txbHinta">
+                                    <input type="number" class="form-control" id="mtxbHinta" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="maara" class="form-control-label">Määrä</label>
-                                    <input type="number" class="form-control" id="txbMaara">
+                                    <input type="number" class="form-control" id="mtxbMaara" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="yksikko" class="form-control-label">Yksikko</label>
-                                    <select class="form-control custom-select" id="ddYksikot">
-                                        <option value="defaultval">Valitse yksikkö</option>
+                                    <select class="form-control custom-select" id="mddYksikot" required>
+                                        <option value="">Valitse yksikkö</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="varasto" class="form-control-label">Varasto</label>
-                                    <select class="form-control custom-select" id="ddVarastot">
-                                        <option value="defaultval">Valitse varasto</option>
+                                    <select class="form-control custom-select" id="mddVarastot" required>
+                                        <option value="">Valitse varasto</option>
                                     </select>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                    <button type="button" id="btnMuokkaatarvike" class="btn btn-primary">Tallenna</button>
+                                    <button type="submit" id="btnMuokkaatarvike" class="btn btn-primary">Tallenna</button>
                                 </div>
+							</form>
                             </div>
                         </div>
                     </div>
                 </div>
-                            
+
                 <!--Dialogi tarvikkeiden luomista varten-->
                 <div class="modal fade" id="tarvikeDialog" tabindex="-1" role="dialog" aria-labelledby="lisaaTarvikeLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
@@ -325,56 +374,65 @@
                                 <h5 class="modal-title" id="lisaaTarvikeLabel">Lisää uusi tarvike</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
-                                    </buttoN>
+                                </button>
                             </div>
-                            
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="kategoria" class="col-form-label">Kategoria</label>
-                                    <select class="form-control custom-select" id="ddTyypit">
-                                        <option value="defaultval">Valitse kategoria</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nimike" class="col-form-label">Nimike</label>
-                                    <input type="text" class="form-control" id="txbTarNim">
-                                </div>
-                                <div class="form-group">
-                                    <label for="kuvaus" class="col-form-label">Kuvaus</label>
-                                    <input type="text" class="form-control" id="txbTarKuvaus">
-                                </div>
-                                <div class="form-group">
-                                    <label for="halytysraja" class="col-form-label">Hälytysraja</label>
-                                    <input type="number" class="form-control" id="txbHalRaja">
-                                </div>
-                                <div class="form-group">
-                                    <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
-                                    <input type="text" class="form-control" id="txbHPaikka">
-                                </div>
-                                <div class="form-group">
-                                    <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="txbHinta">
-                                </div>
-                                <div class="form-group">
-                                    <label for="maara" class="form-control-label">Määrä</label>
-                                    <input type="number" class="form-control" id="txbMaara">
-                                </div>
-                                <div class="form-group">
-                                    <label for="yksikko" class="form-control-label">Yksikko</label>
-                                    <select class="form-control custom-select" id="ddYksikot">
-                                        <option value="defaultval">Valitse yksikkö</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="varasto" class="form-control-label">Varasto</label>
-                                    <select class="form-control custom-select" id="ddVarastot">
-                                        <option value="defaultval">Valitse varasto</option>
-                                    </select>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                    <button type="button" id="btnLuotarvike" class="btn btn-primary">Lisää</button>
-                                </div>
+                                <form class="needs-validation" id="lisays" novalidate>
+                                    <div class="form-group">
+                                        <label for="kategoria" class="col-form-label">Kategoria</label>
+                                        <select class="form-control custom-select" id="ddTyypit" required>
+                                            <option value="">Valitse kategoria</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nimike" class="col-form-label">Nimike</label>
+                                        <input type="text" class="form-control" id="txbTarNim" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kuvaus" class="col-form-label">Kuvaus</label>
+                                        <input type="text" class="form-control" id="txbTarKuvaus" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="halytysraja" class="col-form-label">Hälytysraja</label>
+                                        <input type="number" class="form-control" id="txbHalRaja" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
+                                        <input type="text" class="form-control" id="txbHPaikka" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hinta" class="col-form-label">Hinta (€)</label>
+                                        <input type="number" class="form-control" id="txbHinta" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maara" class="form-control-label">Määrä</label>
+                                        <input type="number" class="form-control" id="txbMaara" required>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="yksikko" class="form-control-label">Yksikko</label>
+                                        <select class="form-control custom-select" id="ddYksikot" required>
+                                            <option value="">Valitse yksikkö</option>
+                                        </select>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="varasto" class="form-control-label">Varasto</label>
+                                        <select class="form-control custom-select" id="ddVarastot" required>
+                                            <option value="">Valitse varasto</option>
+                                        </select>
+                                        <div class="valid-feedback"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="submit" id="btnLuotarvike" class="btn btn-primary">Lisää</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -383,6 +441,8 @@
 
             </div>
         </div>
+        <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+        <button id="topBtn">Ylös</button>
     </body>
 
 </html>

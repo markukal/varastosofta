@@ -1,16 +1,13 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" id="ylanavi">
 
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script><div class="collapse navbar-collapse" id="navbarSupportedContent">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/" id="etusivu">Etusivu</a>
+                <a class="nav-link" href="/" id="tarvikkeet">Tarvikkeet</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/ostoskorisivu" id="ostoskorisivu">Noutolista</a>
+                <a class="nav-link" href="/noutolista" id="noutolista">Noutolista</a>
             </li>
             <% if (kayttoOikeudet == 1) { %>
             <li class="nav-item">
@@ -24,6 +21,7 @@
                     <a class="dropdown-item" href="/varastojenhallinta" id="varastot">Varastot</a>
                     <a class="dropdown-item" href="/tarviketyyppienhallinta" id="tarviketyypit">Tarviketyypit</a>
                     <a class="dropdown-item" href="/yksikoidenhallinta" id="yksikot">Yksiköt</a>
+                    <a class="dropdown-item" href="/luokkienhallinta" id="luokkienhallinta">Luokat</a>
                     <a class="dropdown-item" href="/kayttajienhallinta" id="kayttajienhallinta">Käyttäjien
                         hallinta</a>
                 </div>

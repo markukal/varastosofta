@@ -87,34 +87,20 @@ h1 {
     margin: 0px;
 }
 
-#kayttajatContainer {
+#kayttajatContainer, #varastotContainer, #tarviketyypitContainer, #yksikotContainer, #luokatContainer {
     width:80%;
     margin-left:auto;
     margin-right:auto;
     /* transition: all 0.5s; */
 }
 
-#varastotContainer {
-    width:80%;
-    margin-left:auto;
-    margin-right:auto;
-    /* transition: all 0.5s; */
-}
-
-#tarviketyypitContainer {
-    width:80%;
-    margin-left:auto;
-    margin-right:auto;
-    /* transition: all 0.5s; */
-}
-
-#yksikotContainer {
-    width:80%;
-    margin-left:auto;
-    margin-right:auto;
-    /* transition: all 0.5s; */
-}
 
 .modal {
     top: 100px;
+}
+.fade {
+    transition-property: opacity;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+    transition-delay: 0s;
 }

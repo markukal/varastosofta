@@ -5,6 +5,26 @@ module.exports =
 {
     //Tietojen haku tarvikkeet taulusta
     fetchAll: function (req, res){
+
+
+        if (req.query.muokkaus !== null && req.query.muokkaus !== undefined && req.query.tarvikeID) {
+            connection.query('SELECT * FROM tarvikkeet WHERE tarvikeID = "' + req.query.tarvikeID + '"', function(error, results) {
+                if (error) {
+                    console.log("Virhe haettaessa tuotteita, syy " + error);
+                    res.send({"status":500, "error": error, "response": null});
+                }
+                else
+                {
+                    res.json(results);
+                    console.log("Tuotteen haku onnistui.");
+                }
+            });
+        }
+        else
+        {
+    
+
+
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
         sqlQuery = "SELECT tarvikkeet.tarvikeID AS ID, tarviketyypit.nimi AS tyyppi, tarvikkeet.nimi AS nimi, varastot.nimi AS varasto, tarvikkeet.hinta AS hinta, " +
         "tarvikkeet.kuvaus AS kuvaus, tarvikkeet.maara AS maara, yksikot.nimi AS yksikko, tarvikkeet.rarvo AS halytysraja, tarvikkeet.hpaikka AS hankintapaikka FROM tarvikkeet " +
@@ -13,7 +33,6 @@ module.exports =
         "INNER JOIN yksikot ON tarvikkeet.yksikkoID = yksikot.yksikkoID";
 
         var i = 0;//Apumuuttuja
-        console.log(sqlQuery);
         //Käydään req.query läpi ja lisätään hakuun ehdot 
         for (var key in req.query){
 
@@ -29,19 +48,16 @@ module.exports =
             
         }
 
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe haettaessa dataa tarvikkeet-taulusta, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
-                //console.log("Data = " + JSON.stringify(results));
-                //console.log("Params = " + JSON.stringify(req.query));
-
                 res.json(results);
             }
         });
+        }
     },
 
     //Uuden tarvikkeen lisäys
@@ -50,16 +66,12 @@ module.exports =
         connection.escape(req.query.tyyppiID) + ", " + connection.escape(req.query.varastoID) +", " + connection.escape(req.query.nimi) + ", " 
         + connection.escape(req.query.kuvaus) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.hinta) + ", '"+ req.query.yksikkoID + "'" + ", "+ connection.escape(req.query.hpaikka) + ", "+ connection.escape(req.query.rarvo) + ");";
 
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe lisätessä dataa tarvikkeet-tauluun, syy: " + error);
                 res.send({ "status": 500, "error": error, "response": null });
             }
             else {
-                //console.log("Data = " + JSON.stringify(results));
-                //console.log("Params = " + JSON.stringify(req.query));
-
                 res.json(results);
             }
         });
@@ -68,15 +80,16 @@ module.exports =
     //Tarvikkeen tietojen päivitys
     update: function (req, res){
 
-        if (req.body.nimi != undefined && req.body.maara != undefined) {
+        // päivitetään tarvikemäärää noutolistasta
+        if (req.body.nimi !== undefined && req.body.maara !== undefined && req.body.noutolista !== undefined && req.body.noutolista !== null) {
             sqlQuery = "UPDATE tarvikkeet SET maara ="+ connection.escape(req.body.maara) + " WHERE nimi=" + connection.escape(req.body.nimi);
         }
+        // päivitetään tarvikemäärää tarvikkeet sivun muokkaa valikon kautta (opettajan toimesta)
         else {
             sqlQuery = "UPDATE tarvikkeet SET tyyppiID ="+ connection.escape(req.query.tyyppiID) + ", varastoID =" + connection.escape(req.query.varastoID) + ", nimi ='" + connection.escape(req.query.nimi) + 
             "', kuvaus ='"+ connection.escape(req.query.kuvaus) +"', maara="+ connection.escape(req.query.maara) + " WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
         }
         
-        console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
                 console.log("Virhe päivittäessä dataa tarvikkeet-tauluun, syy: " + error);
