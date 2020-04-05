@@ -85,7 +85,7 @@
             // Poistaa noutolistasta yksittäisen tuotteen.
             $(document).on("click", "a.poistaListasta", function (e) {
                 e.preventDefault();
-                var listID = $(this).closest('tr').children('th:first').text();
+                var listID = $(this).closest('tr').children('td:first').text();
                 
                 $.ajax({
                     url: 'http://localhost:3002/ostoskori',
