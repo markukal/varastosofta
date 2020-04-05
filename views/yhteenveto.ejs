@@ -37,26 +37,26 @@
                 if ($('#lisays')[0].checkValidity() === false) {
                     event.stopPropagation();
                 } else {
-                var nimi = $("#txbTarNim").val();
-                var kuvaus = $("#txbTarKuvaus").val();
-                var varasto = $("#ddVarastot").val();
-                var yksikko = $("#ddYksikot").val();
-                var hraja = $("#txbHalRaja").val();
-                var hpaikka = $("#txbHPaikka").val();
-                var hinta = $("#txbHinta").val();
-                var maara = $("#txbMaara").val();
-                var tyyppi = $("#ddTyypit").val();
+                    var nimi = $("#txbTarNim").val();
+                    var kuvaus = $("#txbTarKuvaus").val();
+                    var varasto = $("#ddVarastot").val();
+                    var yksikko = $("#ddYksikot").val();
+                    var hraja = $("#txbHalRaja").val();
+                    var hpaikka = $("#txbHPaikka").val();
+                    var hinta = $("#txbHinta").val();
+                    var maara = $("#txbMaara").val();
+                    var tyyppi = $("#ddTyypit").val();
 
-                $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
-                    '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
-                    function (data) {
-                    });
-                setTimeout(() => { lataaTaulukko() }, timeOut);
-                $("#tarvikeDialog").modal('toggle');
+                    $.post('http://localhost:3002/tarvikkeet?nimi=' + nimi + '&kuvaus=' + kuvaus + '&varastoID=' + varasto + '&yksikkoID=' + yksikko +
+                        '&rarvo=' + hraja + '&hpaikka=' + hpaikka + '&hinta=' + hinta + '&maara=' + maara + '&tyyppiID=' + tyyppi,
+                        function (data) {
+                        });
+                    setTimeout(() => { lataaTaulukko() }, timeOut);
+                    $("#tarvikeDialog").modal('toggle');
                 }
                 $('#lisays').addClass('was-validated');
             });
-			
+
             // Suoritetaan tarviketta muokatessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
 
             $('#muokkaus').submit(function(event) {
@@ -64,16 +64,16 @@
                 if ($('#muokkaus')[0].checkValidity() === false) {
                     event.stopPropagation();
                 } else {
-                var tarvikeID = $("#mtxbTarID").val();
-                var nimi = $("#mtxbTarNim").val();
-                var kuvaus = $("#mtxbTarKuvaus").val();
-                var varasto = $("#mddVarastot").val();
-                var yksikko = $("#mddYksikot").val();
-                var hraja = $("#mtxbHalRaja").val();
-                var hpaikka = $("#mtxbHPaikka").val();
-                var hinta = $("#mtxbHinta").val();
-                var maara = $("#mtxbMaara").val();
-                var tyyppi = $("#mddTyypit").val();
+                    var tarvikeID = $("#mtxbTarID").val();
+                    var nimi = $("#mtxbTarNim").val();
+                    var kuvaus = $("#mtxbTarKuvaus").val();
+                    var varasto = $("#mddVarastot").val();
+                    var yksikko = $("#mddYksikot").val();
+                    var hraja = $("#mtxbHalRaja").val();
+                    var hpaikka = $("#mtxbHPaikka").val();
+                    var hinta = $("#mtxbHinta").val();
+                    var maara = $("#mtxbMaara").val();
+                    var tyyppi = $("#mddTyypit").val();
                     $.ajax({
                         url: "http://127.0.0.1:3002/tarvikkeet?tarvikeID=" + tarvikeID + "&nimi=" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
                         type: 'PUT',
@@ -85,37 +85,37 @@
                 }
                 $('#muokkaus').addClass('was-validated');
             });
-			
+
 
 
             $('#muokkausDialog').on('show.bs.modal', function(event) {
-				haeVarastot("mddVarastot");
+                haeVarastot("mddVarastot");
                 haeYksikot("mddYksikot");
                 haeTarvikeTyypit("mddTyypit");
                 var button = $(event.relatedTarget)
                 var tarvikeID = button.data('tarvikeid')
                 var modal = $(this)
-				var muokkaus = "muokkaus"
+                var muokkaus = "muokkaus"
                 modal.find('.modal-body #mtxbTarID').val(tarvikeID);
                 $.get( "http://127.0.0.1:3002/tarvikkeet", { "tarvikeID" : tarvikeID, "muokkaus" : muokkaus}).done(function(data) {
                     modal.find('.modal-body #mtxbTarNim').val(data[0].nimi)
-					modal.find('.modal-body #mtxbTarKuvaus').val(data[0].kuvaus)
-					modal.find('.modal-body #mddVarastot').val(data[0].varastoID)
-					modal.find('.modal-body #mddYksikot').val(data[0].yksikkoID)
-					modal.find('.modal-body #mtxbHalRaja').val(data[0].rarvo)
-					modal.find('.modal-body #mtxbHPaikka').val(data[0].hpaikka)
-					modal.find('.modal-body #mtxbHinta').val(data[0].hinta)
-					modal.find('.modal-body #mtxbMaara').val(data[0].maara)
-					modal.find('.modal-body #mddTyypit').val(data[0].tyyppiID)
+                    modal.find('.modal-body #mtxbTarKuvaus').val(data[0].kuvaus)
+                    modal.find('.modal-body #mddVarastot').val(data[0].varastoID)
+                    modal.find('.modal-body #mddYksikot').val(data[0].yksikkoID)
+                    modal.find('.modal-body #mtxbHalRaja').val(data[0].rarvo)
+                    modal.find('.modal-body #mtxbHPaikka').val(data[0].hpaikka)
+                    modal.find('.modal-body #mtxbHinta').val(data[0].hinta)
+                    modal.find('.modal-body #mtxbMaara').val(data[0].maara)
+                    modal.find('.modal-body #mddTyypit').val(data[0].tyyppiID)
                 })
             });
 
 
-			$('.modal').on('hidden.bs.modal', function() {
+            $('.modal').on('hidden.bs.modal', function() {
                 $('.modal-backdrop').hide();
                 $(this).find('form').trigger('reset');
             })
-			
+
             // Apumuuttuja muokattavan tarvikkeen valitsemista varten.
             var tarID;
             // Muuttuja keinotekoisen viiveen määrittämiseen.
@@ -210,6 +210,11 @@
             function haeVarastot(dd) {
                 $("#" + dd).empty();
                 $.get("http://localhost:3002/varastot", function (data, status) {
+                    if (dd === "dropdown") {
+                        $("#" + dd).append(
+                            '<option value="defaultval">Kaikki varastot</option>'
+                        )
+                    }
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
                             '<option value=' + item.ID + '>' + item.nimi + '</option>'
@@ -221,6 +226,9 @@
             // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeYksikot(dd) {
                 $("#" + dd).empty();
+                $("#" + dd).append(
+                    '<option value="defaultval">Valitse yksikkö</option>'
+                )
                 $.get("http://localhost:3002/yksikot", function (data, status) {
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
@@ -234,6 +242,9 @@
             // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
             function haeTarvikeTyypit(dd) {
                 $("#" + dd).empty();
+                $("#" + dd).append(
+                    '<option value="defaultval">Valitse kategoria</option>'
+                )
                 $.get("http://localhost:3002/tarviketyypit", function (data, status) {
                     $.each(data, function (i, item) {
                         $("#" + dd).append(
@@ -313,58 +324,58 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-							<form class="needs-validation" id="muokkaus" novalidate>
-                                <div class="form-group">
-                                    <label for="ID" class="col-form-label">ID</label>
-                                    <input type="text" class="form-control" id="mtxbTarID" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="kategoria" class="col-form-label">Kategoria</label>
-                                    <select class="form-control custom-select" id="mddTyypit" required>
-                                        <option value="">Valitse kategoria</option>
-                                    </select>
-                                </div> 
-                                <div class="form-group">
-                                    <label for="nimike" class="col-form-label">Nimike</label>
-                                    <input type="text" class="form-control" id="mtxbTarNim" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="kuvaus" class="col-form-label">Kuvaus</label>
-                                    <input type="text" class="form-control" id="mtxbTarKuvaus" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="halytysraja" class="col-form-label">Hälytysraja</label>
-                                    <input type="number" class="form-control" id="mtxbHalRaja" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
-                                    <input type="text" class="form-control" id="mtxbHPaikka" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="mtxbHinta" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="maara" class="form-control-label">Määrä</label>
-                                    <input type="number" class="form-control" id="mtxbMaara" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="yksikko" class="form-control-label">Yksikko</label>
-                                    <select class="form-control custom-select" id="mddYksikot" required>
-                                        <option value="">Valitse yksikkö</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="varasto" class="form-control-label">Varasto</label>
-                                    <select class="form-control custom-select" id="mddVarastot" required>
-                                        <option value="">Valitse varasto</option>
-                                    </select>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                                    <button type="submit" id="btnMuokkaatarvike" class="btn btn-primary">Tallenna</button>
-                                </div>
-							</form>
+                                <form class="needs-validation" id="muokkaus" novalidate>
+                                    <div class="form-group">
+                                        <label for="ID" class="col-form-label">ID</label>
+                                        <input type="text" class="form-control" id="mtxbTarID" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kategoria" class="col-form-label">Kategoria</label>
+                                        <select class="form-control custom-select" id="mddTyypit" required>
+                                            <option value="">Valitse kategoria</option>
+                                        </select>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label for="nimike" class="col-form-label">Nimike</label>
+                                        <input type="text" class="form-control" id="mtxbTarNim" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="kuvaus" class="col-form-label">Kuvaus</label>
+                                        <input type="text" class="form-control" id="mtxbTarKuvaus" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="halytysraja" class="col-form-label">Hälytysraja</label>
+                                        <input type="number" class="form-control" id="mtxbHalRaja" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hankintapaikka" class="col-form-label">Hankintapaikka</label>
+                                        <input type="text" class="form-control" id="mtxbHPaikka" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="hinta" class="col-form-label">Hinta (€)</label>
+                                        <input type="number" class="form-control" id="mtxbHinta" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maara" class="form-control-label">Määrä</label>
+                                        <input type="number" class="form-control" id="mtxbMaara" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="yksikko" class="form-control-label">Yksikko</label>
+                                        <select class="form-control custom-select" id="mddYksikot" required>
+                                            <option value="">Valitse yksikkö</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="varasto" class="form-control-label">Varasto</label>
+                                        <select class="form-control custom-select" id="mddVarastot" required>
+                                            <option value="">Valitse varasto</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="submit" id="btnMuokkaatarvike" class="btn btn-primary">Tallenna</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
