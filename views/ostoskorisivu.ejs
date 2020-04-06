@@ -17,7 +17,9 @@
 
         $(document).ready(function(){
         
-         // tablen lajittelu
+        // TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
+        
+        // tablen lajittelu
 
          $(document).on("click", "th", function () {
             var table = $(this).parents('table').eq(0)
@@ -32,7 +34,9 @@
                 var valA = getCellValue(a, index), valB = getCellValue(b, index)
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
             }
-        }    
+        }
+
+        function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
         
         // Koodi top-buttonin ilmestymiselle/piilottamiselle
 
