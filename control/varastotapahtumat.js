@@ -6,7 +6,9 @@ module.exports =
     //Tietojen haku varastotapahtumat taulusta
     fetchAll: function (req, res){
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
-        sqlQuery = "";
+        sqlQuery = "SELECT varastotapahtumat.tapahtumaID AS ID, varastotapahtumat.kasittelija AS kasittelija, varastotapahtumat.ttyyppinimi AS tapahtumatyyppinimi, " +
+        "varastotapahtumat.tarvikenimi AS tarvikenimi, varastotapahtumat.luokkanimi AS luokka, varastotapahtumat.maara AS maara, varastotapahtumat.yksikkonimi AS yksikko, " +
+        "varastotapahtumat.tarvikehpaikka AS tarvikepaikka, varastotapahtumat.pvm AS pvm,  FROM varastotapahtumat";
 
         var i = 0;//Apumuuttuja
         console.log(sqlQuery);
@@ -31,6 +33,7 @@ module.exports =
             else {
                 //console.log("Data = " + JSON.stringify(results));
                 //console.log("Params = " + JSON.stringify(req.query));
+
                 res.json(results);
             }
         });
@@ -38,9 +41,10 @@ module.exports =
 
     //Uuden varastotapahtuman lisäys
     addNew: function (req, res){
-        sqlQuery = "INSERT INTO varastotapahtumat (tapahtumaID, ttyyppiID, tarvikeID, luokkaID, kasittelija, maara, pvm) VALUES (" + null + ", " + 
-        connection.escape(req.query.ttyyppiID) + ", " + connection.escape(req.query.tarvikeID) +", " + connection.escape(req.query.luokkaID) + ", " 
-        + connection.escape(req.query.kasittelija) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.pvm) + ");";
+        sqlQuery = "INSERT INTO varastotapahtumat (tapahtumaID, ttyyppinimi, luokkanimi, tarvikenimi, tarvikehpaikka, maara, yksikkonimi, kasittelija, pvm) VALUES (" + null + ", " + 
+        connection.escape(req.query.ttyyppinimi) + ", " + connection.escape(req.query.luokkanimi) +", " + connection.escape(req.query.tarvikenimi) + ", " +
+        connection.escape(req.query.tarvikehpaikka) + ", " + connection.escape(req.query.maara) + ", " + connection.escape(req.query.yksikkonimi) + ", " +
+        connection.escape(req.query.kasittelija) + ", " + connection.escape(req.query.pvm) + ");";
 
         console.log(sqlQuery);
         connection.query(sqlQuery, function (error, results, fields) {
@@ -59,9 +63,11 @@ module.exports =
 
     //Varastotapahtuman tietojen päivitys
     update: function (req, res){
-        sqlQuery = "UPDATE varastotapahtumat SET ttyyppiID ="+ connection.escape(req.query.ttyyppiID) + ", tarvikeID =" + connection.escape(req.query.tarvikeID) + ", luokkaID ='" + 
-        connection.escape(req.query.luokkaID) + "', kasittelija ='"+ connection.escape(req.query.kasittelija) +"', maara="+ connection.escape(req.query.maara) + 
-        "', pvm="+ connection.escape(req.query.pvm) + " WHERE tapahtumaID=" + connection.escape(req.query.tapahtumaID);
+        sqlQuery = "UPDATE varastotapahtumat SET ttyyppinimi ="+ connection.escape(req.query.ttyyppinimi) + ", tarvikenimi =" + connection.escape(req.query.tarvikenimi) + 
+        ", luokkanimi ='" + connection.escape(req.query.luokkanimi) + "', tarvikenimi ='" + connection.escape(req.query.tarvikenimi) + 
+        "', tarvikehpaikka ='" + connection.escape(req.query.tarvikehpaikka) + "', maara="+ connection.escape(req.query.maara) + 
+        "', yksikkonimi ='" + connection.escape(req.query.yksikkonimi) + "', kasittelija ='" + connection.escape(req.query.kasittelija) +
+        "', pvm=" + connection.escape(req.query.pvm) + " WHERE tapahtumaID=" + connection.escape(req.query.tapahtumaID);
 
         connection.query(sqlQuery, function (error, results, fields) {
             if (error) {
