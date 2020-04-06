@@ -36,7 +36,7 @@
                 return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
             }
         }
-        
+
         function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
 
@@ -306,6 +306,14 @@
             haeTarvikeTyypit("ddTyypit");
         })
 
+        // popup, joka ilmaantuu, kun tarvike on lisätty listaan
+        $(document).on("click", ".tarvikeKoriin", function () {
+             
+            $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
+            $(".popuptext").fadeOut(2000);
+
+        })
+
         // Lataa sivun avautuessa tarvikkeet taulukkoon.
         lataaTaulukko();
         // Lataa sivun avautuessa varastot pudotusvalikkoon.
@@ -340,6 +348,9 @@
             </div>
             <table class="table" id="taulu">
             </table>
+
+            <!-- Popup-div -->
+            <div class='popup'><span class='popuptext' id='popupSpan'>Lisätty noutolistaan</span></div>
 
 
             <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
