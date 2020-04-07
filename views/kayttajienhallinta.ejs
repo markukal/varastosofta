@@ -43,7 +43,7 @@
 					var luokkaID = document.getElementById("luokkaID").value;
 					var kayttoOikeus = document.getElementById("kayttoOikeus").value;
 					$.ajax({
-						url: "http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus  + "&luokkaID=" + luokkaID + "&salasana=" + salasana + "&salasanauudelleen=" + salasanauudelleen + "&kayttoOikeus=" + kayttoOikeus,
+						url: "/users?kayttajatunnus=" + kayttajatunnus  + "&luokkaID=" + luokkaID + "&salasana=" + salasana + "&salasanauudelleen=" + salasanauudelleen + "&kayttoOikeus=" + kayttoOikeus,
 						type: 'POST',
 						success: function(result) {
 							$('#lisaaKayttaja').modal('toggle');
@@ -68,7 +68,7 @@
 					var luokkaID = document.getElementById("mluokkaID").value;
 					var kayttoOikeus = document.getElementById("mkayttoOikeus").value;
 					$.ajax({
-						url: "http://127.0.0.1:3002/users?mkayttajatunnus=" + kayttajatunnus  + "&mluokkaID=" + luokkaID + "&msalasana=" + salasana + "&msalasanauudelleen=" + salasanauudelleen + "&mkayttoOikeus=" + kayttoOikeus,
+						url: "/users?mkayttajatunnus=" + kayttajatunnus  + "&mluokkaID=" + luokkaID + "&msalasana=" + salasana + "&msalasanauudelleen=" + salasanauudelleen + "&mkayttoOikeus=" + kayttoOikeus,
 						type: 'PUT',
 						success: function(result) {
 							$('#muokkaaKayttajaa').modal('toggle');
@@ -85,7 +85,7 @@
 				var button = $(event.relatedTarget)
 				var kayttajatunnus = button.data('kayttajatunnus')
 				var modal = $(this)
-				$.get( "http://127.0.0.1:3002/users", { "mkayttajatunnus" : kayttajatunnus }).done(function(data) {
+				$.get( "/users", { "mkayttajatunnus" : kayttajatunnus }).done(function(data) {
 					modal.find('.modal-body #mkayttajatunnus').val(kayttajatunnus)
 					modal.find('.modal-body #mluokkaID').val(data[0].luokkaID)
 					modal.find('.modal-body #mkayttoOikeus').val(data[0].kayttoOikeus)
@@ -110,7 +110,7 @@
 			})
 			function poistaKayttaja(kayttajatunnus) {
 				$.ajax({
-					url: "http://127.0.0.1:3002/users?kayttajatunnus=" + kayttajatunnus,
+					url: "/users?kayttajatunnus=" + kayttajatunnus,
 					type: 'DELETE',
 					success: function(results) {
 						$('#poistoVahvistus').modal('toggle');
@@ -128,7 +128,8 @@
 			function paivita() {
 
 				$("#kayttajat tbody tr").remove();
-				$.getJSON( "http://127.0.0.1:3002/users", function (data) {
+				$.getJSON( "/users", function (data) {
+                    console.log(data)
 					var len = data.length;
 					for (var i=0; i < len; i++) {
 						var oikeudet = kayttoOikeudet(data[i].kayttoOikeus);
@@ -160,7 +161,7 @@
 				}));
 
 
-				$.getJSON( "http://127.0.0.1:3002/luokat", function (data) {
+				$.getJSON( "/luokat", function (data) {
 					$.each(data, function (i, item) {
 						$('#luokkaID').append($('<option>', {
 							value: item.luokkaID,
