@@ -57,53 +57,53 @@ app.use(flash()); // käytetään virheviesteihin kirjautumisen epäonnistuessa
 
 // Reitit tietokantafunktioihin.
 app.route('/klistat')
-    .get(klistat.fetchAll)
-    .post(klistat.addNew)
-    .put(klistat.update)
-    .delete(klistat.delete);
+    .get(checkAuthenticated, klistat.fetchAll)
+    .post(checkAuthenticated, klistat.addNew)
+    .put(checkAuthenticated, klistat.update)
+    .delete(checkAuthenticated, klistat.delete);
 
 
 app.route('/tarvikkeet')
-    .get(tarvikkeet.fetchAll)
-    .post(tarvikkeet.addNew)
-    .put(tarvikkeet.update)
-    .delete(tarvikkeet.delete);
+    .get(checkAuthenticated, tarvikkeet.fetchAll)
+    .post(checkAuthenticated, tarvikkeet.addNew)
+    .put(checkAuthenticated, tarvikkeet.update)
+    .delete(checkAuthenticated, tarvikkeet.delete);
 
 app.route('/varastot')
-    .get(varastot.fetchAll)
-    .post(varastot.addNew)
-    .put(varastot.update)
-    .delete(varastot.delete);
+    .get(checkAuthenticated, varastot.fetchAll)
+    .post(checkAuthenticated, varastot.addNew)
+    .put(checkAuthenticated, varastot.update)
+    .delete(checkAuthenticated, varastot.delete);
 
 app.route('/yksikot')
-    .get(yksikot.fetchAll)
-    .post(yksikot.addNew)
-    .put(yksikot.update)
-    .delete(yksikot.delete);
+    .get(checkAuthenticated, yksikot.fetchAll)
+    .post(checkAuthenticated, yksikot.addNew)
+    .put(checkAuthenticated, yksikot.update)
+    .delete(checkAuthenticated, yksikot.delete);
 
 app.route('/tarviketyypit')
-    .get(tarviketyypit.fetchAll)
-    .post(tarviketyypit.addNew)
-    .put(tarviketyypit.update)
-    .delete(tarviketyypit.delete);
+    .get(checkAuthenticated, tarviketyypit.fetchAll)
+    .post(checkAuthenticated, tarviketyypit.addNew)
+    .put(checkAuthenticated, tarviketyypit.update)
+    .delete(checkAuthenticated, tarviketyypit.delete);
 
 app.route('/tapahtumatyypit')
-    .get(tapahtumatyypit.fetchAll)
-    .post(tapahtumatyypit.addNew)
-    .put(tapahtumatyypit.update)
-    .delete(tapahtumatyypit.delete);
+    .get(checkAuthenticated, tapahtumatyypit.fetchAll)
+    .post(checkAuthenticated, tapahtumatyypit.addNew)
+    .put(checkAuthenticated, tapahtumatyypit.update)
+    .delete(checkAuthenticated, tapahtumatyypit.delete);
 
 app.route('/ostoskori')
-    .get(ostoskori.fetchAll)
-    .post(ostoskori.addNew)
-    .put(ostoskori.update)
-    .delete(ostoskori.delete);
+    .get(checkAuthenticated, ostoskori.fetchAll)
+    .post(checkAuthenticated, ostoskori.addNew)
+    .put(checkAuthenticated, ostoskori.update)
+    .delete(checkAuthenticated, ostoskori.delete);
 
 app.route('/luokat')
-    .get(luokat.fetchAll)
-    .post(luokat.addNew)
-    .put(luokat.update)
-    .delete(luokat.delete);
+    .get(checkAuthenticated, luokat.fetchAll)
+    .post(checkAuthenticated, luokat.addNew)
+    .put(checkAuthenticated, luokat.update)
+    .delete(checkAuthenticated, luokat.delete);
 
 
 app.route('/users')
