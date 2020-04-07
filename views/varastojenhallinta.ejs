@@ -38,7 +38,7 @@
                 } else {
                     var nimi = document.getElementById("nimi").value;
                     $.ajax({
-                        url: "http://127.0.0.1:3002/varastot?nimi=" + nimi,
+                        url: "/varastot?nimi=" + nimi,
                         type: 'POST',
                         success: function (result) {
                             $('#lisaaVarasto').modal('toggle');
@@ -60,7 +60,7 @@
                     var nimi = document.getElementById("mnimi").value;
                     var varastoID = document.getElementById("mvarastoID").value;
                     $.ajax({
-                        url: "http://127.0.0.1:3002/varastot?mnimi=" + nimi + "&mvarastoID=" + varastoID,
+                        url: "/varastot?mnimi=" + nimi + "&mvarastoID=" + varastoID,
                         type: 'PUT',
                         success: function (result) {
                             $('#muokkaaVarastoa').modal('toggle');
@@ -76,7 +76,7 @@
                 var varastoID = button.data('varastoid');
                 var modal = $(this)
                 modal.find('.modal-body #mvarastoID').val(varastoID);
-                $.get("http://127.0.0.1:3002/varastot", { "mvarastoID": varastoID }).done(function (data) {
+                $.get("/varastot", { "mvarastoID": varastoID }).done(function (data) {
                     modal.find('.modal-body #mnimi').val(data[0].nimi)
                 })
             });
@@ -99,7 +99,7 @@
             })
             function poistaVarasto(varastoID) {
                 $.ajax({
-                    url: "http://127.0.0.1:3002/varastot?varastoID=" + varastoID,
+                    url: "/varastot?varastoID=" + varastoID,
                     type: 'DELETE',
                     success: function (results) {
                         $('#poistoVahvistus').modal('toggle');
@@ -114,7 +114,7 @@
             function paivita() {
 
                 $("#varastotTaulu tbody tr").remove();
-                $.getJSON("http://127.0.0.1:3002/varastot", function (data) {
+                $.getJSON("/varastot", function (data) {
                     var len = data.length;
                     for (var i = 0; i < len; i++) {
                         $("#varastotTaulu").append(

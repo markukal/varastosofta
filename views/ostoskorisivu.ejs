@@ -85,7 +85,7 @@
             $("#koriTaulu").empty();
             $("#koriTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimi</th>' +
                 '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
-            $.getJSON("http://127.0.0.1:3002/ostoskori", function (data) {
+            $.getJSON("/ostoskori", function (data) {
 
 
                 var len = data.length;
@@ -132,7 +132,7 @@
             var listID = $(this).closest('tr').children('td:first').text();
 
             $.ajax({
-                url: 'http://localhost:3002/ostoskori',
+                url: '/ostoskori',
                 method: 'DELETE',
                 data: { "ostosID": listID }
             })
@@ -145,7 +145,7 @@
         function tyhjennaKori() {
 
             $.ajax({
-                url: 'http://localhost:3002/ostoskori',
+                url: '/ostoskori',
                 method: 'DELETE',
                 data: { ostosID: 0 }
             })
@@ -164,7 +164,7 @@
                 var noutolista = "noutolista";
 
                 $.ajax({
-                    url: 'http://localhost:3002/tarvikkeet',
+                    url: '/tarvikkeet',
                     method: 'PUT',
                     data: {
                         "nimi": poistettava,

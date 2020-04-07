@@ -61,7 +61,7 @@
 
         // Käy tarvikkeet-taulun läpi ja lisää raja-arvon alittavat tarvikkeet klistat-tauluun.
         function suodataLoppuvat() {
-            $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
+            $.getJSON("/tarvikkeet", function (data) {
                         
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -69,7 +69,7 @@
                 var maara = data[i].maara;
 
                 if (maara < rarvo) {
-                    $.post('http://localhost:3002/klistat?tarvikeID=' + data[i].ID, {})   
+                    $.post('/klistat?tarvikeID=' + data[i].ID, {})   
                 }
                       
             }
@@ -82,7 +82,7 @@
         function tyhjennaKlistatTaulu() {
             var listID = 0;
             $.ajax({      
-                url: 'http://localhost:3002/klistat',
+                url: '/klistat',
                 method: 'DELETE',
                 data: {"klistaID" : listID}    
             })
@@ -113,7 +113,7 @@
         function listaaKlista() {
             $("#kerailyTaulu").empty();
             $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Poisto</th></tr>');
-            $.getJSON("http://127.0.0.1:3002/klistat", function (data) {
+            $.getJSON("/klistat", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
                     $("#kerailyTaulu").append(

@@ -42,7 +42,7 @@
             } else {
                 var nimi = document.getElementById("nimi").value;
                 $.ajax({
-                    url: "http://127.0.0.1:3002/tarviketyypit?nimi=" + nimi,
+                    url: "/tarviketyypit?nimi=" + nimi,
                     type: 'POST',
                     success: function (result) {
                         $('#lisaaTtyyppi').modal('toggle');
@@ -64,7 +64,7 @@
                 var nimi = document.getElementById("mnimi").value;
                 var ttyyppiID = document.getElementById("mttyyppiID").value;
                 $.ajax({
-                    url: "http://127.0.0.1:3002/tarviketyypit?mnimi=" + nimi + "&mttyyppiID=" + ttyyppiID,
+                    url: "/tarviketyypit?mnimi=" + nimi + "&mttyyppiID=" + ttyyppiID,
                     type: 'PUT',
                     success: function (result) {
                         $('#muokkaaTtyyppia').modal('toggle');
@@ -80,7 +80,7 @@
             var ttyyppiID = button.data('ttyyppiid');
             var modal = $(this)
             modal.find('.modal-body #mttyyppiID').val(ttyyppiID);
-            $.get("http://127.0.0.1:3002/tarviketyypit", { "mttyyppiID": ttyyppiID }).done(function (data) {
+            $.get("/tarviketyypit", { "mttyyppiID": ttyyppiID }).done(function (data) {
                 modal.find('.modal-body #mnimi').val(data[0].nimi)
             })
         });
@@ -103,7 +103,7 @@
         })
         function poistaTtyyppi(ttyyppiID) {
             $.ajax({
-                url: "http://127.0.0.1:3002/tarviketyypit?tyyppiID=" + ttyyppiID,
+                url: "/tarviketyypit?tyyppiID=" + ttyyppiID,
                 type: 'DELETE',
                 success: function (results) {
                     $('#poistoVahvistus').modal('toggle');
@@ -118,7 +118,7 @@
         function paivita() {
 
             $("#tarviketyypitTaulu tbody tr").remove();
-            $.getJSON("http://127.0.0.1:3002/tarviketyypit", function (data) {
+            $.getJSON("/tarviketyypit", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
                     $("#tarviketyypitTaulu").append(

@@ -38,7 +38,7 @@
                 } else {
                     var nimi = document.getElementById("nimi").value;
                     $.ajax({
-                        url: "http://127.0.0.1:3002/yksikot?nimi=" + nimi,
+                        url: "/yksikot?nimi=" + nimi,
                         type: 'POST',
                         success: function (result) {
                             $('#lisaaYksikko').modal('toggle');
@@ -61,7 +61,7 @@
                     var nimi = document.getElementById("mnimi").value;
                     var yksikkoID = document.getElementById("myksikkoID").value;
                     $.ajax({
-                        url: "http://127.0.0.1:3002/yksikot?mnimi=" + nimi + "&myksikkoID=" + yksikkoID,
+                        url: "/yksikot?mnimi=" + nimi + "&myksikkoID=" + yksikkoID,
                         type: 'PUT',
                         success: function (result) {
                             $('#muokkaaYksikkoa').modal('toggle');
@@ -77,7 +77,7 @@
                 var yksikkoID = button.data('yksikkoid');
                 var modal = $(this)
                 modal.find('.modal-body #myksikkoID').val(yksikkoID);
-                $.get("http://127.0.0.1:3002/yksikot", { "myksikkoID": yksikkoID }).done(function (data) {
+                $.get("/yksikot", { "myksikkoID": yksikkoID }).done(function (data) {
                     modal.find('.modal-body #mnimi').val(data[0].nimi)
                 })
             });
@@ -100,7 +100,7 @@
             })
             function poistaYksikko(yksikkoID) {
                 $.ajax({
-                    url: "http://127.0.0.1:3002/yksikot?yksikkoID=" + yksikkoID,
+                    url: "/yksikot?yksikkoID=" + yksikkoID,
                     type: 'DELETE',
                     success: function (results) {
                         $('#poistoVahvistus').modal('toggle');
@@ -115,7 +115,7 @@
             function paivita() {
 
                 $("#yksikkoTaulu tbody tr").remove();
-                $.getJSON("http://127.0.0.1:3002/yksikot", function (data) {
+                $.getJSON("/yksikot", function (data) {
                     var len = data.length;
                     for (var i = 0; i < len; i++) {
                         $("#yksikkoTaulu").append(
