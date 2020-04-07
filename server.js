@@ -105,11 +105,12 @@ app.route('/luokat')
     .put(luokat.update)
     .delete(luokat.delete);
 
+
 app.route('/users')
-    .get(users.fetchAll)
-    .post(users.register)
-    .put(users.update)
-    .delete(users.delete);
+    .get(checkAuthenticated, users.fetchAll)
+    .post(checkAuthenticated, users.register)
+    .put(checkAuthenticated, users.update)
+    .delete(checkAuthenticated, users.delete)
 
 app.get('/login',  function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
@@ -139,7 +140,7 @@ app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
         res.render('kayttajienhallinta.ejs', {
             kayttajatunnus: req.user.kayttajatunnus,
             kayttoOikeus: req.user.kayttoOikeus,
-            kayttajaID: req.user.kayttajaID
+            kayttajaID: req.user.kayttajaID,
         });
     }
     else {
