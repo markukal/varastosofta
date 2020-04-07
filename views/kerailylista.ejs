@@ -59,6 +59,35 @@
 
         });
 
+        // Käy tarvikkeet-taulun läpi ja lisää raja-arvon alittavat tarvikkeet klistat-tauluun.
+        function suodataLoppuvat() {
+            $.getJSON("http://127.0.0.1:3002/tarvikkeet", function (data) {
+                        
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                var rarvo = data[i].halytysraja;
+                var maara = data[i].maara;
+
+                if (maara < rarvo) {
+                    $.post('http://localhost:3002/klistat?tarvikeID=' + data[i].ID, {})   
+                }
+                      
+            }
+            
+                
+        }); 
+            
+        }
+
+        function tyhjennaKlistatTaulu() {
+            var listID = 0;
+            $.ajax({      
+                url: 'http://localhost:3002/klistat',
+                method: 'DELETE',
+                data: {"klistaID" : listID}    
+            })
+        }
+
         // Hakukentän toiminnallisuus
         $("#hakuInput").on("keyup", function () {
             var filter = $(this).val().toUpperCase();
@@ -78,15 +107,16 @@
             })
         });
 
-        // Listaa tarvikkeet taulukkoon.
 
+
+        // Listaa tarvikkeet taulukkoon.
         function listaaKlista() {
             $("#kerailyTaulu").empty();
-            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Kori</th></tr>');
+            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Poisto</th></tr>');
             $.getJSON("http://127.0.0.1:3002/klistat", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
-                    $("#taulu").append(
+                    $("#kerailyTaulu").append(
                         "<tr>" +
                         "<th scope='row'>" + data[i].ID + "</th>" +
                         "<td>" + data[i].nimi + "</td>" +
@@ -94,16 +124,27 @@
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='editp'>Koriin</a>" + "</td>" + "</tr>"
-
+                        "<td>" + "<a href='javascript:void(0);' class='removep'>Poista</a>" + "</td>" + "</tr>"
 
                     )
-                    $("#taulu").append("</tbody>")
+                    $("#kerailyTaulu").append("</tbody>")
                 }
             })
         };
 
-        listaaKlista();
+        $("#btnHaeListaus").click(function() {
+            listaaKlista();
+        })
+
+        $("#btnLisaaTauluun").click(function() {
+            suodataLoppuvat();
+        })
+
+        $("#btnTyhjennaTaulu").click(function() {
+            tyhjennaKlistatTaulu();
+        })
+
+        
 
     });
 </script>
@@ -122,6 +163,9 @@
                 <div class="row justify-content-sm-center">
                     <input type="text" placeholder="Hae">
                     <button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>
+                    <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
+                    <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button>
+                    <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button>
 
                 </div>
             </div>
