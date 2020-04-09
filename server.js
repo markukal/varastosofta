@@ -221,7 +221,7 @@ app.get('/yksikoidenhallinta', checkAuthenticated,( req, res) => {
     }
 });
 
-app.get('/varastotapahtumat', checkAuthenticated,( req, res) => {
+app.get('/tapahtumat', checkAuthenticated,( req, res) => {
     // opettajan kayttooikeus = 1 , oppilaan = 2
     if (req.user.kayttoOikeus == "1") {
         res.render('tapahtumat.ejs', {
