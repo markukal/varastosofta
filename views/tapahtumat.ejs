@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Noutolista</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<script>
+
+
+    $(document).ready(function () {
+
+        // TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
+
+        // tablen lajittelu
+
+        $(document).on("click", "th", function () {
+            var table = $(this).parents('table').eq(0)
+            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+            this.asc = !this.asc
+            if (!this.asc) { rows = rows.reverse() }
+            for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+        })
+
+        function comparer(index) {
+            return function (a, b) {
+                var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+            }
+        }
+
+        function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+
+        // Hakukentän toiminnallisuus
+        $("#hakuInput").on("keyup", function () {
+            var filter = $(this).val().toUpperCase();
+
+            // haku tapahtuu kahden ensimmäisen sarakkeen välillä.
+            $("table tr").each(function () {
+                if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
+                ) {
+                    $("#tableRow").show();
+                    $(this).show();
+                } else {
+                    $("#tableRow").show();
+                    $(this).hide();
+                }
+            })
+        });
+
+        // Koodi top-buttonin ilmestymiselle/piilottamiselle
+
+        $(window).scroll(function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                $("#topBtn").css("display", "block");
+            } else {
+                $("#topBtn").css("display", "none");
+            }
+        });
+
+        $("#topBtn").click(function topFunction() {
+            $(document.body).scrollTop(0);
+            $(document.documentElement).scrollTop(0);
+        });
+
+
+        var timeOut = 500;
+
+    });
+
+
+
+
+
+</script>
+
+<body>
+    <div id="yhteenvetodiv">
+        <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+        <div class="mainwrapper">
+            <br>
+            <br>
+            <h1>Varastotapahtumat</h1>
+            <hr>
+
+            <div id="suodatusContainer">
+                <div class="row justify-content-sm-center">
+                    <input type="text" id="hakuInput" placeholder="Hae">
+                </div>
+            </div>
+
+
+            <table class="table" id="tapahtumaTaulu">
+            </table>
+
+        </div>
+    </div>
+
+    <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+    <button id="topBtn">Ylös</button>
+
+</body>
+
+</html>
