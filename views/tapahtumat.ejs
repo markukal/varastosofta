@@ -22,8 +22,6 @@
 
     $(document).ready(function () {
 
-        // TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
-
         // tablen lajittelu
 
         $(document).on("click", "th", function () {
@@ -79,6 +77,32 @@
 
         var timeOut = 500;
 
+        // Listaa varastotapahtumat taulukkoon.
+        function lataaTaulukko() {
+            $("#tapahtumaTaulu").empty();
+            $("#tapahtumaTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Käsittelijä</th><th scope="col">Tapahtumatyyppi</th><th scope="col">Tarvike</th><th scope="col">Luokka</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Pvm</th></tr>');
+            $.getJSON("/varastotapahtumat", function (data) {
+                var len = data.length;
+                for (var i = 0; i < len; i++) {
+                    $("#tapahtumaTaulu").append(
+                        "<tr>" +
+                        "<td>" + data[i].ID + "</td>" +
+                        "<td>" + data[i].kasittelija + "</td>" +
+                        "<td>" + data[i].tapahtumatyyppinimi + "</td>" +
+                        "<td>" + data[i].tarvikenimi + "</td>" +
+                        "<td>" + data[i].luokka + "</td>" +
+                        "<td>" + data[i].maara + "</td>" +
+                        "<td>" + data[i].yksikko + "</td>" +
+                        "<td>" + data[i].tarvikepaikka + "</td>" +
+                        "<td>" + data[i].pvm + "</td>" + "</tr>"
+                    )
+                    $("#tapahtumaTaulu").append("</tbody>")
+                }
+            })
+        };
+
+        lataaTaulukko();
+
     });
 
 
@@ -88,8 +112,10 @@
 </script>
 
 <body>
-    <div id="yhteenvetodiv">
+    
+    <div id="tapahtumatdiv">
         <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+        
         <div class="mainwrapper">
             <br>
             <br>
@@ -99,10 +125,11 @@
             <div id="suodatusContainer">
                 <div class="row justify-content-sm-center">
                     <input type="text" id="hakuInput" placeholder="Hae">
+                    <br
                 </div>
             </div>
 
-
+            <br>
             <table class="table" id="tapahtumaTaulu">
             </table>
 

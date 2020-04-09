@@ -11,7 +11,7 @@ module.exports =
         "varastotapahtumat.tarvikehpaikka AS tarvikepaikka, varastotapahtumat.pvm AS pvm FROM varastotapahtumat";
 
         var i = 0;//Apumuuttuja
-        console.log(sqlQuery);
+        
         //Käydään req.query läpi ja lisätään hakuun ehdot 
         for (var key in req.query){
 
@@ -33,7 +33,7 @@ module.exports =
             else {
                 //console.log("Data = " + JSON.stringify(results));
                 //console.log("Params = " + JSON.stringify(req.query));
-
+                console.log(results);
                 res.json(results);
             }
         });
