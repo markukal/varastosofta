@@ -8,7 +8,7 @@ module.exports =
         //Haetaan kaikki tiedot jos hakuehtoja ei tule
         sqlQuery = "SELECT varastotapahtumat.tapahtumaID AS ID, varastotapahtumat.kasittelija AS kasittelija, varastotapahtumat.ttyyppinimi AS tapahtumatyyppinimi, " +
         "varastotapahtumat.tarvikenimi AS tarvikenimi, varastotapahtumat.luokkanimi AS luokka, varastotapahtumat.maara AS maara, varastotapahtumat.yksikkonimi AS yksikko, " +
-        "varastotapahtumat.tarvikehpaikka AS tarvikepaikka, varastotapahtumat.pvm AS pvm,  FROM varastotapahtumat";
+        "varastotapahtumat.tarvikehpaikka AS tarvikepaikka, varastotapahtumat.pvm AS pvm FROM varastotapahtumat";
 
         var i = 0;//Apumuuttuja
         console.log(sqlQuery);
