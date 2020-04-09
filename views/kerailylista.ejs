@@ -132,6 +132,26 @@
             })
         };
 
+        //Tulostus
+        function tulosta() {
+            var mywindow = window.open('', 'PRINT', 'height=600,width=800');
+
+            mywindow.document.write('<html><head><title>Tulostus</title>');
+            mywindow.document.write('</head><body >');
+            mywindow.document.write('<h1>Keräilylista</h1>');
+            mywindow.document.write('<table>')
+            mywindow.document.write(document.getElementById("kerailyTaulu").innerHTML);
+            mywindow.document.write('</table></body></html>');
+
+            mywindow.document.close();
+            mywindow.focus(); 
+
+            mywindow.print();
+
+        };
+
+
+        
         $("#btnHaeListaus").click(function() {
             listaaKlista();
         })
@@ -142,6 +162,10 @@
 
         $("#btnTyhjennaTaulu").click(function() {
             tyhjennaKlistatTaulu();
+        })
+
+        $("#btnTulosta").click(function() {
+            tulosta();
         })
 
         
@@ -166,6 +190,7 @@
                     <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
                     <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button>
                     <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button>
+                    <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button>
 
                 </div>
             </div>
