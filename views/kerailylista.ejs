@@ -150,19 +150,22 @@
 
         };
 
+        tyhjennaKlistatTaulu();
 
+        suodataLoppuvat();
         
         $("#btnHaeListaus").click(function() {
             listaaKlista();
         })
 
-        $("#btnLisaaTauluun").click(function() {
+        /*$("#btnLisaaTauluun").click(function() {
             suodataLoppuvat();
         })
 
         $("#btnTyhjennaTaulu").click(function() {
             tyhjennaKlistatTaulu();
         })
+        */
 
         $("#btnTulosta").click(function() {
             tulosta();
@@ -186,10 +189,10 @@
             <div id="suodatusContainer">
                 <div class="row justify-content-sm-center">
                     <input type="text" placeholder="Hae">
-                    <button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>
+                 <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
                     <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
-                    <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button>
-                    <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button>
+                  <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
+                  <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
                     <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button>
 
                 </div>
