@@ -39,19 +39,19 @@
 
         function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
-            var timeOut = 500;
+        var timeOut = 500;
 
-        
-       
+
+
         // Koodi top-buttonin ilmestymiselle/piilottamiselle
         $(window).scroll(function scrollFunction() {
             if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
                 $("#topBtn").css("display", "block");
-            } 
+            }
             else {
                 $("#topBtn").css("display", "none");
             }
-        }); 
+        });
 
         $("#topBtn").click(function topFunction() {
             $(document.body).scrollTop(0);
@@ -62,29 +62,29 @@
         // Käy tarvikkeet-taulun läpi ja lisää raja-arvon alittavat tarvikkeet klistat-tauluun.
         function suodataLoppuvat() {
             $.getJSON("/tarvikkeet", function (data) {
-                        
+
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
-                var rarvo = data[i].halytysraja;
-                var maara = data[i].maara;
+                    var rarvo = data[i].halytysraja;
+                    var maara = data[i].maara;
 
-                if (maara < rarvo) {
-                    $.post('/klistat?tarvikeID=' + data[i].ID, {})   
+                    if (maara < rarvo) {
+                        $.post('/klistat?tarvikeID=' + data[i].ID, {})
+                    }
+
                 }
-                      
-            }
-            
-                
-        }); 
-            
+
+
+            });
+
         }
 
         function tyhjennaKlistatTaulu() {
             var listID = 0;
-            $.ajax({      
+            $.ajax({
                 url: '/klistat',
                 method: 'DELETE',
-                data: {"klistaID" : listID}    
+                data: { "klistaID": listID }
             })
         }
 
@@ -144,7 +144,7 @@
             mywindow.document.write('</table></body></html>');
 
             mywindow.document.close();
-            mywindow.focus(); 
+            mywindow.focus();
 
             mywindow.print();
 
@@ -153,8 +153,8 @@
         tyhjennaKlistatTaulu();
 
         suodataLoppuvat();
-        
-        $("#btnHaeListaus").click(function() {
+
+        $("#btnHaeListaus").click(function () {
             listaaKlista();
         })
 
@@ -167,11 +167,11 @@
         })
         */
 
-        $("#btnTulosta").click(function() {
+        $("#btnTulosta").click(function () {
             tulosta();
         })
 
-        
+
 
     });
 </script>
@@ -189,12 +189,14 @@
             <div id="suodatusContainer">
                 <div class="row justify-content-sm-center">
                     <input type="text" placeholder="Hae">
-                 <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
+                    <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
                     <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
-                  <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
-                  <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
+                    <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
+                    <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
                     <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button>
-
+                    <!--Painike käyttöohjeen avaamiseen-->
+                    <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
+                        data-target="#kayttoohjeDialog">Ohje</button>
                 </div>
             </div>
 
@@ -206,6 +208,23 @@
                     <p>Yhteensä</p>
                     <input type="text" id="txbYhteensa" readonly>
                 -->
+
+            <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Tähän kaikki käyttöohjeeseen tuleva tavara
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
