@@ -24,6 +24,14 @@
 
         // TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
 
+        // popup, joka ilmaantuu, kun tarvike on vähennetty varastosta
+        $(document).on("click", "#btnOtaVarastosta", function () {
+            console.log("moro");
+            $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
+            $(".popuptext").fadeOut(2000);
+
+        })
+
         // tablen lajittelu
 
         $(document).on("click", "th", function () {
@@ -223,6 +231,13 @@
             <table class="table" id="koriTaulu">
             </table>
 
+                            <!-- Popup-div -->
+                            <div class='popup'><span class='popuptext' id='popupSpan'>Vähennetty varastosta</span></div>
+
+            
+
+
+
             <!--
                     <p>Yhteensä</p>
                     <input type="text" id="txbYhteensa" readonly>
@@ -232,6 +247,7 @@
 
     <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
     <button id="topBtn">Ylös</button>
+
 
 </body>
 
