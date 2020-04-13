@@ -223,6 +223,9 @@
                     <input type="text" id="hakuInput" placeholder="Hae">
                     <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
                     <button type="button" id="btnOtaVarastosta" class="btn btn-dark">Ota varastosta</button>
+                    <!--Painike käyttöohjeen avaamiseen-->
+                    <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
+                        data-target="#kayttoohjeDialog">Ohje</button>
                 </div>
             </div>
 
@@ -230,10 +233,10 @@
             <table class="table" id="koriTaulu">
             </table>
 
-                            <!-- Popup-div -->
-                            <div class='popup'><span class='popuptext' id='popupSpan'>Vähennetty varastosta</span></div>
+            <!-- Popup-div -->
+            <div class='popup'><span class='popuptext' id='popupSpan'>Vähennetty varastosta</span></div>
 
-            
+
 
 
 
@@ -241,6 +244,23 @@
                     <p>Yhteensä</p>
                     <input type="text" id="txbYhteensa" readonly>
                 -->
+            <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Tähän kaikki käyttöohjeeseen tuleva tavara
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
