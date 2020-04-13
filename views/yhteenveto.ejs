@@ -308,7 +308,7 @@
 
         // popup, joka ilmaantuu, kun tarvike on lisätty listaan
         $(document).on("click", ".tarvikeKoriin", function () {
-             
+
             $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
             $(".popuptext").fadeOut(2000);
 
@@ -318,7 +318,12 @@
         lataaTaulukko();
         // Lataa sivun avautuessa varastot pudotusvalikkoon.
         haeVarastot("dropdown");
+
+
     });
+
+    
+
 
 </script>
 
@@ -345,6 +350,9 @@
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark" data-toggle="modal"
                     data-target="#tarvikeDialog">Uusi tarvike</button>
                 <% } %>
+
+                <!--Painike käyttöohjeen avaamiseen-->
+                <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal" data-target="#kayttoohjeDialog">Ohje</button>
             </div>
             <table class="table" id="taulu">
             </table>
@@ -403,7 +411,7 @@
                                     <input type="number" class="form-control" id="mtxbMaara" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="yksikko" class="form-control-label">Yksikko</label>
+                                    <label for="yksikko" class="form-control-label">Yksikkö</label>
                                     <select class="form-control custom-select" id="mddYksikot" required>
                                         <option value="">Valitse yksikkö</option>
                                     </select>
@@ -476,7 +484,7 @@
                                     <div class="valid-feedback"></div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="yksikko" class="form-control-label">Yksikko</label>
+                                    <label for="yksikko" class="form-control-label">Yksikkö</label>
                                     <select class="form-control custom-select" id="ddYksikot" required>
                                         <option value="">Valitse yksikkö</option>
                                     </select>
@@ -501,8 +509,26 @@
 
             </div>
 
+            <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog"
+                aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Tähän kaikki käyttöohjeeseen tuleva tavara
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+    
     <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
     <button id="topBtn">Ylös</button>
 </body>
