@@ -1,146 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Noutolista</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<script>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Noutolista</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+				integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+				crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+				integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+				crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/css/styles.css">
+	</head>
+	<script>
 
 
-    $(document).ready(function () {
+		$(document).ready(function () {
 
-        // TODO: päivämäärä suomalaisempaan muotoon + tyylillisiä hiomisia.
+			$('li.active').removeClass('active');
+			$('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
 
-        // tablen lajittelu
+			// TODO: päivämäärä suomalaisempaan muotoon + tyylillisiä hiomisia.
 
-        $(document).on("click", "th", function () {
-            var table = $(this).parents('table').eq(0)
-            var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-            this.asc = !this.asc
-            if (!this.asc) { rows = rows.reverse() }
-            for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
-        })
+			// tablen lajittelu
 
-        function comparer(index) {
-            return function (a, b) {
-                var valA = getCellValue(a, index), valB = getCellValue(b, index)
-                return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-            }
-        }
+			$(document).on("click", "th", function () {
+				var table = $(this).parents('table').eq(0)
+				var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+				this.asc = !this.asc
+				if (!this.asc) { rows = rows.reverse() }
+				for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+			})
 
-        function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+			function comparer(index) {
+				return function (a, b) {
+					var valA = getCellValue(a, index), valB = getCellValue(b, index)
+					return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+				}
+			}
 
-        // Hakukentän toiminnallisuus
-        $("#hakuInput").on("keyup", function () {
-            var filter = $(this).val().toUpperCase();
+			function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
-            // haku tapahtuu kahden ensimmäisen sarakkeen välillä.
-            $("table tr").each(function () {
-                if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
-                    || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
-                ) {
-                    $("#tableRow").show();
-                    $(this).show();
-                } else {
-                    $("#tableRow").show();
-                    $(this).hide();
-                }
-            })
-        });
+			// Hakukentän toiminnallisuus
+			$("#hakuInput").on("keyup", function () {
+				var filter = $(this).val().toUpperCase();
 
-        // Koodi top-buttonin ilmestymiselle/piilottamiselle
+				// haku tapahtuu kahden ensimmäisen sarakkeen välillä.
+				$("table tr").each(function () {
+					if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
+						|| $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
+					) {
+						$("#tableRow").show();
+						$(this).show();
+					} else {
+						$("#tableRow").show();
+						$(this).hide();
+					}
+				})
+			});
 
-        $(window).scroll(function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                $("#topBtn").css("display", "block");
-            } else {
-                $("#topBtn").css("display", "none");
-            }
-        });
+			// Koodi top-buttonin ilmestymiselle/piilottamiselle
 
-        $("#topBtn").click(function topFunction() {
-            $(document.body).scrollTop(0);
-            $(document.documentElement).scrollTop(0);
-        });
+			$(window).scroll(function scrollFunction() {
+				if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+					$("#topBtn").css("display", "block");
+				} else {
+					$("#topBtn").css("display", "none");
+				}
+			});
 
-
-        var timeOut = 500;
-
-        // Listaa varastotapahtumat taulukkoon.
-        function lataaTaulukko() {
-            $("#tapahtumaTaulu").empty();
-            $("#tapahtumaTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Käsittelijä</th><th scope="col">Tapahtumatyyppi</th><th scope="col">Tarvike</th><th scope="col">Luokka</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Pvm</th></tr>');
-            $.getJSON("/varastotapahtumat", function (data) {
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    $("#tapahtumaTaulu").append(
-                        "<tr>" +
-                        "<td>" + data[i].ID + "</td>" +
-                        "<td>" + data[i].kasittelija + "</td>" +
-                        "<td>" + data[i].tapahtumatyyppinimi + "</td>" +
-                        "<td>" + data[i].tarvikenimi + "</td>" +
-                        "<td>" + data[i].luokka + "</td>" +
-                        "<td>" + data[i].maara + "</td>" +
-                        "<td>" + data[i].yksikko + "</td>" +
-                        "<td>" + data[i].tarvikepaikka + "</td>" +
-                        "<td>" + data[i].pvm + "</td>" + "</tr>"
-                    )
-                    $("#tapahtumaTaulu").append("</tbody>")
-                }
-            })
-        };
-
-        lataaTaulukko();
-
-    });
+			$("#topBtn").click(function topFunction() {
+				$(document.body).scrollTop(0);
+				$(document.documentElement).scrollTop(0);
+			});
 
 
+			var timeOut = 500;
+
+			// Listaa varastotapahtumat taulukkoon.
+			function lataaTaulukko() {
+				$("#tapahtumaTaulu").empty();
+				$("#tapahtumaTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Käsittelijä</th><th scope="col">Tapahtumatyyppi</th><th scope="col">Tarvike</th><th scope="col">Luokka</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Pvm</th></tr>');
+				$.getJSON("/varastotapahtumat", function (data) {
+					var len = data.length;
+					for (var i = 0; i < len; i++) {
+						$("#tapahtumaTaulu").append(
+							"<tr>" +
+							"<td>" + data[i].ID + "</td>" +
+							"<td>" + data[i].kasittelija + "</td>" +
+							"<td>" + data[i].tapahtumatyyppinimi + "</td>" +
+							"<td>" + data[i].tarvikenimi + "</td>" +
+							"<td>" + data[i].luokka + "</td>" +
+							"<td>" + data[i].maara + "</td>" +
+							"<td>" + data[i].yksikko + "</td>" +
+							"<td>" + data[i].tarvikepaikka + "</td>" +
+							"<td>" + data[i].pvm + "</td>" + "</tr>"
+						)
+						$("#tapahtumaTaulu").append("</tbody>")
+					}
+				})
+			};
+
+			lataaTaulukko();
+
+		});
 
 
 
-</script>
 
-<body>
-    
-    <div id="tapahtumatdiv">
-        <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
-        
-        <div class="mainwrapper">
-            <br>
-            <br>
-            <h1>Varastotapahtumat</h1>
-            <hr>
 
-            <div id="suodatusContainer">
-                <div class="row justify-content-sm-center">
-                    <input type="text" id="hakuInput" placeholder="Hae">
-                    <br>
-                </div>
-            </div>
+	</script>
 
-            <br>
-            <table class="table" id="tapahtumaTaulu">
-            </table>
+	<body>
 
-        </div>
-    </div>
+		<div id="tapahtumatdiv">
+			<%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
 
-    <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
-    <button id="topBtn">Ylös</button>
+			<div class="mainwrapper">
+				<br>
+				<br>
+				<h1>Varastotapahtumat</h1>
+				<hr>
 
-</body>
+				<div id="suodatusContainer">
+					<div class="row justify-content-sm-center">
+						<input type="text" id="hakuInput" placeholder="Hae">
+						<br>
+					</div>
+				</div>
+
+				<br>
+				<table class="table" id="tapahtumaTaulu">
+				</table>
+
+			</div>
+		</div>
+
+		<!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+		<button id="topBtn">Ylös</button>
+
+	</body>
 
 </html>
