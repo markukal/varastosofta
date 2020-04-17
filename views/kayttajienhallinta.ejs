@@ -81,12 +81,18 @@
                 if ($('#muokkaus')[0].checkValidity() === false) {
                     event.stopPropagation();
                 } else {
-
                     var kayttajatunnus = document.getElementById("mkayttajatunnus").value;
                     var salasana = document.getElementById("msalasana").value;
                     var salasanauudelleen = document.getElementById("msalasanauudelleen").value;
                     var luokkaID = document.getElementById("mluokkaID").value;
                     var kayttoOikeus = document.getElementById("mkayttoOikeus").value;
+
+                    if (salasana !== salasanauudelleen) {
+                        $('#salasana').addClass('is-invalid');
+                        $('#salasanauudelleen').addClass('is-invalid');
+                        event.stopPropagation();
+                    } else {
+
                     $.ajax({
                         url: "/users?mkayttajatunnus=" + kayttajatunnus  + "&mluokkaID=" + luokkaID + "&msalasana=" + salasana + "&msalasanauudelleen=" + salasanauudelleen + "&mkayttoOikeus=" + kayttoOikeus,
                         type: 'PUT',
@@ -96,6 +102,7 @@
                         }
                     });
 
+                    }
                 }
                 $('#muokkaus').addClass('was-validated');
             });
