@@ -114,7 +114,8 @@ th {
     position: absolute;
     display: inline-block;
     cursor: pointer;
-    padding-top: 50%;
+    top: 50%;
+    left: 50%;
 
 
   }
@@ -130,8 +131,6 @@ th {
     padding: 8px 0;
     position: absolute;
     z-index: 1;
-    bottom: 125%;
-    left: 50%;
     margin-left: -80px;
   }
 
