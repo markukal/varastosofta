@@ -12,6 +12,7 @@
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@3.4.3/dist/jspdf.plugin.autotable.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.css">
@@ -19,6 +20,7 @@
 </head>
 
 <script>
+
     $(document).ready(function () {
 
         // tablen lajittelu
@@ -173,43 +175,12 @@
         })
 
         $("#btnPDF").click(function () {
-            var table = tableToJson($("#kerailyTaulu").get(0));
-            var doc = new jsPDF('1', 'pt', 'letter', true);
-
-            doc.cellInitialize();
-            $.each(table, function(i, row) {
-                $.each(row, function(j,cell){
-                    doc.cell(1,10,90,20,cell,i);
-                })
-            })
+            var doc = new jsPDF();
+            var res = doc.autoTableHtmlToJson(document.getElementById("kerailyTaulu"));
+            var columns = [res.columns[0], res.columns[1], res.columns[2], res.columns[3], res.columns[4], res.columns[5]];
+            doc.autoTable(columns, res.data, {startY: 10});
             doc.save('ostoslista.pdf');
         });
-
-        function tableToJson(table) {
-            var data = [];
-            // ensimmäinen rivi headereille. Metodin molemmissa for-loopeissa on ehtona sarakkeiden pituus -1, että poistosarake ei tule dokumenttiin.
-            var headers = [];
-            for (var i = 0; i < table.rows[0].cells.length -1; i++) {
-                headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi, '');
-            }
-            data.push(headers);
-            // loopataan sarakkeet läpi
-            for (var i = 1; i < table.rows.length; i++) {
-
-                var tableRow = table.rows[i];
-                var rowData = {};
-
-                for (var j = 0; j < tableRow.cells.length -1; j++) {
-
-                    rowData[headers[j]] = tableRow.cells[j].innerHTML;
-
-                }
-
-                data.push(rowData);
-            }
-
-            return data;
-        }
 
 
 
