@@ -166,15 +166,14 @@
 			// Poistaa noutolistassa olevat tarvikkeet varastosta määritetyn määrän mukaisesti.
 			function otaVarastosta() {
 
+                    var kasittelija = <%- JSON.stringify(kayttajatunnus) %>;
+                    var luokkaID = <%- JSON.stringify(luokkaID) %>;
 				$("#koriTaulu").find('tr').each(function (i) {
 
 					var $tds = $(this).find('td');
 					var poistettava = $tds.eq(1).text();
 					var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
 					var noutolista = "noutolista";
-                    var kasittelija = <%= kayttajatunnus %>;
-                    var luokkaID = <%= luokkaID %>;
-
 					$.ajax({
 						url: '/tarvikkeet',
 						method: 'PUT',
