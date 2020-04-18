@@ -61,32 +61,31 @@ app.route('/klistat')
     .get(checkAuthenticated, klistat.fetchAll)
     .post(checkAuthenticated, klistat.addNew)
     .put(checkAuthenticated, klistat.update)
-    .delete(checkAuthenticated, klistat.delete);
-
+    .delete(checkAuthenticated, checkPermissions, klistat.delete);
 
 app.route('/tarvikkeet')
     .get(checkAuthenticated, tarvikkeet.fetchAll)
     .post(checkAuthenticated, tarvikkeet.addNew)
     .put(checkAuthenticated, tarvikkeet.update)
-    .delete(checkAuthenticated, tarvikkeet.delete);
+    .delete(checkAuthenticated, checkPermissions, tarvikkeet.delete);
 
 app.route('/varastot')
     .get(checkAuthenticated, varastot.fetchAll)
-    .post(checkAuthenticated, varastot.addNew)
-    .put(checkAuthenticated, varastot.update)
-    .delete(checkAuthenticated, varastot.delete);
+    .post(checkAuthenticated, checkPermissions, varastot.addNew)
+    .put(checkAuthenticated, checkPermissions, varastot.update)
+    .delete(checkAuthenticated, checkPermissions, varastot.delete);
 
 app.route('/yksikot')
     .get(checkAuthenticated, yksikot.fetchAll)
     .post(checkAuthenticated, yksikot.addNew)
-    .put(checkAuthenticated, yksikot.update)
-    .delete(checkAuthenticated, yksikot.delete);
+    .put(checkAuthenticated, checkPermissions, yksikot.update)
+    .delete(checkAuthenticated, checkPermissions, yksikot.delete);
 
 app.route('/tarviketyypit')
     .get(checkAuthenticated, tarviketyypit.fetchAll)
     .post(checkAuthenticated, tarviketyypit.addNew)
-    .put(checkAuthenticated, tarviketyypit.update)
-    .delete(checkAuthenticated, tarviketyypit.delete);
+    .put(checkAuthenticated, checkPermissions, tarviketyypit.update)
+    .delete(checkAuthenticated, checkPermissions, tarviketyypit.delete);
 
 app.route('/tapahtumatyypit')
     .get(checkAuthenticated, tapahtumatyypit.fetchAll)
@@ -102,9 +101,9 @@ app.route('/ostoskori')
 
 app.route('/luokat')
     .get(checkAuthenticated, luokat.fetchAll)
-    .post(checkAuthenticated, luokat.addNew)
-    .put(checkAuthenticated, luokat.update)
-    .delete(checkAuthenticated, luokat.delete);
+    .post(checkAuthenticated, checkPermissions, luokat.addNew)
+    .put(checkAuthenticated, checkPermissions, luokat.update)
+    .delete(checkAuthenticated, checkPermissions, luokat.delete);
 
 app.route('/varastotapahtumat')
     .get(checkAuthenticated, varastotapahtumat.fetchAll)
@@ -113,10 +112,10 @@ app.route('/varastotapahtumat')
     .delete(checkAuthenticated, varastotapahtumat.delete);
 
 app.route('/users')
-    .get(checkAuthenticated, users.fetchAll)
-    .post(checkAuthenticated, users.register)
-    .put(checkAuthenticated, users.update)
-    .delete(checkAuthenticated, users.delete)
+    .get(checkAuthenticated, checkPermissions, users.fetchAll)
+    .post(checkAuthenticated, checkPermissions, users.register)
+    .put(checkAuthenticated, checkPermissions, users.update)
+    .delete(checkAuthenticated, checkPermissions, users.delete)
 
 app.get('/login',  function (req, res) {
     res.render('login.ejs', { message: req.flash('loginMessage') });
@@ -264,6 +263,15 @@ function checkNotAuthenticated(req, res, next) {
         return res.redirect('/')
     }
     next()
+}
+
+// tarkastetaan onko käyttäjällä täydet käyttöoikeudet
+// tämä reitityksissä checkAuthenticated ja itse rest api funktiokutsun väliin
+function checkPermissions(req, res, next) {
+    if (req.user.kayttoOikeus === 1) {
+        return next()
+    }
+    res.redirect('/login')
 }
 
 app.listen(port, hostname, () => {
