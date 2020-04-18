@@ -84,8 +84,7 @@
 
 			// Listaa varastotapahtumat taulukkoon.
 			function lataaTaulukko() {
-				$("#tapahtumaTaulu").empty();
-				$("#tapahtumaTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Käsittelijä</th><th scope="col">Tapahtumatyyppi</th><th scope="col">Tarvike</th><th scope="col">Luokka</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Pvm</th></tr>');
+				$("#tapahtumaTaulu tbody tr").remove();
 				$.getJSON("/varastotapahtumat", function (data) {
 					var len = data.length;
 					for (var i = 0; i < len; i++) {
@@ -101,7 +100,6 @@
 							"<td>" + data[i].tarvikepaikka + "</td>" +
 							"<td>" + data[i].pvm + "</td>" + "</tr>"
 						)
-						$("#tapahtumaTaulu").append("</tbody>")
 					}
 				})
 			};
@@ -137,6 +135,21 @@
 
 				<br>
 				<table class="table" id="tapahtumaTaulu">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Käsittelijä</th>
+                            <th scope="col">Tapahtumatyyppi</th>
+                            <th scope="col">Tarvike</th>
+                            <th scope="col">Luokka</th>
+                            <th scope="col">Määrä</th>
+                            <th scope="col">Yksikkö</th>
+                            <th scope="col">Varasto</th>
+                            <th scope="col">Pvm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
 				</table>
 
 			</div>
