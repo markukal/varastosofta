@@ -149,8 +149,6 @@ app.get('/kayttajienhallinta', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -165,8 +163,6 @@ app.get('/varastojenhallinta', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -181,8 +177,6 @@ app.get('/luokkienhallinta', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -198,8 +192,6 @@ app.get('/tarviketyyppienhallinta', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -214,8 +206,6 @@ app.get('/yksikoidenhallinta', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -230,8 +220,6 @@ app.get('/tapahtumat', checkAuthenticated,( req, res) => {
         });
     }
     else {
-        // mahdollisesti jonkinlainen varoitussivu käyttöoikeuksien puuttumisesta, tai redirect edelliselle sivulle
-        // res.redirect('back')
         res.redirect('/login')
     }
 });
@@ -248,7 +236,8 @@ app.get('/noutolista', (req, res) => {
     res.render('ostoskorisivu.ejs', {
             kayttajatunnus: req.user.kayttajatunnus,
             kayttoOikeus: req.user.kayttoOikeus,
-            kayttajaID: req.user.kayttajaID
+            kayttajaID: req.user.kayttajaID,
+            luokkaID: req.user.luokkaID
         }); 
 });
 
