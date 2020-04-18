@@ -1,279 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Noutolista</title>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-				integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-				crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-				integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-				crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link rel="stylesheet" href="/css/styles.css">
-	</head>
-	<script>
-
-
-		$(document).ready(function () {
-
-			$('li.active').removeClass('active');
-			$('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
-
-			// TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
-
-			// popup, joka ilmaantuu, kun tarvike on vähennetty varastosta
-			$(document).on("click", "#btnOtaVarastosta", function () {
-				$(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
-				$(".popuptext").fadeOut(2000);
-
-			})
-
-			// tablen lajittelu
-
-			$(document).on("click", "th", function () {
-				var table = $(this).parents('table').eq(0)
-				var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
-				this.asc = !this.asc
-				if (!this.asc) { rows = rows.reverse() }
-				for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
-			})
-
-			function comparer(index) {
-				return function (a, b) {
-					var valA = getCellValue(a, index), valB = getCellValue(b, index)
-					return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
-				}
-			}
-
-			function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
-
-			// Hakukentän toiminnallisuus
-			$("#hakuInput").on("keyup", function () {
-				var filter = $(this).val().toUpperCase();
-
-				// haku tapahtuu kahden ensimmäisen sarakkeen välillä.
-				$("table tr").each(function () {
-					if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
-						|| $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
-					) {
-						$("#tableRow").show();
-						$(this).show();
-					} else {
-						$("#tableRow").show();
-						$(this).hide();
-					}
-				})
-			});
-
-			// Koodi top-buttonin ilmestymiselle/piilottamiselle
-
-			$(window).scroll(function scrollFunction() {
-				if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-					$("#topBtn").css("display", "block");
-				} else {
-					$("#topBtn").css("display", "none");
-				}
-			});
-
-			$("#topBtn").click(function topFunction() {
-				$(document.body).scrollTop(0);
-				$(document.documentElement).scrollTop(0);
-			});
-
-
-			var timeOut = 500;
-
-			// Hakee ostoskorin rivit taulukkoon.
-			function listaaKori() {
-				var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
-				$("#koriTaulu").empty();
-				$("#koriTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimi</th>' +
-					'<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
-				$.getJSON("/ostoskori", function (data) {
-
-
-					var len = data.length;
-
-					for (var i = 0; i < len; i++) {
-						$("#koriTaulu").append(
-							"<tr>" +
-							"<td>" + data[i].id + "</th>" +
-							"<td>" + data[i].nimi + "</td>" +
-							"<td>" + data[i].varastossa + "</td>" +
-							"<td>" + "<input type='number' placeholder='0'>" + "</td>" +
-							"<td>" + data[i].yksikko + "</td>" +
-							"<td>" + data[i].hinta + "</td>" +
-							"<td>" + data[i].kasittelija + "</td>" +
-							"<td>" + "<a href='javascript:void(0);' class='poistaListasta'>Poista</a>" + "</td>" + "</tr>"
-						)
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Noutolista</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+                integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <script>
+
+
+        $(document).ready(function () {
+
+            $('li.active').removeClass('active');
+            $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+
+            // TODO: Yhteensä-osio poistoon. Keräilylista-näkymässä tämä on aiheellinen, mutta täytyy tweakata koodia niin, ettei yhteensä-palikka liiku lajittelun mukana.
+
+            // popup, joka ilmaantuu, kun tarvike on vähennetty varastosta
+            $(document).on("click", "#btnOtaVarastosta", function () {
+                $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
+                $(".popuptext").fadeOut(2000);
+
+            })
+
+            // tablen lajittelu
+
+            $(document).on("click", "th", function () {
+                var table = $(this).parents('table').eq(0)
+                var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+                this.asc = !this.asc
+                if (!this.asc) { rows = rows.reverse() }
+                for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+            })
+
+            function comparer(index) {
+                return function (a, b) {
+                    var valA = getCellValue(a, index), valB = getCellValue(b, index)
+                    return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+                }
+            }
+
+            function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+
+            // Hakukentän toiminnallisuus
+            $("#hakuInput").on("keyup", function () {
+                var filter = $(this).val().toUpperCase();
+
+                // haku tapahtuu kahden ensimmäisen sarakkeen välillä.
+                $("table tr").each(function () {
+                    if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
+                        || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
+                    ) {
+                        $("#tableRow").show();
+                        $(this).show();
+                    } else {
+                        $("#tableRow").show();
+                        $(this).hide();
+                    }
+                })
+            });
+
+            // Koodi top-buttonin ilmestymiselle/piilottamiselle
+
+            $(window).scroll(function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    $("#topBtn").css("display", "block");
+                } else {
+                    $("#topBtn").css("display", "none");
+                }
+            });
+
+            $("#topBtn").click(function topFunction() {
+                $(document.body).scrollTop(0);
+                $(document.documentElement).scrollTop(0);
+            });
+
+
+            var timeOut = 500;
+
+            // Hakee ostoskorin rivit taulukkoon.
+            function listaaKori() {
+                var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
+                $("#koriTaulu").empty();
+                $("#koriTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimi</th>' +
+                    '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
+                $.getJSON("/ostoskori", function (data) {
+
+
+                    var len = data.length;
+
+                    for (var i = 0; i < len; i++) {
+                        $("#koriTaulu").append(
+                            "<tr>" +
+                            "<td>" + data[i].id + "</th>" +
+                            "<td>" + data[i].nimi + "</td>" +
+                            "<td>" + data[i].varastossa + "</td>" +
+                            "<td>" + "<input type='number' placeholder='0'>" + "</td>" +
+                            "<td>" + data[i].yksikko + "</td>" +
+                            "<td>" + data[i].hinta + "</td>" +
+                            "<td>" + data[i].kasittelija + "</td>" +
+                            "<td>" + "<a href='javascript:void(0);' class='poistaListasta'>Poista</a>" + "</td>" + "</tr>"
+                        )
+
+                        //$("#taulu").append("</tbody>")
+
+                        yhteensa += Number(data[i].hinta);
+                    }
+
+                    // Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
+                    $("#koriTaulu").append(
+                        "<tr>" +
+                        "<th scope='row'>" + "</th>" +
+                        "<td>" + "</td>" +
+                        "<td>" + "</td>" +
+                        "<td>" + "</td>" +
+                        "<td>" + "Yhteensä (€):" + "</td>" +
+                        "<td>" + yhteensa + "</td>" +
+                        "<td>" + "</td>" +
+                        "<td>" + "</td>" + "</tr>"
+                    )
+
+                })
 
-						//$("#taulu").append("</tbody>")
 
-						yhteensa += Number(data[i].hinta);
-					}
+            };
+
+            // Poistaa noutolistasta yksittäisen tuotteen.
+            $(document).on("click", "a.poistaListasta", function (e) {
+                e.preventDefault();
+                var listID = $(this).closest('tr').children('td:first').text();
+
+                $.ajax({
+                    url: '/ostoskori',
+                    method: 'DELETE',
+                    data: { "ostosID": listID }
+                })
+                setTimeout(() => { listaaKori(); }, timeOut);
+
+            });
+
+
+            // Tyhjentää ostoskori-taulun.
+            function tyhjennaKori() {
+
+                $.ajax({
+                    url: '/ostoskori',
+                    method: 'DELETE',
+                    data: { ostosID: 0 }
+                })
+                setTimeout(() => { listaaKori(); }, 500);
+            }
 
-					// Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
-					$("#koriTaulu").append(
-						"<tr>" +
-						"<th scope='row'>" + "</th>" +
-						"<td>" + "</td>" +
-						"<td>" + "</td>" +
-						"<td>" + "</td>" +
-						"<td>" + "Yhteensä (€):" + "</td>" +
-						"<td>" + yhteensa + "</td>" +
-						"<td>" + "</td>" +
-						"<td>" + "</td>" + "</tr>"
-					)
 
-				})
+            // Poistaa noutolistassa olevat tarvikkeet varastosta määritetyn määrän mukaisesti.
+            function otaVarastosta() {
 
-
-			};
-
-			// Poistaa noutolistasta yksittäisen tuotteen.
-			$(document).on("click", "a.poistaListasta", function (e) {
-				e.preventDefault();
-				var listID = $(this).closest('tr').children('td:first').text();
-
-				$.ajax({
-					url: '/ostoskori',
-					method: 'DELETE',
-					data: { "ostosID": listID }
-				})
-				setTimeout(() => { listaaKori(); }, timeOut);
-
-			});
-
-
-			// Tyhjentää ostoskori-taulun.
-			function tyhjennaKori() {
-
-				$.ajax({
-					url: '/ostoskori',
-					method: 'DELETE',
-					data: { ostosID: 0 }
-				})
-				setTimeout(() => { listaaKori(); }, 500);
-			}
-
-
-			// Poistaa noutolistassa olevat tarvikkeet varastosta määritetyn määrän mukaisesti.
-			function otaVarastosta() {
-
-                    var kasittelija = <%- JSON.stringify(kayttajatunnus) %>;
-                    var luokkaID = <%- JSON.stringify(luokkaID) %>;
-				$("#koriTaulu").find('tr').each(function (i) {
-
-					var $tds = $(this).find('td');
-					var poistettava = $tds.eq(1).text();
-					var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
-					var noutolista = "noutolista";
-					$.ajax({
-						url: '/tarvikkeet',
-						method: 'PUT',
-						data: {
-							"nimi": poistettava,
-							"maara": maara,
-							"noutolista": noutolista,
-                            "kasittelija": kasittelija,
-                            "luokkaID": luokkaID
-						}
-					})
-
-				})
-				setTimeout(() => { tyhjennaKori(); }, timeOut)
-			}
-
-
-
-			$("#btnOtaVarastosta").click(function () {
-				otaVarastosta();
-			});
-
-
-			// Click-funktio painikkeelle, josta tyhjennetään ostoskori.
-			$("#btnTyhjennaKori").click(function () {
-				tyhjennaKori();
-			});
-
-
-			// Suorittaa listaaKori-funktion
-			listaaKori();
-
-
-		});
-
-
-
-
-
-	</script>
-
-	<body>
-		<div id="yhteenvetodiv">
-			<%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
-			<div class="mainwrapper">
-				<br>
-				<br>
-				<h1>Noutolista</h1>
-				<hr>
-
-				<div id="suodatusContainer">
-					<div class="row justify-content-sm-center">
-						<input type="text" id="hakuInput" placeholder="Hae">
-						<button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
-						<button type="button" id="btnOtaVarastosta" class="btn btn-dark">Ota varastosta</button>
-						<!--Painike käyttöohjeen avaamiseen-->
-						<button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
-																						  data-target="#kayttoohjeDialog">Ohje</button>
-					</div>
-				</div>
-
-
-				<table class="table" id="koriTaulu">
-				</table>
-
-				<!-- Popup-div -->
-				<div class='popup'><span class='popuptext' id='popupSpan'>Vähennetty varastosta</span></div>
-
-
-
-
-
-				<!--
-		<p>Yhteensä</p>
-		<input type="text" id="txbYhteensa" readonly>
-				-->
-				<div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
-																						  aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								Tähän kaikki käyttöohjeeseen tuleva tavara
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-		<!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
-		<button id="topBtn">Ylös</button>
-
-
-	</body>
+                var ttyyppinimi = 2;
+                $("#koriTaulu").find('tr').each(function (i) {
+
+                    var kasittelija = $("#kayttajatunnus").text();
+                    var luokkaID = $("#luokkaID").text();
+
+                    var $tds = $(this).find('td');
+                    var poistettava = $tds.eq(1).text();
+                    var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
+                    var yksikkoID = $tds.eq(4).text();
+                    var noutolista = "noutolista";
+                    $.ajax({
+                        url: '/tarvikkeet',
+                        method: 'PUT',
+                        data: {
+                            "nimi": poistettava,
+                            "maara": maara,
+                            "noutolista": noutolista,
+                            success: function(results) {
+                                $.ajax({
+                                    // TODO: tapahtuman luonti muokatessa
+                                    // back end toimii, testattu postmanilla, allaoleva kuitenkin antaa "ttyyppinimi cannot be null"
+                                    url: '/varastotapahtumat',
+                                    method: 'POST',
+                                    data: {
+                                        "ttyyppinimi": ttyyppinimi,
+                                        "luokkaID": luokkaID,
+                                        "nimi" : poistettava,
+                                        "maara": maara,
+                                        "yksikkoID": yksikkoID,
+                                        "kasittelija": kasittelija
+                                    }
+
+                                })
+                            }
+                        }
+                    })
+                })
+                setTimeout(() => { tyhjennaKori(); }, timeOut)
+            }
+
+
+
+            $("#btnOtaVarastosta").click(function () {
+                otaVarastosta();
+            });
+
+
+            // Click-funktio painikkeelle, josta tyhjennetään ostoskori.
+            $("#btnTyhjennaKori").click(function () {
+                tyhjennaKori();
+            });
+
+
+            // Suorittaa listaaKori-funktion
+            listaaKori();
+
+
+        });
+
+
+
+
+
+    </script>
+
+    <body>
+        <div id="yhteenvetodiv">
+            <%- include('partials/navbar', {kayttoOikeudet : kayttoOikeus, navKayttajatunnus : kayttajatunnus}) %>
+            <div class="mainwrapper">
+                <br>
+                <br>
+                <h1>Noutolista</h1>
+                <hr>
+
+                <div id="suodatusContainer">
+                    <div class="row justify-content-sm-center">
+                        <input type="text" id="hakuInput" placeholder="Hae">
+                        <button type="button" id="btnTyhjennaKori" class="btn btn-dark">Tyhjennä kori</button>
+                        <button type="button" id="btnOtaVarastosta" class="btn btn-dark">Ota varastosta</button>
+                        <!--Painike käyttöohjeen avaamiseen-->
+                        <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
+                                                                                          data-target="#kayttoohjeDialog">Ohje</button>
+                    </div>
+                </div>
+
+
+                <table class="table" id="koriTaulu">
+                </table>
+
+                <!-- Popup-div -->
+                <div class='popup'><span class='popuptext' id='popupSpan'>Vähennetty varastosta</span></div>
+
+
+
+
+                <p id="kayttaja" hidden><%= kayttajatunnus %></p>
+                <p id="luokkaID" hidden><%= luokkaID %></p>
+                <!--
+                    <p>Yhteensä</p>
+                    <input type="text" id="txbYhteensa" readonly>
+                -->
+                <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
+                                                                                          aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Tähän kaikki käyttöohjeeseen tuleva tavara
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
+        <button id="topBtn">Ylös</button>
+
+
+    </body>
 
 </html>
