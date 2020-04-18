@@ -172,6 +172,8 @@
 					var poistettava = $tds.eq(1).text();
 					var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
 					var noutolista = "noutolista";
+                    var kasittelija = <%= kayttajatunnus %>;
+                    var luokkaID = <%= luokkaID %>;
 
 					$.ajax({
 						url: '/tarvikkeet',
@@ -179,7 +181,9 @@
 						data: {
 							"nimi": poistettava,
 							"maara": maara,
-							"noutolista": noutolista
+							"noutolista": noutolista,
+                            "kasittelija": kasittelija,
+                            "luokkaID": luokkaID
 						}
 					})
 
