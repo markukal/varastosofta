@@ -91,10 +91,10 @@
 
             // Hakee ostoskorin rivit taulukkoon.
             function listaaKori() {
-                var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
+                // var yhteensa = 0; // Apumuuttuja kokonaishinnan laskemiselle.
                 $("#koriTaulu").empty();
                 $("#koriTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimi</th>' +
-                    '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th><th scope="col">Hinta (€)</th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
+                    '<th scope="col">Varastossa</th><th scope="col">Määrä</th><th scope="col">Yksikkö</th></th><th scope="col">Käsittelijä</th><th scope="col">(painikesarake)</th></tr>');
                 $.getJSON("/ostoskori", function (data) {
 
 
@@ -108,14 +108,13 @@
                             "<td>" + data[i].varastossa + "</td>" +
                             "<td>" + "<input type='number' placeholder='0'>" + "</td>" +
                             "<td>" + data[i].yksikko + "</td>" +
-                            "<td>" + data[i].hinta + "</td>" +
                             "<td>" + data[i].kasittelija + "</td>" +
                             "<td>" + "<a href='javascript:void(0);' class='poistaListasta'>Poista</a>" + "</td>" + "</tr>"
                         )
 
                         //$("#taulu").append("</tbody>")
 
-                        yhteensa += Number(data[i].hinta);
+                        // yhteensa += Number(data[i].hinta);
                     }
 
                     // Lisää ostoskorilistauksen loppuun rivin, jossa on tuotteiden kokonaishinta.
@@ -125,8 +124,8 @@
                         "<td>" + "</td>" +
                         "<td>" + "</td>" +
                         "<td>" + "</td>" +
-                        "<td>" + "Yhteensä (€):" + "</td>" +
-                        "<td>" + yhteensa + "</td>" +
+                //      "<td>" + "Yhteensä (€):" + "</td>" +
+                //      "<td>" + yhteensa + "</td>" +
                         "<td>" + "</td>" +
                         "<td>" + "</td>" + "</tr>"
                     )
