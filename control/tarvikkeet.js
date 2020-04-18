@@ -103,22 +103,7 @@ module.exports =
                     }
                     else {
                         res.json(results);
-
-                        // varastotapahtuman luominen (OTTO) , noutolistasta 
-                        var pvm = new Date().toJSON().slice(0, 19).replace('T', ' ');
-
-                        connection.query('INSERT INTO varastotapahtumat (ttyyppinimi, luokkanimi, tarvikenimi, tarvikehpaikka, maara, yksikkonimi, kasittelija, pvm) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [2, luokkaID, nimi, hpaikka, maara, yksikkoID, kasittelija, pvm], function (error, results) {
-                            if (error) {
-                                console.log("Virhe luodessa varastotapahtumaa (OTTO), syy " + error);
-                                res.status(400);
-                            }
-                            else 
-                            {
-                                console.log("Varastotapahtuman luonti onnistui (OTTO)");
-                                res.send({"status": 201});
-                            }
-                        });
-                    }
+                   }
                 });
             }
 
