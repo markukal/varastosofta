@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 18, 2020 at 03:07 PM
+-- Generation Time: Apr 18, 2020 at 04:56 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -181,11 +181,11 @@ CREATE TABLE IF NOT EXISTS `tarvikkeet` (
 --
 
 INSERT INTO `tarvikkeet` (`tarvikeID`, `tyyppiID`, `varastoID`, `yksikkoID`, `nimi`, `kuvaus`, `maara`, `hinta`, `hpaikka`, `rarvo`) VALUES
-(1, 1, 1, 1, 'Lauta', 'Tavallinen puulauta', 15, '15', 'Starkki', 3),
-(2, 1, 1, 3, 'Vanerilevy', 'Tavallinen vanerilevy', 24, '17', 'Kesko', 4),
+(1, 1, 1, 1, 'Lauta', 'Tavallinen puulauta', 11, '15', 'Starkki', 3),
+(2, 1, 1, 3, 'Vanerilevy', 'Tavallinen vanerilevy', 22, '17', 'Kesko', 4),
 (3, 2, 1, 1, 'Terästanko', 'Voi hitsata', 3, '21', 'Starkki', 5),
-(4, 4, 2, 4, 'WD-40', 'Voiteluun', 3, '21', 'Starkki', 5),
-(5, 5, 2, 3, 'Pistosahan metalliterä', 'Metalliosien sahaukseen', 10, '21', 'Starkki', 5);
+(4, 4, 2, 4, 'WD-40', 'Voiteluun', 1, '21', 'Starkki', 5),
+(5, 5, 2, 3, 'Pistosahan metalliterä', 'Metalliosien sahaukseen', 8, '21', 'Starkki', 5);
 
 -- --------------------------------------------------------
 
@@ -221,7 +221,6 @@ CREATE TABLE IF NOT EXISTS `varastotapahtumat` (
   `ttyyppinimi` varchar(50) NOT NULL,
   `luokkanimi` varchar(50) NOT NULL,
   `tarvikenimi` varchar(50) NOT NULL,
-  `tarvikehpaikka` varchar(50) NOT NULL,
   `maara` int(4) NOT NULL,
   `yksikkonimi` varchar(50) NOT NULL,
   `kasittelija` varchar(30) NOT NULL,
@@ -256,24 +255,6 @@ INSERT INTO `yksikot` (`yksikkoID`, `nimi`) VALUES
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `kayttajat`
---
-ALTER TABLE `kayttajat`
-  ADD CONSTRAINT `luokat_kayttajat` FOREIGN KEY (`luokkaID`) REFERENCES `luokat` (`luokkaID`);
-
---
--- Constraints for table `klistat`
---
-ALTER TABLE `klistat`
-  ADD CONSTRAINT `tarvikkeet_klistat` FOREIGN KEY (`tarvikeID`) REFERENCES `tarvikkeet` (`tarvikeID`);
-
---
--- Constraints for table `ostoskori`
---
-ALTER TABLE `ostoskori`
-  ADD CONSTRAINT `tarvikkeet_ostoskori` FOREIGN KEY (`tarvikeID`) REFERENCES `tarvikkeet` (`tarvikeID`);
 
 --
 -- Constraints for table `tarvikkeet`
