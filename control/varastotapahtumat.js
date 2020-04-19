@@ -46,8 +46,6 @@ module.exports =
 			var yksikkoID = req.body.yksikkoID;
 			var kasittelija = req.body.kasittelija;
 			var ttyyppinimi = req.body.ttyyppinimi;
-			console.log(luokkaID);
-			console.log(ttyyppinimi);
 
 			connection.query('INSERT INTO varastotapahtumat (ttyyppinimi, luokkanimi, tarvikenimi, maara, yksikkonimi, kasittelija, pvm) VALUES (?, ?, ?, ?, ?, ?, ?)', [ttyyppinimi, luokkaID, nimi, maara, yksikkoID, kasittelija, pvm], function (error, results) {
 				if (error) {
