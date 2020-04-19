@@ -151,7 +151,7 @@
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th>' <% if (kayttoOikeus == 1) { %> + '<th scope="col">Muokkaa</th>' <% } %> + '<th scope="col">Kori</th></tr>');
             $.getJSON("/tarvikkeet", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -162,7 +162,9 @@
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
+                <% if (kayttoOikeus == 1) { %>
                         "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                        <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
@@ -174,7 +176,7 @@
         // Suodattaa tarvikkeet valitun varaston perusteella.       
         function suodataTaulukko(vid) {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Muokkaa</th><th scope="col">Kori</th></tr>');
+            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö' <% if (kayttoOikeus == 1) { %> + '</th><th scope="col">Muokkaa</th>' <% } %> + '<th scope="col">Kori</th></tr>');
             $.getJSON("/tarvikkeet?tarvikkeet.varastoID=" + vid, function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -185,7 +187,9 @@
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
+                <% if (kayttoOikeus == 1) { %>
                         "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                        <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
