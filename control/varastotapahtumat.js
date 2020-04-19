@@ -6,9 +6,11 @@ module.exports =
 		//Tietojen haku varastotapahtumat taulusta
 		fetchAll: function (req, res){
 			//Haetaan kaikki tiedot jos hakuehtoja ei tule
-			sqlQuery = "SELECT varastotapahtumat.tapahtumaID AS ID, varastotapahtumat.kasittelija AS kasittelija, varastotapahtumat.ttyyppinimi AS tapahtumatyyppinimi, " +
-				"varastotapahtumat.tarvikenimi AS tarvikenimi, varastotapahtumat.luokkanimi AS luokka, varastotapahtumat.maara AS maara, varastotapahtumat.yksikkonimi AS yksikko, " +
-				"varastotapahtumat.tarvikehpaikka AS tarvikepaikka, varastotapahtumat.pvm AS pvm FROM varastotapahtumat";
+			sqlQuery = "SELECT varastotapahtumat.tapahtumaID AS ID, tapahtumatyypit.nimi AS ttyyppi, luokat.nimi AS luokka, " +
+                "varastotapahtumat.tarvikenimi AS tarvike, varastotapahtumat.maara AS maara, varastotapahtumat.yksikkonimi AS yksikko, " + 
+                "varastotapahtumat.kasittelija AS kasittelija, varastotapahtumat.pvm AS pvm FROM varastotapahtumat " +
+                "INNER JOIN tapahtumatyypit ON varastotapahtumat.ttyyppinimi = tapahtumatyypit.ttyyppiID " +
+                "INNER JOIN luokat ON varastotapahtumat.luokkanimi = luokat.luokkaID";
 
 			var i = 0;//Apumuuttuja
 
@@ -31,7 +33,6 @@ module.exports =
 					res.send({ "status": 500, "error": error, "response": null });
 				}
 				else {
-					console.log(results);
 					res.json(results);
 				}
 			});
