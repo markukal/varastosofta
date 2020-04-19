@@ -167,7 +167,11 @@
             function otaVarastosta() {
 
                 var ttyyppinimi = 2;
+                var rows = $('#koriTaulu').find('tr').length;
+                
                 $("#koriTaulu").find('tr').each(function (i) {
+                    // suoritetaan kaikille paitsi ensimmäiselle ja viimeiselle riville (tr) 
+                    if ($(this).index() !== 0 && $(this).index() !== rows-1) {
 
                     var kasittelija = $("#kayttajatunnus").text();
                     var luokkaID = $("#luokkaID").text();
@@ -175,6 +179,8 @@
                     var $tds = $(this).find('td');
                     var poistettava = $tds.eq(1).text();
                     var maara = Number($tds.eq(2).text()) - $(this).find("td").find("input").val();
+                    // poistettu muuttujaa kaytetaan tapahtumalokia luodessa. Halutaan siis OTETTU maara
+                    var poistettu = $(this).find("td").find("input").val();
                     var yksikkoID = $tds.eq(4).text();
                     var noutolista = "noutolista";
                     $.ajax({
@@ -194,7 +200,7 @@
                                         "ttyyppinimi": ttyyppinimi,
                                         "luokkaID": luokkaID,
                                         "nimi" : poistettava,
-                                        "maara": maara,
+                                        "maara": poistettu,
                                         "yksikkoID": yksikkoID,
                                         "kasittelija": kasittelija
                                     }
@@ -203,6 +209,7 @@
                             }
                         }
                     })
+                    }
                 })
                 setTimeout(() => { tyhjennaKori(); }, timeOut)
             }
@@ -262,7 +269,7 @@
 
 
 
-                <p id="kayttaja" hidden><%= kayttajatunnus %></p>
+                <p id="kayttajatunnus" hidden><%= kayttajatunnus %></p>
                 <p id="luokkaID" hidden><%= luokkaID %></p>
                 <!--
                     <p>Yhteensä</p>
