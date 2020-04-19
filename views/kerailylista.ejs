@@ -120,15 +120,16 @@
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
                     $("#kerailyTaulu").append(
+                        "<tbody>" +
                         "<tr>" +
                         "<th scope='row'>" + data[i].ID + "</th>" +
                         "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + " " + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
-                        "<td>" + "<input class='kerroin' type='number' placeholder='1'>" + "</td>" +
+                        "<td>" + "<input class='kerroin' min='0' type='number' placeholder='0'>" + "</td>" +
                         "<td id='hinta'>" + data[i].hinta + " €" + "</td>" +
-                        "<td>" + "<input type='text' class='colYhteensa' readonly>" + "</td>" +
+                        "<td>" + "<input type='text' class='colYhteensa' placeholder='0' readonly>" + "</td>" +
 
                         "<td>" + "<a href='javascript:void(0);' class='removep'>Poista</a>" + "</td>" + "</tr>"
 
@@ -163,7 +164,6 @@
 
         $("#btnHaeListaus").click(function () {
             listaaKlista();
-            laskeSumma();
         })
 
         /*$("#btnLisaaTauluun").click(function() {
@@ -186,33 +186,29 @@
             doc.autoTable(columns, res.data, { startY: 10 });
             doc.save('ostoslista.pdf');
         });
-        /*
-        function laskeSumma() {
-            var table = document.getElementById("kerailyTaulu");
-            
 
 
-            $(document).on('input', '.kerroin', function () {
-                
-                $.getJSON("/klistat", function (data) {
-                    var yht = 0;
-                    for (i = 0; i < data.length; i++) {
-                        
-                    
-                        if ( != 0) {
-                            yht += parseFloat(data[i].hinta);
-                            console.log($(".kerroin").val());
-                        }
 
-                    }
-                })
-                
+        // Metodi, joka laskee keräilylistan eri inputteihin yhteishinnan.
+        $(document).on('input', '.kerroin', function () {
+            var loppusumma = 0;
+            $("#kerailyTaulu tbody tr").each(function () {
+                var yht = 0;
+                var kerroin = $(this).find(".kerroin").val();
+                var hinta = parseFloat($(this).find("#hinta").text());
+                yht = kerroin * hinta;
+                $(this).find(".colYhteensa").val(yht + " €");
             })
 
-        }
+            $("#kerailyTaulu tbody tr .colYhteensa").each(function () {
+                loppusumma += parseFloat($(this).val());
+            })
 
-        laskeSumma();
-        */
+            $(function () {
+                $("#txbYhteensa").val(loppusumma + " €");
+            })
+
+        })
 
     });
 </script>
