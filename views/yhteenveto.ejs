@@ -164,8 +164,8 @@
                         "<td>" + data[i].yksikko + "</td>" +
                 <% if (kayttoOikeus == 1) { %>
                         "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                        <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                        <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
