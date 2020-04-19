@@ -40,14 +40,12 @@ module.exports =
 		//Uuden varastotapahtuman lisäys
 		addNew: function (req, res){
 			var pvm = new Date().toJSON().slice(0, 19).replace('T', ' ');
-			var luokkaID = req.query.luokkaID;
-			var nimi = req.query.nimi;
-			var maara = req.query.maara;
-			var yksikkoID = req.query.yksikkoID;
-			var kasittelija = req.query.kasittelija;
-			var ttyyppinimi = req.query.ttyyppinimi;
-			console.log(luokkaID);
-			console.log(ttyyppinimi);
+			var luokkaID = req.body.luokkaID;
+			var nimi = req.body.nimi;
+			var maara = req.body.maara;
+			var yksikkoID = req.body.yksikkoID;
+			var kasittelija = req.body.kasittelija;
+			var ttyyppinimi = req.body.ttyyppinimi;
 
 			connection.query('INSERT INTO varastotapahtumat (ttyyppinimi, luokkanimi, tarvikenimi, maara, yksikkonimi, kasittelija, pvm) VALUES (?, ?, ?, ?, ?, ?, ?)', [ttyyppinimi, luokkaID, nimi, maara, yksikkoID, kasittelija, pvm], function (error, results) {
 				if (error) {
