@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -114,7 +115,7 @@
         // Listaa tarvikkeet taulukkoon.
         function listaaKlista() {
             $("#kerailyTaulu").empty();
-            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th><th scope="col">Varasto</th><th scope="col">Poisto</th></tr>');
+            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Varasto</th><th scope="col">Tilataan</th><th scope="col">Hinta</th><th scope="col">Yht</th><th scope="col">Poisto</th></tr>');
             $.getJSON("/klistat", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -123,9 +124,12 @@
                         "<th scope='row'>" + data[i].ID + "</th>" +
                         "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
-                        "<td>" + data[i].maara + "</td>" +
-                        "<td>" + data[i].yksikko + "</td>" +
+                        "<td>" + data[i].maara + " " + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
+                        "<td>" + "<input class='kerroin' type='number' placeholder='1'>" + "</td>" +
+                        "<td id='hinta'>" + data[i].hinta + " €" + "</td>" +
+                        "<td>" + "<input type='text' class='colYhteensa' readonly>" + "</td>" +
+
                         "<td>" + "<a href='javascript:void(0);' class='removep'>Poista</a>" + "</td>" + "</tr>"
 
                     )
@@ -133,7 +137,7 @@
                 }
             })
         };
-
+        /*
         //Tulostus
         function tulosta() {
             var mywindow = window.open('', 'PRINT', 'height=600,width=800');
@@ -151,6 +155,7 @@
             mywindow.print();
 
         };
+        */
 
         tyhjennaKlistatTaulu();
 
@@ -158,6 +163,7 @@
 
         $("#btnHaeListaus").click(function () {
             listaaKlista();
+            laskeSumma();
         })
 
         /*$("#btnLisaaTauluun").click(function() {
@@ -177,11 +183,36 @@
             var doc = new jsPDF();
             var res = doc.autoTableHtmlToJson(document.getElementById("kerailyTaulu"));
             var columns = [res.columns[0], res.columns[1], res.columns[2], res.columns[3], res.columns[4], res.columns[5]];
-            doc.autoTable(columns, res.data, {startY: 10});
+            doc.autoTable(columns, res.data, { startY: 10 });
             doc.save('ostoslista.pdf');
         });
+        /*
+        function laskeSumma() {
+            var table = document.getElementById("kerailyTaulu");
+            
 
 
+            $(document).on('input', '.kerroin', function () {
+                
+                $.getJSON("/klistat", function (data) {
+                    var yht = 0;
+                    for (i = 0; i < data.length; i++) {
+                        
+                    
+                        if ( != 0) {
+                            yht += parseFloat(data[i].hinta);
+                            console.log($(".kerroin").val());
+                        }
+
+                    }
+                })
+                
+            })
+
+        }
+
+        laskeSumma();
+        */
 
     });
 </script>
@@ -203,7 +234,7 @@
                     <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
                     <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
                     <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
-                    <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button>
+                    <!-- <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button> -->
                     <!--Painike käyttöohjeen avaamiseen-->
                     <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
                         data-target="#kayttoohjeDialog">Ohje</button>
@@ -215,10 +246,9 @@
             <table class="table" id="kerailyTaulu">
             </table>
 
-            <!--
-                    <p>Yhteensä</p>
-                    <input type="text" id="txbYhteensa" readonly>
-                -->
+            <div id="yhteensaDiv">
+                <p>Yhteensä <input type="text" id="txbYhteensa" readonly> </p>
+            </div>
 
             <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
                 aria-hidden="true">
