@@ -129,7 +129,7 @@ module.exports =
 
                 //Tarvikkeen poisto
                 delete: function (req, res){
-                    sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + connection.escape(req.query.tarvikeID);
+                    sqlQuery = "DELETE FROM tarvikkeet WHERE tarvikeID=" + connection.escape(req.body.tarvikeID);
 
                     connection.query(sqlQuery, function (error, results, fields) {
                         if (error) {
