@@ -71,7 +71,7 @@ body, html {
 
 
 #dropdown {
-    width: 15%;
+    width: 20%;
     margin-right: 5%;
 }
 
@@ -153,10 +153,6 @@ th {
     text-align: center;
 
   }
-  
-  /*#kayttoohjeDialog {
-      width: 60%;
-  }*/
   
   #kayttoohjeModalDialog {
     overflow-y: initial !important;
