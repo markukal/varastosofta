@@ -42,10 +42,9 @@
 
         function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
-
         // Koodi top-buttonin ilmestymiselle/piilottamiselle
-        $(window).scroll(function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        $(".mainwrapper").scroll(function scrollFunction() {
+            if ($(".mainwrapper").scrollTop() > 20) {
                 $("#topBtn").css("display", "block");
             } else {
                 $("#topBtn").css("display", "none");
@@ -53,8 +52,7 @@
         });
 
         $("#topBtn").click(function topFunction() {
-            $(document.body).scrollTop(0);
-            $(document.documentElement).scrollTop(0);
+            $(".mainwrapper").scrollTop(0);
         });
 
 
@@ -92,7 +90,7 @@
                 event.stopPropagation();
             } else {
 
-               var kasittelija = $("#pKayttaja").text();
+                var kasittelija = $("#pKayttaja").text();
                 var luokkaID = $("#luokkaID").text();
                 var alkumaara = $('#alkumaara').val();
                 var tarvikeID = $("#mtxbTarID").val();
@@ -105,17 +103,17 @@
                 var hinta = $("#mtxbHinta").val();
                 var maara = $("#mtxbMaara").val();
                 var tyyppi = $("#mddTyypit").val();
-               
+
                 $.ajax({
                     url: "/tarvikkeet?tarvikeID=" + tarvikeID + "&nimi=" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
                     type: 'PUT',
                     success: function (result) {
                         $('#muokkausDialog').modal('toggle');
                         setTimeout(lataaTaulukko(), 500);
-                         if (alkumaara > maara) {
+                        if (alkumaara > maara) {
                             ttyyppinimi = 2; // otto
                             maara = alkumaara - maara;
-                        }else if (alkumaara < maara) {
+                        } else if (alkumaara < maara) {
                             ttyyppinimi = 1; // lisays
                             maara = maara - alkumaara;
                         }
@@ -125,7 +123,7 @@
                         $.ajax({
                             url: "/yksikot?myksikkoID=" + yksikko,
                             type: "GET",
-                            success: function(results) {
+                            success: function (results) {
                                 yksikkonimi = results[0].nimi;
                                 if (alkumaara != maara) {
                                     $.ajax({
@@ -134,7 +132,7 @@
                                         data: {
                                             "ttyyppinimi": ttyyppinimi,
                                             "luokkaID": luokkaID,
-                                            "nimi" : nimi,
+                                            "nimi": nimi,
                                             "maara": maara,
                                             "yksikkoID": yksikkonimi,
                                             "kasittelija": kasittelija
@@ -193,217 +191,217 @@
         // Listaa tarvikkeet taulukkoon.
         function lataaTaulukko() {
             $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th>' <% if (kayttoOikeus == 1) { %> + '<th scope="col">Muokkaa</th>' + '<th scope="col">Poista</th>'<% } %> + '<th scope="col">Kori</th></tr>');
-            $.getJSON("/tarvikkeet", function (data) {
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    $("#taulu").append(
-                        "<tr>" +
-                        "<td>" + data[i].ID + "</td>" +
-                        "<td>" + data[i].nimi + "</td>" +
-                        "<td>" + data[i].kuvaus + "</td>" +
-                        "<td>" + data[i].maara + "</td>" +
-                        "<td>" + data[i].yksikko + "</td>" +
+            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö</th>' <% if (kayttoOikeus == 1) { %> + '<th scope="col">Muokkaa</th>' + '<th scope="col">Poista</th>' <% } %> + '<th scope="col">Kori</th></tr>');
+    $.getJSON("/tarvikkeet", function (data) {
+        var len = data.length;
+        for (var i = 0; i < len; i++) {
+            $("#taulu").append(
+                "<tr>" +
+                "<td>" + data[i].ID + "</td>" +
+                "<td>" + data[i].nimi + "</td>" +
+                "<td>" + data[i].kuvaus + "</td>" +
+                "<td>" + data[i].maara + "</td>" +
+                "<td>" + data[i].yksikko + "</td>" +
                         <% if (kayttoOikeus == 1) { %>
-                                "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
                                 <% } %>
-                        "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
+                "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
-                    $("#taulu").append("</tbody>")
+    $("#taulu").append("</tbody>")
                 }
             })
         };
 
 
-        // Suodattaa tarvikkeet valitun varaston perusteella.       
-        function suodataTaulukko(vid) {
-            $("#taulu").empty();
-            $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö' <% if (kayttoOikeus == 1) { %> + '</th><th scope="col">Muokkaa</th>' + '<th scope="col">Poista</th>'<% } %> + '<th scope="col">Kori</th></tr>');
-            $.getJSON("/tarvikkeet?tarvikkeet.varastoID=" + vid, function (data) {
-                var len = data.length;
-                for (var i = 0; i < len; i++) {
-                    $("#taulu").append(
-                        "<tr>" +
-                        "<td>" + data[i].ID + "</td>" +
-                        "<td>" + data[i].nimi + "</td>" +
-                        "<td>" + data[i].kuvaus + "</td>" +
-                        "<td>" + data[i].maara + "</td>" +
-                        "<td>" + data[i].yksikko + "</td>" +
+    // Suodattaa tarvikkeet valitun varaston perusteella.       
+    function suodataTaulukko(vid) {
+        $("#taulu").empty();
+        $("#taulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Yksikkö' <% if (kayttoOikeus == 1) { %> + '</th><th scope="col">Muokkaa</th>' + '<th scope="col">Poista</th>' <% } %> + '<th scope="col">Kori</th></tr>');
+        $.getJSON("/tarvikkeet?tarvikkeet.varastoID=" + vid, function (data) {
+            var len = data.length;
+            for (var i = 0; i < len; i++) {
+                $("#taulu").append(
+                    "<tr>" +
+                    "<td>" + data[i].ID + "</td>" +
+                    "<td>" + data[i].nimi + "</td>" +
+                    "<td>" + data[i].kuvaus + "</td>" +
+                    "<td>" + data[i].maara + "</td>" +
+                    "<td>" + data[i].yksikko + "</td>" +
                         <% if (kayttoOikeus == 1) { %>
-                                "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                    "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                    "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
                                 <% } %>
-                        "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
+                    "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
-                    $("#taulu").append("</tbody>")
-                }
+        $("#taulu").append("</tbody>")
+    }
             })
 
 
         };
 
-        // Poistaa noutolistasta yksittäisen tuotteen.
-        $(document).on("click", "a.muokkaaTarvike", function (e) {
-            e.preventDefault();
-            var tarID = $(this).closest('tr').children('th:first').text();
+    // Poistaa noutolistasta yksittäisen tuotteen.
+    $(document).on("click", "a.muokkaaTarvike", function (e) {
+        e.preventDefault();
+        var tarID = $(this).closest('tr').children('th:first').text();
 
-        });
+    });
 
-        // TO-DO: Koriin-linkkien klikkauksesta ei vielä tapahdu mitään.
-        // Tallentaa lisäyslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja lisää sen koriin.
+    // TO-DO: Koriin-linkkien klikkauksesta ei vielä tapahdu mitään.
+    // Tallentaa lisäyslinkkiä klikattaessa valitun tarvikkeen id:n muuttujaan ja lisää sen koriin.
 
-        $(document).on("click", "a.tarvikeKoriin", function (e) {
-            e.preventDefault();
-            var tarID = $(this).closest('tr').children('td:first').text();
-            var kayttaja = $("#pKayttaja").text();
-            setTimeout(() => { $.post('/ostoskori?tarvikeID=' + tarID + '&kasittelija=' + kayttaja, {}); }, timeOut);
+    $(document).on("click", "a.tarvikeKoriin", function (e) {
+        e.preventDefault();
+        var tarID = $(this).closest('tr').children('td:first').text();
+        var kayttaja = $("#pKayttaja").text();
+        setTimeout(() => { $.post('/ostoskori?tarvikeID=' + tarID + '&kasittelija=' + kayttaja, {}); }, timeOut);
 
-        });
+    });
 
-        $(document).on("click", "a.tarvikePoista", function (e) {
-            e.preventDefault();
-            var tarID = $(this).closest('tr').children('td:first').text();
-            var kasittelija = "<%= kayttajatunnus %>";
-            ttyyppinimi = 3;
-            yksikkonimi = $(this).eq(4);
-            luokkanimi = "<%= kayttajatunnus %>";
-            tarvikenimi = $(this).eq(1);
-            $.ajax({
-                url: '/tarvikkeet',
-                method: 'DELETE',
-                data: { 
-                    "tarvikeID": tarID,
-                    success: function(results) {
-                        $.ajax({
-                            // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
-                            url: '/varastotapahtumat',
-                            method: 'POST',
-                            data: {
-                                "kasittelija" : kasittelija,
-                                "ttyyppinimi" : ttyyppinimi,
-                                "yksikkonimi" : yksikkonimi,
-                                "luokkanimi" : luokkanimi,
-                                "tarvikenimi" : tarvikenimi
-                            }
+    $(document).on("click", "a.tarvikePoista", function (e) {
+        e.preventDefault();
+        var tarID = $(this).closest('tr').children('td:first').text();
+        var kasittelija = "<%= kayttajatunnus %>";
+        ttyyppinimi = 3;
+        yksikkonimi = $(this).eq(4);
+        luokkanimi = "<%= kayttajatunnus %>";
+        tarvikenimi = $(this).eq(1);
+        $.ajax({
+            url: '/tarvikkeet',
+            method: 'DELETE',
+            data: {
+                "tarvikeID": tarID,
+                success: function (results) {
+                    $.ajax({
+                        // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
+                        url: '/varastotapahtumat',
+                        method: 'POST',
+                        data: {
+                            "kasittelija": kasittelija,
+                            "ttyyppinimi": ttyyppinimi,
+                            "yksikkonimi": yksikkonimi,
+                            "luokkanimi": luokkanimi,
+                            "tarvikenimi": tarvikenimi
+                        }
 
-                        })
-                    } 
+                    })
                 }
-
-            })
-
-            setTimeout(() => { lataaTaulukko(); }, timeOut);
-        });
-
-        // Hakukentän toiminnallisuus
-        $("#hakuInput").on("keyup", function () {
-            var filter = $(this).val().toUpperCase();
-
-            // haku tapahtuu kolmen ensimmäisen sarakkeen välillä.
-            $("table tr").each(function () {
-                if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
-                    || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
-                    || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
-                ) {
-                    $("#tableRow").show();
-                    $(this).show();
-                } else {
-                    $("#tableRow").show();
-                    $(this).hide();
-                }
-            })
-        });
-
-
-        // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-        function haeVarastot(dd) {
-            $("#" + dd).empty();
-            $.get("/varastot", function (data, status) {
-                if (dd === "dropdown") {
-                    $("#" + dd).append(
-                        '<option value="defaultval">Kaikki varastot</option>'
-                    )
-                }
-                if (dd === "ddVarastot" || dd === "mddVarastot") {
-                    $("#" + dd).append(
-                        '<option value="">Valitse varasto</option>'
-                    )
-                }
-
-                $.each(data, function (i, item) {
-                    $("#" + dd).append(
-                        '<option value=' + item.ID + '>' + item.nimi + '</option>'
-                    )
-                });
-            });
-        }
-
-        // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-        function haeYksikot(dd) {
-            $("#" + dd).empty();
-            $("#" + dd).append(
-                '<option value="">Valitse yksikkö</option>'
-            )
-            $.get("/yksikot", function (data, status) {
-                $.each(data, function (i, item) {
-                    $("#" + dd).append(
-                        '<option value=' + item.ID + '>' + item.nimi + '</option>'
-                    )
-                });
-
-            });
-        }
-
-        // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
-        function haeTarvikeTyypit(dd) {
-            $("#" + dd).empty();
-            $("#" + dd).append(
-                '<option value="">Valitse kategoria</option>'
-            )
-            $.get("/tarviketyypit", function (data, status) {
-                $.each(data, function (i, item) {
-                    $("#" + dd).append(
-                        '<option value=' + item.ID + '>' + item.tyyppi + '</option>'
-                    )
-                });
-            });
-        }
-
-        // Suorittaa pudotusvalikosta valitun varaston perusteella suodatustoiminnon.
-        $("#dropdown").change(function () {
-
-            var vid = $("#dropdown option:selected").val();
-
-            // Jos pudotusvalikosta on valittu muu kuin oletusarvo, suoritetaan suodatus.
-            if (vid != "defaultval") {
-                suodataTaulukko(vid);
             }
-            // Jos pudotusvalikosta on valittu oletusarvo, listataan kaikki tarvikkeet.
-            else {
-                lataaTaulukko();
+
+        })
+
+        setTimeout(() => { lataaTaulukko(); }, timeOut);
+    });
+
+    // Hakukentän toiminnallisuus
+    $("#hakuInput").on("keyup", function () {
+        var filter = $(this).val().toUpperCase();
+
+        // haku tapahtuu kolmen ensimmäisen sarakkeen välillä.
+        $("table tr").each(function () {
+            if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
+                || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
+                || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
+            ) {
+                $("#tableRow").show();
+                $(this).show();
+            } else {
+                $("#tableRow").show();
+                $(this).hide();
             }
         })
+    });
 
-        // Avaa dialogin tarvikkeen luomista varten.
-        $("#btnLisaaTarvike").click(function () {
-            haeVarastot("ddVarastot");
-            haeYksikot("ddYksikot");
-            haeTarvikeTyypit("ddTyypit");
-        })
 
-        // popup, joka ilmaantuu, kun tarvike on lisätty listaan
-        $(document).on("click", ".tarvikeKoriin", function () {
+    // Listaa varastot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+    function haeVarastot(dd) {
+        $("#" + dd).empty();
+        $.get("/varastot", function (data, status) {
+            if (dd === "dropdown") {
+                $("#" + dd).append(
+                    '<option value="defaultval">Kaikki varastot</option>'
+                )
+            }
+            if (dd === "ddVarastot" || dd === "mddVarastot") {
+                $("#" + dd).append(
+                    '<option value="">Valitse varasto</option>'
+                )
+            }
 
-            $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
-            $(".popuptext").fadeOut(2000);
+            $.each(data, function (i, item) {
+                $("#" + dd).append(
+                    '<option value=' + item.ID + '>' + item.nimi + '</option>'
+                )
+            });
+        });
+    }
 
-        })
+    // Listaa yksikot pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+    function haeYksikot(dd) {
+        $("#" + dd).empty();
+        $("#" + dd).append(
+            '<option value="">Valitse yksikkö</option>'
+        )
+        $.get("/yksikot", function (data, status) {
+            $.each(data, function (i, item) {
+                $("#" + dd).append(
+                    '<option value=' + item.ID + '>' + item.nimi + '</option>'
+                )
+            });
 
-        // Lataa sivun avautuessa tarvikkeet taulukkoon.
-        lataaTaulukko();
-        // Lataa sivun avautuessa varastot pudotusvalikkoon.
-        haeVarastot("dropdown");
+        });
+    }
+
+    // Listaa tarviketyypit pudotusvalikoihin. Vastaanottaa parametrina operoitavan valikon id:n.
+    function haeTarvikeTyypit(dd) {
+        $("#" + dd).empty();
+        $("#" + dd).append(
+            '<option value="">Valitse kategoria</option>'
+        )
+        $.get("/tarviketyypit", function (data, status) {
+            $.each(data, function (i, item) {
+                $("#" + dd).append(
+                    '<option value=' + item.ID + '>' + item.tyyppi + '</option>'
+                )
+            });
+        });
+    }
+
+    // Suorittaa pudotusvalikosta valitun varaston perusteella suodatustoiminnon.
+    $("#dropdown").change(function () {
+
+        var vid = $("#dropdown option:selected").val();
+
+        // Jos pudotusvalikosta on valittu muu kuin oletusarvo, suoritetaan suodatus.
+        if (vid != "defaultval") {
+            suodataTaulukko(vid);
+        }
+        // Jos pudotusvalikosta on valittu oletusarvo, listataan kaikki tarvikkeet.
+        else {
+            lataaTaulukko();
+        }
+    })
+
+    // Avaa dialogin tarvikkeen luomista varten.
+    $("#btnLisaaTarvike").click(function () {
+        haeVarastot("ddVarastot");
+        haeYksikot("ddYksikot");
+        haeTarvikeTyypit("ddTyypit");
+    })
+
+    // popup, joka ilmaantuu, kun tarvike on lisätty listaan
+    $(document).on("click", ".tarvikeKoriin", function () {
+
+        $(".popuptext").css("visibility", "visible").hide().fadeIn(2000);
+        $(".popuptext").fadeOut(2000);
+
+    })
+
+    // Lataa sivun avautuessa tarvikkeet taulukkoon.
+    lataaTaulukko();
+    // Lataa sivun avautuessa varastot pudotusvalikkoon.
+    haeVarastot("dropdown");
 
 
     });
@@ -418,11 +416,12 @@
         <%- include('partials/navbar', {kayttoOikeudet: kayttoOikeus, navKayttajatunnus: kayttajatunnus}) %>
 
         <!--Lohko suodatustyökaluille-->
-        <div class="mainwrapper" id="suodatusContainer">
+        <div class="mainwrapper">
+            <br>
             <br>
             <h1>Tarvikkeet</h1>
             <hr>
-            <div class="row justify-content-sm-center">
+            <div class="row justify-content-sm-center" id="suodatusContainer">
 
                 <!--Pudotusvalikko varaston valitseen-->
                 <select class="form-control" id="dropdown">
@@ -434,11 +433,12 @@
                 <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark" data-toggle="modal"
-                                                                                data-target="#tarvikeDialog">Uusi tarvike</button>
+                    data-target="#tarvikeDialog">Uusi tarvike</button>
                 <% } %>
 
                 <!--Painike käyttöohjeen avaamiseen-->
-                <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal" data-target="#kayttoohjeDialog">Ohje</button>
+                <button type="button" id="btnTarvikkeetOhje" class="btn btn-dark" data-toggle="modal"
+                    data-target="#kayttoohjeDialog">Ohje</button>
             </div>
             <table class="table" id="taulu">
             </table>
@@ -448,11 +448,11 @@
 
 
             <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
-            <p id="luokkaID" hidden><%= luokka %></p> 
+            <p id="luokkaID" hidden><%= luokka %></p>
 
             <!--Dialogi tarvikkeiden muokkaamista varten-->
             <div class="modal fade" id="muokkausDialog" tabindex="-1" role="dialog"
-                                                                      aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
+                aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -512,9 +512,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                                          data-dismiss="modal">Peruuta</button>
+                                        data-dismiss="modal">Peruuta</button>
                                     <button type="submit" id="btnMuokkaatarvike"
-                                                          class="btn btn-primary">Tallenna</button>
+                                        class="btn btn-primary">Tallenna</button>
                                 </div>
                             </form>
                         </div>
@@ -524,7 +524,7 @@
 
             <!--Dialogi tarvikkeiden luomista varten-->
             <div class="modal fade" id="tarvikeDialog" tabindex="-1" role="dialog" aria-labelledby="lisaaTarvikeLabel"
-                                                                                   aria-hidden="true">
+                aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -587,7 +587,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                                          data-dismiss="modal">Peruuta</button>
+                                        data-dismiss="modal">Peruuta</button>
                                     <button type="submit" id="btnLuotarvike" class="btn btn-primary">Lisää</button>
                                 </div>
                             </form>
@@ -598,7 +598,7 @@
             </div>
 
             <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
-                                                                                      aria-hidden="true">
+                aria-hidden="true">
                 <div class="modal-dialog" id="kayttoohjeModalDialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -617,7 +617,8 @@
                             Hakukentästä voi hakea id:n, nimikkeen ja kuvauksen perusteella. Hakuominaisuus toimii
                             hakukentän tekstiä muuttamalla. Sovellus tunnistaa automaattisesti haettavan sarakkeen.
                             <br><br>
-                            Taulukon lajittelu aakkosjärjestykseen halutun sarakkeen osalta tapahtuu sarakkeen otsikkoa klikkaamalla.
+                            Taulukon lajittelu aakkosjärjestykseen halutun sarakkeen osalta tapahtuu sarakkeen otsikkoa
+                            klikkaamalla.
                             <br><br>
                             <img src="/media/esimtarvike.JPG" id="koImg" alt="esimtarvike" width="100%">
                             <br><br>
@@ -651,13 +652,14 @@
                             Määrä : Tähän kenttään syötetään tuotteen varastoon lisättävä, tämänhetkinen määrä.<br><br>
                             Yksikkö : Valitse pudotusvalikosta määrän yksikkö. Esim. kpl, m. cm, mm jne.<br><br>
                             Varasto : Valitse pudotusvalikosta varasto, johon tarvike lisätään.<br><br>
-                            Kategoria-, yksikkö- ja varasto-pudotusvalikoihin saa lisättyä uusia artikkeleja navigointipalkin-asetusvalikosta.
+                            Kategoria-, yksikkö- ja varasto-pudotusvalikoihin saa lisättyä uusia artikkeleja
+                            navigointipalkin-asetusvalikosta.
                             <hr>
                             <h4>Muokkaa tarviketta</h4>
                             <img src="/media/muokkaatarviketta.JPG" id="koImg" alt="muokkaatarviketta"
-                                                                               width="100%"><br><br>
-                                                                               Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
-                                                                               numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.<br>
+                                width="100%"><br><br>
+                            Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
+                            numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.<br>
                         </div>
                     </div>
                 </div>
@@ -665,7 +667,6 @@
 
         </div>
     </div>
-
     <!-- Buttoni, jolla pääsee sivun yläreunaan takaisin -->
     <button id="topBtn">Ylös</button>
 </body>
