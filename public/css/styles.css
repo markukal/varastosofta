@@ -147,4 +147,18 @@ th {
     text-align: center;
 
   }
+  
+  /*#kayttoohjeDialog {
+      width: 60%;
+  }*/
+  
+  #kayttoohjeModalDialog {
+    overflow-y: initial !important;
+  }
+
+  #kayttoohjeModalBody {
+    height: 550px;
+    overflow-y: auto;
+  }
+
 
