@@ -222,9 +222,11 @@
         $(document).on("click", "a.tarvikePoista", function (e) {
             e.preventDefault();
             var tarID = $(this).closest('tr').children('td:first').text();
-            var kayttaja = <%= kayttajatunnus %>;
+            var kasittelija = "<%= kayttajatunnus %>";
             ttyyppinimi = 3;
-
+            yksikkonimi = $(this).eq(4);
+            luokkanimi = "<%= kayttajatunnus %>";
+            tarvikenimi = $(this).eq(1);
             $.ajax({
                     url: '/tarvikkeet',
                     method: 'DELETE',
@@ -232,16 +234,19 @@
                         "tarvikeID": tarID,
                         success: function(results) {
                                 $.ajax({
-                                    // TODO: tapahtuman luonti muokatessa
-                                    // back end toimii, testattu postmanilla, allaoleva kuitenkin antaa "ttyyppinimi cannot be null"
+                                    // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
                                     url: '/varastotapahtumat',
                                     method: 'POST',
                                     data: {
-                                        
+                                        "kasittelija" : kasittelija,
+                                        "ttyyppinimi" : ttyyppinimi,
+                                        "yksikkonimi" : yksikkonimi,
+                                        "luokkanimi" : luokkanimi,
+                                        "tarvikenimi" : tarvikenimi
                                     }
 
                                 })
-                            }
+                            } 
                      }
                     
                 })
