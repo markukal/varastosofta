@@ -127,7 +127,6 @@
                             type: "GET",
                             success: function(results) {
                                 yksikkonimi = results[0].nimi;
-                                console.log(yksikkonimi)
                                 if (alkumaara != maara) {
                                     $.ajax({
                                         url: '/varastotapahtumat',
