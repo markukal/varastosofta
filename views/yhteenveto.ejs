@@ -91,7 +91,8 @@
             if ($('#muokkaus')[0].checkValidity() === false) {
                 event.stopPropagation();
             } else {
-                var kasittelija = $("#pKayttaja").text();
+
+               var kasittelija = $("#pKayttaja").text();
                 var luokkaID = $("#luokkaID").text();
                 var alkumaara = $('#alkumaara').val();
                 var tarvikeID = $("#mtxbTarID").val();
@@ -104,37 +105,46 @@
                 var hinta = $("#mtxbHinta").val();
                 var maara = $("#mtxbMaara").val();
                 var tyyppi = $("#mddTyypit").val();
-                
+               
                 $.ajax({
                     url: "/tarvikkeet?tarvikeID=" + tarvikeID + "&nimi=" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
                     type: 'PUT',
                     success: function (result) {
                         $('#muokkausDialog').modal('toggle');
                         setTimeout(lataaTaulukko(), 500);
-                        var ttyyppinimi;
-                        
-
-                        if (alkumaara > maara) {
+                         if (alkumaara > maara) {
                             ttyyppinimi = 2; // otto
                             maara = alkumaara - maara;
                         }else if (alkumaara < maara) {
                             ttyyppinimi = 1; // lisays
                             maara = maara - alkumaara;
                         }
-                        if (alkumaara != maara) {
+                        var ttyyppinimi;
+                        var yksikkonimi;
+                        // haetaan tarvikkeen yksikon nimi id:n perusteella
                         $.ajax({
-                            url: '/varastotapahtumat',
-                            method: 'POST',
-                            data: {
-                                "ttyyppinimi": ttyyppinimi,
-                                "luokkaID": luokkaID,
-                                "nimi" : nimi,
-                                "maara": maara,
-                                "yksikkoID": yksikko,
-                                "kasittelija": kasittelija
+                            url: "/yksikot?myksikkoID=" + yksikko,
+                            type: "GET",
+                            success: function(results) {
+                                yksikkonimi = results[0].nimi;
+                                console.log(yksikkonimi)
+                                if (alkumaara != maara) {
+                                    $.ajax({
+                                        url: '/varastotapahtumat',
+                                        method: 'POST',
+                                        data: {
+                                            "ttyyppinimi": ttyyppinimi,
+                                            "luokkaID": luokkaID,
+                                            "nimi" : nimi,
+                                            "maara": maara,
+                                            "yksikkoID": yksikkonimi,
+                                            "kasittelija": kasittelija
+                                        }
+                                    })
+                                }
+
                             }
-                    })
-                        }
+                        })
                     }
                 });
             }
@@ -195,10 +205,10 @@
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
-                <% if (kayttoOikeus == 1) { %>
-                        "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
-                        <% } %>
+                        <% if (kayttoOikeus == 1) { %>
+                                "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                                <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
@@ -221,10 +231,10 @@
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + "</td>" +
                         "<td>" + data[i].yksikko + "</td>" +
-                <% if (kayttoOikeus == 1) { %>
-                        "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                        "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
-                        <% } %>
+                        <% if (kayttoOikeus == 1) { %>
+                                "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
+                                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                                <% } %>
                         "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
                     $("#taulu").append("</tbody>")
@@ -261,29 +271,29 @@
             luokkanimi = "<%= kayttajatunnus %>";
             tarvikenimi = $(this).eq(1);
             $.ajax({
-                    url: '/tarvikkeet',
-                    method: 'DELETE',
-                    data: { 
-                        "tarvikeID": tarID,
-                        success: function(results) {
-                                $.ajax({
-                                    // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
-                                    url: '/varastotapahtumat',
-                                    method: 'POST',
-                                    data: {
-                                        "kasittelija" : kasittelija,
-                                        "ttyyppinimi" : ttyyppinimi,
-                                        "yksikkonimi" : yksikkonimi,
-                                        "luokkanimi" : luokkanimi,
-                                        "tarvikenimi" : tarvikenimi
-                                    }
+                url: '/tarvikkeet',
+                method: 'DELETE',
+                data: { 
+                    "tarvikeID": tarID,
+                    success: function(results) {
+                        $.ajax({
+                            // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
+                            url: '/varastotapahtumat',
+                            method: 'POST',
+                            data: {
+                                "kasittelija" : kasittelija,
+                                "ttyyppinimi" : ttyyppinimi,
+                                "yksikkonimi" : yksikkonimi,
+                                "luokkanimi" : luokkanimi,
+                                "tarvikenimi" : tarvikenimi
+                            }
 
-                                })
-                            } 
-                     }
-                    
-                })
-                
+                        })
+                    } 
+                }
+
+            })
+
             setTimeout(() => { lataaTaulukko(); }, timeOut);
         });
 
@@ -399,7 +409,7 @@
 
     });
 
-    
+
 
 
 </script>
@@ -425,7 +435,7 @@
                 <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark" data-toggle="modal"
-                    data-target="#tarvikeDialog">Uusi tarvike</button>
+                                                                                data-target="#tarvikeDialog">Uusi tarvike</button>
                 <% } %>
 
                 <!--Painike käyttöohjeen avaamiseen-->
@@ -443,7 +453,7 @@
 
             <!--Dialogi tarvikkeiden muokkaamista varten-->
             <div class="modal fade" id="muokkausDialog" tabindex="-1" role="dialog"
-                aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
+                                                                      aria-labelledby="muokkaaTarvikeLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -503,9 +513,9 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Peruuta</button>
+                                                          data-dismiss="modal">Peruuta</button>
                                     <button type="submit" id="btnMuokkaatarvike"
-                                        class="btn btn-primary">Tallenna</button>
+                                                          class="btn btn-primary">Tallenna</button>
                                 </div>
                             </form>
                         </div>
@@ -515,7 +525,7 @@
 
             <!--Dialogi tarvikkeiden luomista varten-->
             <div class="modal fade" id="tarvikeDialog" tabindex="-1" role="dialog" aria-labelledby="lisaaTarvikeLabel"
-                aria-hidden="true">
+                                                                                   aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -578,7 +588,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
-                                        data-dismiss="modal">Peruuta</button>
+                                                          data-dismiss="modal">Peruuta</button>
                                     <button type="submit" id="btnLuotarvike" class="btn btn-primary">Lisää</button>
                                 </div>
                             </form>
@@ -589,7 +599,7 @@
             </div>
 
             <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
-                aria-hidden="true">
+                                                                                      aria-hidden="true">
                 <div class="modal-dialog" id="kayttoohjeModalDialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -646,9 +656,9 @@
                             <hr>
                             <h4>Muokkaa tarviketta</h4>
                             <img src="/media/muokkaatarviketta.JPG" id="koImg" alt="muokkaatarviketta"
-                                width="100%"><br><br>
-                            Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
-                            numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.<br>
+                                                                               width="100%"><br><br>
+                                                                               Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
+                                                                               numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.<br>
                         </div>
                     </div>
                 </div>
