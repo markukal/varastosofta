@@ -219,6 +219,7 @@
 
         });
 
+        // Tarvikkeen poisto ja tapahtuman lokitus
         $(document).on("click", "a.tarvikePoista", function (e) {
             e.preventDefault();
             var tarID = $(this).closest('tr').children('td:first').text();
