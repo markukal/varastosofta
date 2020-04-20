@@ -42,7 +42,7 @@
 
         function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
-        var timeOut = 500;
+        var timeOut = 200;
 
 
 
@@ -158,15 +158,11 @@
 
         };
         */
-
-        tyhjennaKlistatTaulu();
-
-        suodataLoppuvat();
-        //listaaKlista();
+        /*
         $("#btnHaeListaus").click(function () {
             listaaKlista();
         })
-
+        */
         /*$("#btnLisaaTauluun").click(function() {
             suodataLoppuvat();
         })
@@ -211,7 +207,14 @@
 
         })
 
+        // Hakee tauluun lopussa olevat tarvikkeet, kun sivu ladataan
+        tyhjennaKlistatTaulu();
+        suodataLoppuvat();
+        setTimeout(() => { listaaKlista(); }, timeOut);
+
     });
+
+    
 </script>
 
 <body>
@@ -228,7 +231,7 @@
                 <div class="row justify-content-sm-center">
                     <input type="text" id="hakuInput" placeholder="Hae...">
                     <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
-                    <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
+                    <!--<button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>-->
                     <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
                     <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
                     <!-- <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button> -->
