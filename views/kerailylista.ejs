@@ -46,20 +46,17 @@
 
 
 
-        // Koodi top-buttonin ilmestymiselle/piilottamiselle
-        $(window).scroll(function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        // Koodi top-buttonin ilmestymiselle/piilottamiselle TÄYTYY TESTATA
+        $(".mainwrapper").scroll(function scrollFunction() {
+            if ($(".mainwrapper").scrollTop() > 20) {
                 $("#topBtn").css("display", "block");
-            }
-            else {
+            } else {
                 $("#topBtn").css("display", "none");
             }
         });
 
         $("#topBtn").click(function topFunction() {
-            $(document.body).scrollTop(0);
-            $(document.documentElement).scrollTop(0);
-
+            $(".mainwrapper").scrollTop(0);
         });
 
         // Käy tarvikkeet-taulun läpi ja lisää raja-arvon alittavat tarvikkeet klistat-tauluun.
