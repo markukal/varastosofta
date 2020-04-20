@@ -99,7 +99,8 @@
             $("table tr").each(function () {
                 if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
                     || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
-                    || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(4)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(5)').text().toUpperCase().match(filter)
                 ) {
                     $("#tableRow").show();
                     $(this).show();
@@ -122,7 +123,7 @@
                     $("#kerailyTaulu").append(
                         "<tbody>" +
                         "<tr>" +
-                        "<th scope='row'>" + data[i].nimi + "</th>" +
+                        "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + " " + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
@@ -161,7 +162,7 @@
         tyhjennaKlistatTaulu();
 
         suodataLoppuvat();
-
+        //listaaKlista();
         $("#btnHaeListaus").click(function () {
             listaaKlista();
         })
@@ -225,7 +226,7 @@
 
             <div id="suodatusContainer">
                 <div class="row justify-content-sm-center">
-                    <input type="text" placeholder="Hae">
+                    <input type="text" id="hakuInput" placeholder="Hae...">
                     <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
                     <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
                     <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
