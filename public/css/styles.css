@@ -34,7 +34,7 @@ body, html {
     color: #fff;
 }
 
-#taulu, #koriTaulu, #kerailyTaulu, #tapahtumaTaulu {
+#taulu, #koriTaulu, #kerailyTaulu {
     position: relative;
     margin-top: 2%;
     margin-left:auto; 
