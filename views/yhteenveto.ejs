@@ -91,6 +91,9 @@
             if ($('#muokkaus')[0].checkValidity() === false) {
                 event.stopPropagation();
             } else {
+                var kasittelija = $("#pKayttaja").text();
+                var luokkaID = $("#luokkaID").text();
+                var alkumaara = $('#alkumaara').val();
                 var tarvikeID = $("#mtxbTarID").val();
                 var nimi = $("#mtxbTarNim").val();
                 var kuvaus = $("#mtxbTarKuvaus").val();
@@ -101,12 +104,37 @@
                 var hinta = $("#mtxbHinta").val();
                 var maara = $("#mtxbMaara").val();
                 var tyyppi = $("#mddTyypit").val();
+                
                 $.ajax({
                     url: "/tarvikkeet?tarvikeID=" + tarvikeID + "&nimi=" + nimi + "&kuvaus=" + kuvaus + "&varastoID=" + varasto + "&yksikkoID=" + yksikko + "&rarvo=" + hraja + "&hpaikka=" + hpaikka + "&hinta=" + hinta + "&maara=" + maara + "&tyyppiID=" + tyyppi,
                     type: 'PUT',
                     success: function (result) {
                         $('#muokkausDialog').modal('toggle');
                         setTimeout(lataaTaulukko(), 500);
+                        var ttyyppinimi;
+                        
+
+                        if (alkumaara > maara) {
+                            ttyyppinimi = 2; // otto
+                            maara = alkumaara - maara;
+                        }else if (alkumaara < maara) {
+                            ttyyppinimi = 1; // lisays
+                            maara = maara - alkumaara;
+                        }
+                        if (alkumaara != maara) {
+                        $.ajax({
+                            url: '/varastotapahtumat',
+                            method: 'POST',
+                            data: {
+                                "ttyyppinimi": ttyyppinimi,
+                                "luokkaID": luokkaID,
+                                "nimi" : nimi,
+                                "maara": maara,
+                                "yksikkoID": yksikko,
+                                "kasittelija": kasittelija
+                            }
+                    })
+                        }
                     }
                 });
             }
@@ -133,6 +161,11 @@
                 modal.find('.modal-body #mtxbHPaikka').val(data[0].hpaikka)
                 modal.find('.modal-body #mtxbHinta').val(data[0].hinta)
                 modal.find('.modal-body #mtxbMaara').val(data[0].maara)
+                // tallennetaan tavaran maara piilotettuun elementtiin
+                // kaytetaan tata luodessa tapahtumalokiin otto tai lisays,
+                // lasketaan siis alkuperaisen maaran ja muutetun maaran ero
+                // niin saadaan selville onko kyse otosta vai lisayksesta
+                $('#alkumaara').val(data[0].maara);
                 modal.find('.modal-body #mddTyypit').val(data[0].tyyppiID)
             })
         });
@@ -406,6 +439,7 @@
 
 
             <p id="pKayttaja" hidden><%= kayttajatunnus %></p>
+            <p id="luokkaID" hidden><%= luokka %></p> 
 
             <!--Dialogi tarvikkeiden muokkaamista varten-->
             <div class="modal fade" id="muokkausDialog" tabindex="-1" role="dialog"
@@ -453,6 +487,7 @@
                                 <div class="form-group">
                                     <label for="maara" class="form-control-label">Määrä</label>
                                     <input type="number" class="form-control" id="mtxbMaara" required>
+                                    <input type="hidden" id="alkumaara">
                                 </div>
                                 <div class="form-group">
                                     <label for="yksikko" class="form-control-label">Yksikkö</label>
