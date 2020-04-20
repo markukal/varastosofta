@@ -553,9 +553,9 @@
 
             </div>
 
-            <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog"
-                aria-labelledby="kayttoohjeLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+            <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" id="kayttoohjeModalDialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
@@ -563,8 +563,54 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            Tähän kaikki käyttöohjeeseen tuleva tavara
+                        <div class="modal-body" id="kayttoohjeModalBody">
+                            <h4>Yleinen</h4>
+                            Tarvikkeet-sivulla on yhteenveto kaikista varastoon lisätyistä artikkeleista.
+                            <br><br>
+                            Oletuksena taulussa näkyvät kaikkien varastojen saldot. Pudotusvalikosta voi suodattaa
+                            haluamansa varaston.
+                            <br><br>
+                            Hakukentästä voi hakea id:n, nimikkeen ja kuvauksen perusteella. Hakuominaisuus toimii
+                            hakukentän tekstiä muuttamalla. Sovellus tunnistaa automaattisesti haettavan sarakkeen.
+                            <br><br>
+                            <img src="/media/esimtarvike.JPG" id="koImg" alt="esimtarvike" width="100%">
+                            <br><br>
+                            - Id : Artikkelin juokseva avainluku tietokannasta.<br><br>
+                            - Nimike : Tavaran varastonimike. Artikkelia nimettäessä suositellaan syöttämään
+                            mahdollisimman kuvaava nimi mahdollisine mittoineen ylläolevan esimerkin mukaan. Tämä
+                            parantaa myös hakuominaisuuden toimintaa.<br><br>
+                            - Kuvaus : Tähän kenttään suositellaan syöttämään tarkempi kuvaus sekä mahdolliset
+                            lisätiedot, kuten esimerkiksi ostopaikan tilausnumero.<br><br>
+                            - Varastossa : Kertoo varaston tämänhetkisen saldon.<br><br>
+                            - Yksikkö : Määrittää ko. tuotteen varastosaldon yksikön.<br><br>
+                            - Muokkaa : Tästä linkistä pääset muokkaamaan kyseisen tuotteen tietoja.<br><br>
+                            - Poista : Poistaa kyseisen tuotteen tietokannasta kokonaan.<br><br>
+                            - Koriin : Lisää tuotteen noutolistalle tulevaa varastovähennystä varten.<br>
+                            <hr>
+                            <h4>Uusi tarvike</h4>
+                            <img src="/media/lisaauusi.JPG" id="koImg" alt="lisaauusi" width="100%"><br><br>
+                            Kategoria : Aloita valitsemalla tarviketyyppi, esim. kemikaali, puutavara, metalli
+                            jne.<br><br>
+                            Nimike : Kirjoita tähän mahdollisimman kuvaava varastonimike esimerkiksi ylläolevan
+                            esimerkin mukaan. Artikkelia nimettäessä suositellaan noudattamaan mahdollisimman yhtenäistä
+                            nimeämiskäytäntöä, esimerkiksi ”Höylätty mänty 15 x 45 mm”. Näin hakuominaisuus toimii
+                            tehokkaasti.<br><br>
+                            Kuvaus : Kuvauskenttään suositellaan syöttämään tarvikkeen tarkempi kuvaus sekä mahdollinen
+                            hankintapaikan tilausnumero. Yllä yksi mahdollinen esimerkki.
+                            Hälytysraja : Tähän kenttään asetetaan raja-arvo, jonka alittuessa tarvike viedään
+                            automaattisesti keräilylistaan seuraavaa tilausta varten.<br><br>
+                            Hankintapaikka : Tähän kenttään suositellaan syöttämään hankintapaikka, mistä tarvike on
+                            yleensä ostettu.<br><br>
+                            Hinta : Hinta euroina. Jätä € - symboli pois.<br><br>
+                            Määrä : Tähän kenttään syötetään tuotteen varastoon lisättävä, tämänhetkinen määrä.<br><br>
+                            Yksikkö : Valitse pudotusvalikosta määrän yksikkö. Esim. kpl, m. cm, mm jne.<br><br>
+                            Varasto : Valitse pudotusvalikosta varasto, johon tarvike lisätään.<br>
+                            <hr>
+                            <h4>Muokkaa tarviketta</h4>
+                            <img src="/media/muokkaatarviketta.JPG" id="koImg" alt="muokkaatarviketta"
+                                width="100%"><br><br>
+                            Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
+                            numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.
                         </div>
                     </div>
                 </div>
