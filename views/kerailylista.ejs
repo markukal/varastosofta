@@ -115,18 +115,18 @@
         // Listaa tarvikkeet taulukkoon.
         function listaaKlista() {
             $("#kerailyTaulu").empty();
-            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Id</th><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Varasto</th><th scope="col">Tilataan</th><th scope="col">Hinta</th><th scope="col">Yht</th><th scope="col">Poisto</th></tr>');
+            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Varasto</th><th scope="col">Hankintapaikka</th><th scope="col">Tilataan</th><th scope="col">Hinta</th><th scope="col">Yht</th><th scope="col">Poisto</th></tr>');
             $.getJSON("/klistat", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
                     $("#kerailyTaulu").append(
                         "<tbody>" +
                         "<tr>" +
-                        "<th scope='row'>" + data[i].ID + "</th>" +
-                        "<td>" + data[i].nimi + "</td>" +
+                        "<th scope='row'>" + data[i].nimi + "</th>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + " " + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
+                        "<td>" + data[i].hpaikka + "</td>" +
                         "<td>" + "<input class='kerroin' min='0' type='number' placeholder='0'>" + "</td>" +
                         "<td id='hinta'>" + data[i].hinta + " €" + "</td>" +
                         "<td>" + "<input type='text' class='colYhteensa' placeholder='0' readonly>" + "</td>" +
