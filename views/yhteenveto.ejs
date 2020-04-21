@@ -204,7 +204,7 @@
                 "<td>" + data[i].yksikko + "</td>" +
                         <% if (kayttoOikeus == 1) { %>
                 "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                "<td>" + "<a href='javascript:void(0);' data-toggle='modal' data-target='#ypoistoVahvistus' class='tarvikePoista' data-tarvikeID='" + data[i].ID + "' data-tarvikenimi='" + data[i].nimi + "'>Poista</a>" + "</td>" +
                                 <% } %>
                 "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
@@ -230,9 +230,9 @@
                     "<td>" + data[i].yksikko + "</td>" +
                         <% if (kayttoOikeus == 1) { %>
                     "<td>" + "<a href='javascript:void(0);' class='muokkaaTarvike' data-toggle='modal' data-target='#muokkausDialog' data-tarvikeID='" + data[i].ID + "'>Valitse</a>" + "</td>" +
-                    "<td>" + "<a href='javascript:void(0);' class='tarvikePoista'>Poista</a>" + "</td>" +
+                    "<td>" + "<a href='javascript:void(0);' class='tarvikePoista' data-tarvikeID='" + data[i].ID + "' data-tarvikenimi='" + data[i].nimi + "'>Poista</a>" + "</td>" +
                                 <% } %>
-                    "<td>" + "<a href='javascript:void(0);' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
+                    "<td>" + "<a href='javascript:void(0);' data-toggle='modal' data-target='#ypoistoVahvistus' class='tarvikeKoriin'>Koriin</a>" + "</td>" + "</tr>"
                     )
         $("#taulu").append("</tbody>")
     }
@@ -259,44 +259,64 @@
 
     });
 
+    
+    $('.modal').on('hidden.bs.modal', function() { 
+        $('.modal-backdrop').hide();
+		$(this).find('form').trigger('reset');         
+    });
+
+    $('#ypoistoVahvistus').on('shown.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var tarvikeID = button.data('tarvikeid');
+        var tarvikenimi = button.data('tarvikenimi');
+        
+        $('#yvahvistaPoisto')
+        .data('tarvike', tarvikeID)
+        .data('nimi', tarvikenimi)
+    });
+    $('#yvahvistaPoisto').click(function() {
+        poistaTarvike($(this).data('tarvike'), $(this).data('nimi'));
+    });
+
     // Poistaa tarvikkeen järjestelmästä ja tekee siitä lokimerkinnän.
-    $(document).on("click", "a.tarvikePoista", function (e) {
-        e.preventDefault();
-        var tarID = $(this).closest('tr').children('td:first').text();
+    function poistaTarvike(tarvikeID, tarvikenimi) {
         var kasittelija = $("#pKayttaja").text();
         var ttyyppinimi = 3;
         var yksikkonimi = "kaikki";
         var luokkanimi = $("#luokkaID").text();
-        var tarvikenimi =  $(this).parent().prev().prev().prev().prev().prev().text();
+        var tarvikkeennimi =  tarvikenimi;
         var maara = 0;
         $.ajax({
             url: '/tarvikkeet',
             type: 'DELETE',
             data: {
-                "tarvikeID": tarID,
+                "tarvikeID": tarvikeID,
                 success: function (results) {
+                  $('#ypoistoVahvistus').modal('toggle');
                   $.ajax({
                         url: '/varastotapahtumat',
                         type: 'POST',
                         data: {
                            "ttyyppinimi" : ttyyppinimi,
                            "luokkaID" : luokkanimi,
-                           "nimi" : tarvikenimi,
+                           "nimi" : tarvikkeennimi,
                            "maara" : maara,
                            "yksikkoID" : yksikkonimi,
                            "kasittelija" : kasittelija
-
                         }
 
-                    }) 
+                    })
                 }
             }
 
-        })
+        }) 
+        setTimeout(() => { lataaTaulukko(); }, timeOut);     
+    }
 
-        
-        setTimeout(() => { lataaTaulukko(); }, timeOut);
-    });
+    
+    /*$(document).on("click", "a.tarvikePoista", function (e) {
+        e.preventDefault();
+    });*/
 
     // Hakukentän toiminnallisuus
     $("#hakuInput").on("keyup", function () {
@@ -664,6 +684,32 @@
                                 width="100%"><br><br>
                             Muokkaa – napista aukeaa ylläoleva ikkuna. Kaikkia muita arvoja voi muuttaa, paitsi ID –
                             numeroa. Tätä toimintoa käytetään yleisimmin silloin, kun varastosaldoja päivitetään.<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Dialogi tarvikkeen poistamisen vahvistamiselle-->
+            <div class="modal fade" id="ypoistoVahvistus" tabindex="-1" role="dialog" aria-labelledby="poistaTarvikeLabel" aria-hidden="true" style='display: none'>
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="poistaTarvikeLabel">Poista tarvike</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="container">
+                                    <p>Haluatko varmasti poistaa tarvikkeen järjestelmästä?</p>
+                                    <p id="poistettavaTarvike" hidden>" "</p>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+                                        <button type="button" class="btn btn-primary" data-tarvike="" id="yvahvistaPoisto">Kyllä</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

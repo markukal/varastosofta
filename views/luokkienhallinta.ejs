@@ -30,7 +30,7 @@
 			$("#topBtn").click(function topFunction() {
 				$(document.body).scrollTop(0);
 				$(document.documentElement).scrollTop(0);
-			});		
+			});	
 
 			// Suoritetaan uutta luokkaa luodessa. Validoi ekaksi lomakkeen tiedot, jos kaikki ok -> tekee ajax kutsun
 
@@ -91,6 +91,7 @@
 				$('#vahvistaPoisto').data('luokka', luokkaID)
 
 			});
+			
 			$('#vahvistaPoisto').click(function() {
 
 				poistaLuokka($(this).data('luokka'));
