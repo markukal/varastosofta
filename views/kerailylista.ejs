@@ -113,7 +113,7 @@
         // Listaa tarvikkeet taulukkoon.
         function listaaKlista() {
             $("#kerailyTaulu").empty();
-            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Varasto</th><th scope="col">Hankintapaikka</th><th scope="col">Tilataan</th><th scope="col">Hinta</th><th scope="col">Yht</th><th scope="col">Poisto</th></tr>');
+            $("#kerailyTaulu").html('<thead class="thead-dark"><tr id="tableRow"><th scope="col">Nimike</th><th scope="col">Kuvaus</th><th scope="col">Varastossa</th><th scope="col">Varasto</th><th scope="col">Hankintapaikka</th><th scope="col">Tilataan</th><th scope="col" style="display:none">Tilataan</th><th scope="col">Hinta</th><th scope="col">Yht</th><th scope="col" style="display:none">Yht</th><th scope="col">Poisto</th></tr>');
             $.getJSON("/klistat", function (data) {
                 var len = data.length;
                 for (var i = 0; i < len; i++) {
@@ -126,9 +126,10 @@
                         "<td>" + data[i].varasto + "</td>" +
                         "<td>" + data[i].hpaikka + "</td>" +
                         "<td>" + "<input class='kerroin' min='0' type='number' placeholder='0'>" + "</td>" +
+                        "<td style='display:none'>" + "<p id='pdfT'></p>" + "</td>" +
                         "<td id='hinta'>" + data[i].hinta + " €" + "</td>" +
                         "<td>" + "<input type='text' class='colYhteensa' step='0.01' placeholder='0' readonly>" + "</td>" +
-
+                        "<td style='display:none'>" + "<p id='pdfY'></p>" + "</td>" +
                         "<td>" + "<a href='javascript:void(0);' class='removep'>Poista</a>" + "</td>" + "</tr>"
 
                     )
@@ -168,16 +169,29 @@
             tyhjennaKlistatTaulu();
         })
         */
-
+        /*
         $("#btnTulosta").click(function () {
             tulosta();
         })
+        */
 
         $("#btnPDF").click(function () {
             var doc = new jsPDF();
-            var res = doc.autoTableHtmlToJson(document.getElementById("kerailyTaulu"));
-            var columns = [res.columns[0], res.columns[1], res.columns[2], res.columns[3], res.columns[4], res.columns[5]];
-            doc.autoTable(columns, res.data, { startY: 10 });
+
+            var tbl = $('#kerailyTaulu').clone();
+
+            tbl.find('tr th:nth-child(6), tr td:nth-child(6)').remove();
+            tbl.find('tr th:nth-child(8), tr td:nth-child(8)').remove();
+            tbl.find('tr th:nth-child(9), tr td:nth-child(9)').remove();
+            var res = doc.autoTableHtmlToJson(tbl.get(0));
+            var res2 = doc.autoTableHtmlToJson(document.getElementById("yhtTable"),true);
+
+            doc.autoTable(res.columns, res.data, { startY: 10 });
+            doc.autoTable(res2.columns, null, {
+                startY: doc.lastAutoTable.finalY + 20
+            });
+
+
             doc.save('ostoslista.pdf');
         });
 
@@ -189,10 +203,12 @@
             $("#kerailyTaulu tbody tr").each(function () {
                 var yht = 0;
                 var kerroin = $(this).find(".kerroin").val();
+                $(this).find("#pdfT").text(kerroin);
                 var hinta = parseFloat($(this).find("#hinta").text());
                 yht = kerroin * hinta;
                 yht = Number(yht).toFixed(2);
                 $(this).find(".colYhteensa").val(yht + " €");
+                $(this).find("#pdfY").text(yht + " €");
             })
 
             $("#kerailyTaulu tbody tr .colYhteensa").each(function () {
@@ -202,6 +218,7 @@
             $(function () {
                 loppusumma = Number(loppusumma).toFixed(2);
                 $("#txbYhteensa").val(loppusumma + " €");
+                $("#tdYht").text(loppusumma + " €");
             })
 
         })
@@ -213,7 +230,7 @@
 
     });
 
-    
+
 </script>
 
 <body>
@@ -244,9 +261,19 @@
 
             <table class="table" id="kerailyTaulu">
             </table>
-
+            <!-- divi yhteissummalle. Pitää sisällään piilotetun taulun pdf:n tulostamista varten-->
             <div id="yhteensaDiv">
                 <p>Yhteensä <input type="text" id="txbYhteensa" step="0.01" readonly> </p>
+                <table id=yhtTable style="display: none;" >
+                    <tbody>
+                        <tr>
+                            <th>
+                                Yhteensä
+                            <th id ="tdYht"></th>    
+                            </th> 
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
@@ -262,19 +289,26 @@
                         <div class="modal-body" id="kayttoohjeModalBody">
                             <h4>Yleinen</h4>
                             <img src="/media/kerailylista1.JPG" alt="kerailylista1" width="100%">
-                            Kun tarvikkeen varastosaldo alittaa uutta tarviketta lisättäessä määritetyn hälytysrajan, tarvike lisätään automaattisesti keräilylistan 
-                            taulukkoon. Tulevaa tavaratilausta varten on suositeltavaa määrittää mahdollinen ostopaikan tuotenumero tilauksen tekemisen helpottamiseksi. 
+                            Kun tarvikkeen varastosaldo alittaa uutta tarviketta lisättäessä määritetyn hälytysrajan,
+                            tarvike lisätään automaattisesti keräilylistan
+                            taulukkoon. Tulevaa tavaratilausta varten on suositeltavaa määrittää mahdollinen ostopaikan
+                            tuotenumero tilauksen tekemisen helpottamiseksi.
                             <br><br>
                             <img src="/media/kerailylista2.JPG" alt="kerailylista2" width="100%">
-                            Uuden tarvikkeen lisäyksen yhteydessä määritelty, yleisesti käytetty hankintapaikka ilmoitetaan hankintapaikka-sarakkeessa. Mikäli tarvike aiotaan ostaa muualta, 
-                            ei tästä tarvitse välittää. <b>Tilataan</b> - sarakkeessa määritellään tarvikkeen tilausmäärä. Tätä kenttää muuttaessa yht-sarakkeen arvo päivittyy. 
+                            Uuden tarvikkeen lisäyksen yhteydessä määritelty, yleisesti käytetty hankintapaikka
+                            ilmoitetaan hankintapaikka-sarakkeessa. Mikäli tarvike aiotaan ostaa muualta,
+                            ei tästä tarvitse välittää. <b>Tilataan</b> - sarakkeessa määritellään tarvikkeen
+                            tilausmäärä. Tätä kenttää muuttaessa yht-sarakkeen arvo päivittyy.
                             <br><br>
-                            <b>Poista</b> - valinta poistaa rivin, mikäli tuotetta ei haluta huomioida keräilylistassa. Tämä tulee silloin myös poistaa manuaalisesti tarviketaulukosta, tai muuttaa 
+                            <b>Poista</b> - valinta poistaa rivin, mikäli tuotetta ei haluta huomioida keräilylistassa.
+                            Tämä tulee silloin myös poistaa manuaalisesti tarviketaulukosta, tai muuttaa
                             hälytysarvo nollaan, jotta tarvike ei ilmesty listaan tarpeettomasti.
                             <br><br>
-                            Kun tilausmäärät on valittu halutuiksi, <b>Tallenna PDF</b> - painike tallentaa listan tiedot pdf-formaatissa.
+                            Kun tilausmäärät on valittu halutuiksi, <b>Tallenna PDF</b> - painike tallentaa listan
+                            tiedot pdf-formaatissa.
                             <br><br>
-                            Vinkki: Mikäli halutaan tallentaa tietyn varaston tai tietyn hankintapaikan listaus, tulee hakukenttään syöttää jompi kumpi edellämainituista, ja tallentaa pdf vasta tämän jälkeen.
+                            Vinkki: Mikäli halutaan tallentaa tietyn varaston tai tietyn hankintapaikan listaus, tulee
+                            hakukenttään syöttää jompi kumpi edellämainituista, ja tallentaa pdf vasta tämän jälkeen.
                         </div>
                     </div>
                 </div>
