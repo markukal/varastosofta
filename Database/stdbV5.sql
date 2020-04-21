@@ -154,7 +154,6 @@ CREATE TABLE IF NOT EXISTS `varastotapahtumat` (
   `ttyyppinimi` varchar(50) NOT NULL,
   `luokkanimi` varchar(50) NOT NULL,
   `tarvikenimi` varchar(50) NOT NULL,
-  `tarvikehpaikka` varchar(50) NOT NULL,
   `maara` int(4) NOT NULL,
   `yksikkonimi` varchar(50) NOT NULL,
   `kasittelija` varchar(30) NOT NULL,

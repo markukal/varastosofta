@@ -257,78 +257,41 @@
         var kayttaja = $("#pKayttaja").text();
         setTimeout(() => { $.post('/ostoskori?tarvikeID=' + tarID + '&kasittelija=' + kayttaja, {}); }, timeOut);
 
-<<<<<<< HEAD
-        // Tarvikkeen poisto ja tapahtuman lokitus
-        $(document).on("click", "a.tarvikePoista", function (e) {
-            e.preventDefault();
-            var tarID = $(this).closest('tr').children('td:first').text();
-            var kasittelija = "<%= kayttajatunnus %>";
-            ttyyppinimi = 3;
-            yksikkonimi = $(this).eq(4);
-            luokkanimi = "<%= kayttajatunnus %>";
-            tarvikenimi = $(this).eq(1);
-            $.ajax({
-                    url: '/tarvikkeet',
-                    method: 'DELETE',
-                    data: { 
-                        "tarvikeID": tarID,
-                        success: function(results) {
-                                $.ajax({
-                                    // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
-                                    url: '/varastotapahtumat',
-                                    method: 'POST',
-                                    data: {
-                                        "kasittelija" : kasittelija,
-                                        "ttyyppinimi" : ttyyppinimi,
-                                        "yksikkonimi" : yksikkonimi,
-                                        "luokkanimi" : luokkanimi,
-                                        "tarvikenimi" : tarvikenimi
-                                    }
-
-                                })
-                            } 
-                     }
-                    
-                })
-                
-            setTimeout(() => { lataaTaulukko(); }, timeOut);
-        });
-=======
     });
->>>>>>> 155e3d0c76ccc134d032396a280129bf7b27514f
 
     $(document).on("click", "a.tarvikePoista", function (e) {
         e.preventDefault();
         var tarID = $(this).closest('tr').children('td:first').text();
-        var kasittelija = "<%= kayttajatunnus %>";
+        var kasittelija = "oppilas"
         ttyyppinimi = 3;
         yksikkonimi = $(this).eq(4);
-        luokkanimi = "<%= kayttajatunnus %>";
+        luokkanimi = "oppilas";
         tarvikenimi = $(this).eq(1);
         $.ajax({
             url: '/tarvikkeet',
-            method: 'DELETE',
+            type: 'DELETE',
             data: {
                 "tarvikeID": tarID,
                 success: function (results) {
-                    $.ajax({
+                  $.ajax({
                         // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
                         url: '/varastotapahtumat',
-                        method: 'POST',
+                        type: 'POST',
                         data: {
-                            "kasittelija": kasittelija,
-                            "ttyyppinimi": ttyyppinimi,
-                            "yksikkonimi": yksikkonimi,
-                            "luokkanimi": luokkanimi,
-                            "tarvikenimi": tarvikenimi
+                        //    "kasittelija": kasittelija,
+                        //    "ttyyppinimi": ttyyppinimi,
+                         //   "yksikkonimi": yksikkonimi,
+                        //    "luokkanimi": luokkanimi,
+                         //   "tarvikenimi": tarvikenimi
                         }
 
-                    })
+                    }) 
                 }
             }
 
         })
 
+        
         setTimeout(() => { lataaTaulukko(); }, timeOut);
     });
 
