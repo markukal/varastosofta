@@ -25,10 +25,8 @@
 			$('li.active').removeClass('active');
 			$('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
 
-			// TODO: päivämäärä suomalaisempaan muotoon + tyylillisiä hiomisia.
 
 			// tablen lajittelu
-
 			$(document).on("click", "th", function () {
 				var table = $(this).parents('table').eq(0)
 				var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
@@ -133,7 +131,7 @@
 				<br>
 				<table class="table" id="tapahtumaTaulu">
                     <thead class="thead-dark">
-                        <tr>
+                        <tr id="tableRow">
                             <th scope="col">Tapahtumatyyppi</th>
                             <th scope="col">Tarvike</th>
                             <th scope="col">Määrä</th>
