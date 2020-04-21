@@ -40,7 +40,14 @@ module.exports =
 
 		//Uuden varastotapahtuman lisäys
 		addNew: function (req, res){
-			var pvm = new Date().toJSON().slice(0, 19).replace('T', ' ');
+            var today = new Date();
+            var pvm = today.getDate() + "/"
+            + (today.getMonth()+1) + "/"
+            + today.getFullYear() + " "
+            + today.getHours() + ":"
+            + today.getMinutes() + ":"
+            + today.getSeconds();
+            
 			var luokkaID = req.body.luokkaID;
 			var nimi = req.body.nimi;
 			var maara = req.body.maara;
