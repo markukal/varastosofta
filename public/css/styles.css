@@ -1,11 +1,12 @@
 body, html {
     height: 100%;
     background-color:rgb(41, 43, 44);
+    overflow: hidden;
 }
 
 
 #ylanavi {
-    position:static;
+    position: relative;
 }
 
 .mainwrapper {
@@ -13,7 +14,10 @@ body, html {
     margin-left: 8%;
     margin-right: 8%;
     height: 100vh;
-
+    overflow: auto;
+    overflow-x: hidden;
+    position:relative;
+    
 }
 
 #suodatusContainer {
@@ -34,12 +38,14 @@ body, html {
     color: #fff;
 }
 
-#taulu, #koriTaulu, #kerailyTaulu, #tapahtumaTaulu {
+#taulu, #koriTaulu, #kerailyTaulu {
     position: relative;
     margin-top: 2%;
     margin-left:auto; 
     margin-right:auto;
-    width:80%;
+    margin-bottom: 10%;
+    width:90%;
+    text-align: center;
     /* transition: all 0.5s; */
 }
 
@@ -65,7 +71,7 @@ body, html {
 
 
 #dropdown {
-    width: 15%;
+    width: 20%;
     margin-right: 5%;
 }
 
@@ -147,4 +153,14 @@ th {
     text-align: center;
 
   }
+  
+  #kayttoohjeModalDialog {
+    overflow-y: initial !important;
+  }
+
+  #kayttoohjeModalBody {
+    height: 550px;
+    overflow-y: auto;
+  }
+
 

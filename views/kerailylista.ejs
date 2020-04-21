@@ -42,24 +42,21 @@
 
         function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
 
-        var timeOut = 500;
+        var timeOut = 200;
 
 
 
-        // Koodi top-buttonin ilmestymiselle/piilottamiselle
-        $(window).scroll(function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        // Koodi top-buttonin ilmestymiselle/piilottamiselle TÄYTYY TESTATA
+        $(".mainwrapper").scroll(function scrollFunction() {
+            if ($(".mainwrapper").scrollTop() > 20) {
                 $("#topBtn").css("display", "block");
-            }
-            else {
+            } else {
                 $("#topBtn").css("display", "none");
             }
         });
 
         $("#topBtn").click(function topFunction() {
-            $(document.body).scrollTop(0);
-            $(document.documentElement).scrollTop(0);
-
+            $(".mainwrapper").scrollTop(0);
         });
 
         // Käy tarvikkeet-taulun läpi ja lisää raja-arvon alittavat tarvikkeet klistat-tauluun.
@@ -99,7 +96,8 @@
             $("table tr").each(function () {
                 if ($(this).closest('tr').children('td:nth-child(1)').text().toUpperCase().match(filter)
                     || $(this).closest('tr').children('td:nth-child(2)').text().toUpperCase().match(filter)
-                    || $(this).closest('tr').children('td:nth-child(3)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(4)').text().toUpperCase().match(filter)
+                    || $(this).closest('tr').children('td:nth-child(5)').text().toUpperCase().match(filter)
                 ) {
                     $("#tableRow").show();
                     $(this).show();
@@ -122,7 +120,7 @@
                     $("#kerailyTaulu").append(
                         "<tbody>" +
                         "<tr>" +
-                        "<th scope='row'>" + data[i].nimi + "</th>" +
+                        "<td>" + data[i].nimi + "</td>" +
                         "<td>" + data[i].kuvaus + "</td>" +
                         "<td>" + data[i].maara + " " + data[i].yksikko + "</td>" +
                         "<td>" + data[i].varasto + "</td>" +
@@ -157,15 +155,11 @@
 
         };
         */
-
-        tyhjennaKlistatTaulu();
-
-        suodataLoppuvat();
-
+        /*
         $("#btnHaeListaus").click(function () {
             listaaKlista();
         })
-
+        */
         /*$("#btnLisaaTauluun").click(function() {
             suodataLoppuvat();
         })
@@ -210,7 +204,14 @@
 
         })
 
+        // Hakee tauluun lopussa olevat tarvikkeet, kun sivu ladataan
+        tyhjennaKlistatTaulu();
+        suodataLoppuvat();
+        setTimeout(() => { listaaKlista(); }, timeOut);
+
     });
+
+    
 </script>
 
 <body>
@@ -225,9 +226,9 @@
 
             <div id="suodatusContainer">
                 <div class="row justify-content-sm-center">
-                    <input type="text" placeholder="Hae">
+                    <input type="text" id="hakuInput" placeholder="Hae...">
                     <!--<button type="button" id="btnTyhjennaKlista" class="btn btn-dark">Tyhjennä lista</button>-->
-                    <button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>
+                    <!--<button type="button" id="btnHaeListaus" class="btn btn-dark">Hae listaus</button>-->
                     <!--  <button type="button" id="btnLisaaTauluun" class="btn btn-dark">Lisää tauluun</button> -->
                     <!--  <button type="button" id="btnTyhjennaTaulu" class="btn btn-dark">Tyhjennä taulu</button> -->
                     <!-- <button type="button" id="btnTulosta" class="btn btn-dark">Tulosta</button> -->
@@ -248,7 +249,7 @@
 
             <div class="modal fade" id="kayttoohjeDialog" tabindex="-1" role="dialog" aria-labelledby="kayttoohjeLabel"
                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog" id="kayttoohjeModalDialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="kayttoohjeLabel">Käyttöohje</h5>
@@ -256,8 +257,22 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            Tähän kaikki käyttöohjeeseen tuleva tavara
+                        <div class="modal-body" id="kayttoohjeModalBody">
+                            <h4>Yleinen</h4>
+                            <img src="/media/kerailylista1.JPG" alt="kerailylista1" width="100%">
+                            Kun tarvikkeen varastosaldo alittaa uutta tarviketta lisättäessä määritetyn hälytysrajan, tarvike lisätään automaattisesti keräilylistan 
+                            taulukkoon. Tulevaa tavaratilausta varten on suositeltavaa määrittää mahdollinen ostopaikan tuotenumero tilauksen tekemisen helpottamiseksi. 
+                            <br><br>
+                            <img src="/media/kerailylista2.JPG" alt="kerailylista2" width="100%">
+                            Uuden tarvikkeen lisäyksen yhteydessä määritelty, yleisesti käytetty hankintapaikka ilmoitetaan hankintapaikka-sarakkeessa. Mikäli tarvike aiotaan ostaa muualta, 
+                            ei tästä tarvitse välittää. <b>Tilataan</b> - sarakkeessa määritellään tarvikkeen tilausmäärä. Tätä kenttää muuttaessa yht-sarakkeen arvo päivittyy. 
+                            <br><br>
+                            <b>Poista</b> - valinta poistaa rivin, mikäli tuotetta ei haluta huomioida keräilylistassa. Tämä tulee silloin myös poistaa manuaalisesti tarviketaulukosta, tai muuttaa 
+                            hälytysarvo nollaan, jotta tarvike ei ilmesty listaan tarpeettomasti.
+                            <br><br>
+                            Kun tilausmäärät on valittu halutuiksi, <b>Tallenna PDF</b> - painike tallentaa listan tiedot pdf-formaatissa.
+                            <br><br>
+                            Vinkki: Mikäli halutaan tallentaa tietyn varaston tai tietyn hankintapaikan listaus, tulee hakukenttään syöttää jompi kumpi edellämainituista, ja tallentaa pdf vasta tämän jälkeen.
                         </div>
                     </div>
                 </div>
