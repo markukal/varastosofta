@@ -6,6 +6,19 @@
 -- Generation Time: Apr 21, 2020 at 01:19 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
+-- Tarkastetaan, onko kanta jo olemassa.
+--
+DROP DATABASE IF EXISTS stdb;
+
+--
+-- Luodaan kanta, jos sitä ei ole.
+--
+CREATE DATABASE IF NOT EXISTS stdb;
+
+--
+-- Otetaan kanta käyttöön, että tulevat toimenpiteet onnistuvat.
+-- 
+USE stdb;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;

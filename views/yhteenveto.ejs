@@ -262,11 +262,12 @@
     $(document).on("click", "a.tarvikePoista", function (e) {
         e.preventDefault();
         var tarID = $(this).closest('tr').children('td:first').text();
-        var kasittelija = "oppilas"
-        ttyyppinimi = 3;
-        yksikkonimi = $(this).eq(4);
-        luokkanimi = "oppilas";
-        tarvikenimi = $(this).eq(1);
+        var kasittelija = "oppilas";
+        var ttyyppinimi = 3;
+        var yksikkonimi = "NaN";
+        var luokkaID = $("#luokkaID").text();
+        var tarvikenimi = "lauta";
+        var maara = 0;
         $.ajax({
             url: '/tarvikkeet',
             type: 'DELETE',
@@ -278,11 +279,13 @@
                         url: '/varastotapahtumat',
                         type: 'POST',
                         data: {
-                        //    "kasittelija": kasittelija,
-                        //    "ttyyppinimi": ttyyppinimi,
-                         //   "yksikkonimi": yksikkonimi,
-                        //    "luokkanimi": luokkanimi,
-                         //   "tarvikenimi": tarvikenimi
+                           "ttyyppinimi" : ttyyppinimimi,
+                           "luokkanimi" : ,
+                           "tarvikenimi" : tarvikenimi,
+                           "maara" : maara,
+                           "yksikkoID" : 
+
+
                         }
 
                     }) 
