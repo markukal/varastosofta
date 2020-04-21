@@ -10,11 +10,11 @@ var sleep = require("sleep");
 chai.use(chaiHttp);
 
 
-describe('Tarvikkeet API', () => {
+describe('Klistat API', () => {
     describe("Poista kaikki", ()=>{
         it("Poistaa kaikki", ()=>{
             chai.request(server)
-            .delete("/tarvikkeet")
+            .delete("/klistat")
             .send({})
             .end((err, res)=>{
                 res.should.have.status(200);
@@ -22,35 +22,19 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("POST /tarvikkeet", () =>{
-        var tarvike =[{
-            "tarvikeID": "12345",
-            "tyyppiID": "12345",
-            "varastoID": "12345",
-            "yksikkoID": "12345",
-            "nimi": "test",
-            "kuvaus": "test",
-            "maara": "123",
-            "hinta": "123",
-            "hpaikka": "test",
-            "rarvo": "12"
+    describe("POST /klistat", () =>{
+        var klistat =[{
+            "klistaID": "12345",
+            "tarvikeID": "12345"
         }, {
-            "tarvikeID": "1234567",
-            "tyyppiID": "1234567",
-            "varastoID": "1234567",
-            "yksikkoID": "1234567",
-            "nimi": "test2",
-            "kuvaus": "test2",
-            "maara": "1234",
-            "hinta": "1234",
-            "hpaikka": "test2",
-            "rarvo": "123"
+            "klistaID": "123456",
+            "tarvikeID": "123456"
         }]
-        it("Lisää tarvike", () =>{
-            for (tarvike in tarvike){
+        it("Lisää klistat", () =>{
+            for (klistat in klistat){
                 chai.request(server)
-                .post("/tarvikkeet")
-                .send(tarvike[tarvike])
+                .post("/klistat")
+                .send(klistat[klistat])
                 .end((err, res) => {
                     res.should.have.status(200);
                 })
@@ -58,10 +42,10 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("GET /tarvikkeet", () =>{
-        it("Hakee kaikki tarvikkeet", ()=>{
+    describe("GET /klistat", () =>{
+        it("Hakee kaikki klistat", ()=>{
             chai.request(server)
-                .get('/tarvikkeet')
+                .get('/klistat')
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);                       
@@ -72,10 +56,10 @@ describe('Tarvikkeet API', () => {
     });
 
 
-    describe("GET /tarvikkeet/:id", () =>{
-        it("Hakee yksikön id:llä", ()=>{
+    describe("GET /klistat/:id", () =>{
+        it("Hakee klistat id:llä", ()=>{
             chai.request(server)
-                .get("/tarvikkeet?tarvikkeID=" + "12345")
+                .get("/klistat?klistaID=" + "12345")
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);                       
@@ -85,11 +69,11 @@ describe('Tarvikkeet API', () => {
            
     });
 
-    describe("PUT /tarvikkeet", () => {
+    describe("PUT /klistat", () => {
 
         it("Päivittää yhden tiedon", () => {
             chai.request(server)
-            .get("/tarvikkeet?tarvikeID=" + "12345")
+            .get("/klistat?klistaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
             })
@@ -97,7 +81,7 @@ describe('Tarvikkeet API', () => {
 
         it("Päivitys valmis", () => {
             chai.request(server)
-            .get("/tarvikkeet?tarvikeID=" + "12345")
+            .get("/klistat?klistaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
                 result.body.data.nimi.should.equal("test");
@@ -105,11 +89,11 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("DELETE /tarvikkeet", () => {
+    describe("DELETE /klistat", () => {
 
         it("Poistaa yhden", () => {
             chai.request(server)
-            .delete("/tarvikkeet?tarvikeID=" + "12345")
+            .delete("/klistat?klistaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
             })
@@ -117,7 +101,7 @@ describe('Tarvikkeet API', () => {
 
         it("Varmista poisto", () => {
             chai.request(server)
-            .get("/tarvikkeet")
+            .get("/klistat")
             .end((err, result) => {
                 result.should.have.status(200);
                 expect(result).body.to.have.lenghtOf(1);

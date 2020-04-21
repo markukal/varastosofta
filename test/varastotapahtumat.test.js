@@ -10,11 +10,11 @@ var sleep = require("sleep");
 chai.use(chaiHttp);
 
 
-describe('Tarvikkeet API', () => {
+describe('Varastotapahtumat API', () => {
     describe("Poista kaikki", ()=>{
         it("Poistaa kaikki", ()=>{
             chai.request(server)
-            .delete("/tarvikkeet")
+            .delete("/varastotapahtumat")
             .send({})
             .end((err, res)=>{
                 res.should.have.status(200);
@@ -22,35 +22,31 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("POST /tarvikkeet", () =>{
-        var tarvike =[{
-            "tarvikeID": "12345",
-            "tyyppiID": "12345",
-            "varastoID": "12345",
-            "yksikkoID": "12345",
-            "nimi": "test",
-            "kuvaus": "test",
+    describe("POST /varastotapahtumat", () =>{
+        var varastotapahtuma =[{
+            "tapahtumaID": "12345",
+            "ttyyppinimi": "test",
+            "luokkanimi": "test",
+            "tarvikenimi": "test",
             "maara": "123",
-            "hinta": "123",
-            "hpaikka": "test",
-            "rarvo": "12"
+            "yksikkonimi": "test",
+            "kasittelija": "test",
+            "pvm": "test"
         }, {
-            "tarvikeID": "1234567",
-            "tyyppiID": "1234567",
-            "varastoID": "1234567",
-            "yksikkoID": "1234567",
-            "nimi": "test2",
-            "kuvaus": "test2",
-            "maara": "1234",
-            "hinta": "1234",
-            "hpaikka": "test2",
-            "rarvo": "123"
+            "tapahtumaID": "1234567",
+            "ttyyppinimi": "test2",
+            "luokkanimi": "test2",
+            "tarvikenimi": "test2",
+            "maara": "12345",
+            "yksikkonimi": "test2",
+            "kasittelija": "test2",
+            "pvm": "test2"
         }]
-        it("Lisää tarvike", () =>{
-            for (tarvike in tarvike){
+        it("Lisää varastotapahtuma", () =>{
+            for (varastotapahtuma in varastotapahtuma){
                 chai.request(server)
-                .post("/tarvikkeet")
-                .send(tarvike[tarvike])
+                .post("/varastotapahtumat")
+                .send(varastotapahtuma[varastotapahtuma])
                 .end((err, res) => {
                     res.should.have.status(200);
                 })
@@ -58,10 +54,10 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("GET /tarvikkeet", () =>{
-        it("Hakee kaikki tarvikkeet", ()=>{
+    describe("GET /varastotapahtumat", () =>{
+        it("Hakee kaikki varastotapahtumat", ()=>{
             chai.request(server)
-                .get('/tarvikkeet')
+                .get('/varastotapahtumat')
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);                       
@@ -72,10 +68,10 @@ describe('Tarvikkeet API', () => {
     });
 
 
-    describe("GET /tarvikkeet/:id", () =>{
-        it("Hakee yksikön id:llä", ()=>{
+    describe("GET /varastotapahtumat/:id", () =>{
+        it("Hakee varastotapahtumat id:llä", ()=>{
             chai.request(server)
-                .get("/tarvikkeet?tarvikkeID=" + "12345")
+                .get("/varastotapahtumat?tapahtumaID=" + "12345")
                 .end((err, res) => {
                     res.should.have.status(200);
                     should.exist(res.body);                       
@@ -85,11 +81,11 @@ describe('Tarvikkeet API', () => {
            
     });
 
-    describe("PUT /tarvikkeet", () => {
+    describe("PUT /varastotapahtumat", () => {
 
         it("Päivittää yhden tiedon", () => {
             chai.request(server)
-            .get("/tarvikkeet?tarvikeID=" + "12345")
+            .get("/varastotapahtumat?tapahtumaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
             })
@@ -97,7 +93,7 @@ describe('Tarvikkeet API', () => {
 
         it("Päivitys valmis", () => {
             chai.request(server)
-            .get("/tarvikkeet?tarvikeID=" + "12345")
+            .get("/varastotapahtumat?tapahtumaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
                 result.body.data.nimi.should.equal("test");
@@ -105,11 +101,11 @@ describe('Tarvikkeet API', () => {
         })
     })
 
-    describe("DELETE /tarvikkeet", () => {
+    describe("DELETE /varastotapahtumat", () => {
 
         it("Poistaa yhden", () => {
             chai.request(server)
-            .delete("/tarvikkeet?tarvikeID=" + "12345")
+            .delete("/varastotapahtumat?tapahtumaID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
             })
@@ -117,7 +113,7 @@ describe('Tarvikkeet API', () => {
 
         it("Varmista poisto", () => {
             chai.request(server)
-            .get("/tarvikkeet")
+            .get("/varastotapahtumat")
             .end((err, result) => {
                 result.should.have.status(200);
                 expect(result).body.to.have.lenghtOf(1);
