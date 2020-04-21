@@ -259,14 +259,15 @@
 
     });
 
+    // Poistaa tarvikkeen järjestelmästä ja tekee siitä lokimerkinnän.
     $(document).on("click", "a.tarvikePoista", function (e) {
         e.preventDefault();
         var tarID = $(this).closest('tr').children('td:first').text();
-        var kasittelija = "oppilas";
+        var kasittelija = $("#pKayttaja").text();
         var ttyyppinimi = 3;
-        var yksikkonimi = "NaN";
-        var luokkaID = $("#luokkaID").text();
-        var tarvikenimi = "lauta";
+        var yksikkonimi = "kaikki";
+        var luokkanimi = $("#luokkaID").text();
+        var tarvikenimi =  $(this).parent().prev().prev().prev().prev().prev().text();
         var maara = 0;
         $.ajax({
             url: '/tarvikkeet',
@@ -274,21 +275,20 @@
             data: {
                 "tarvikeID": tarID,
                 success: function (results) {
-                 /* $.ajax({
-                        // TODO: tapahtuman luonti muokatessa. Tietokantanotaatiosta voi katsoa tarvittavat parametrit
+                  $.ajax({
                         url: '/varastotapahtumat',
                         type: 'POST',
                         data: {
-                           "ttyyppinimi" : ttyyppinimimi,
-                           "luokkanimi" : ,
-                           "tarvikenimi" : tarvikenimi,
+                           "ttyyppinimi" : ttyyppinimi,
+                           "luokkaID" : luokkanimi,
+                           "nimi" : tarvikenimi,
                            "maara" : maara,
-                           "yksikkoID" : 
-
+                           "yksikkoID" : yksikkonimi,
+                           "kasittelija" : kasittelija
 
                         }
 
-                    }) */
+                    }) 
                 }
             }
 
