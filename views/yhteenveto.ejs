@@ -433,7 +433,7 @@
                 </select>
 
                 <!--Hakukenttä tuotteiden sanalliseen hakemiseen-->
-                <input type="text" id="hakuInput" placeholder="Hae...">
+                <input type="text" id="hakuInput" placeholder="Hae">
                 <% if (kayttoOikeus == 1) { %>
                 <!--Painike uuden tarvikkeen luomiseen-->
                 <button type="button" id="btnLisaaTarvike" class="btn btn-dark" data-toggle="modal"
@@ -495,7 +495,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="mtxbHinta" min="0" required>
+                                    <input type="number" class="form-control" id="mtxbHinta" step="0.01" min="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="maara" class="form-control-label">Määrä</label>
@@ -567,7 +567,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="hinta" class="col-form-label">Hinta (€)</label>
-                                    <input type="number" class="form-control" id="txbHinta" min="0" required>
+                                    <input type="number" class="form-control" id="txbHinta" step="0.01" min="0" required>
                                     <div class="valid-feedback"></div>
                                 </div>
                                 <div class="form-group">
