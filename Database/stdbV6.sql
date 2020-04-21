@@ -3,23 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 18, 2020 at 04:56 PM
+-- Generation Time: Apr 21, 2020 at 01:19 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
-
--- Tarkastetaan, onko kanta jo olemassa.
---
-DROP DATABASE IF EXISTS stdb;
-
---
--- Luodaan kanta, jos sitä ei ole.
---
-CREATE DATABASE IF NOT EXISTS stdb;
-
-
-USE stdb;
-
-
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -238,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `varastotapahtumat` (
   `maara` int(4) NOT NULL,
   `yksikkonimi` varchar(50) NOT NULL,
   `kasittelija` varchar(30) NOT NULL,
-  `pvm` datetime NOT NULL,
+  `pvm` varchar(20) NOT NULL,
   PRIMARY KEY (`tapahtumaID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
