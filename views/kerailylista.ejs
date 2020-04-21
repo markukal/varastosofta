@@ -137,6 +137,10 @@
                 }
             })
         };
+
+        $("#kerailyTaulu").on("click", ".removep", function () {
+            $(this).closest("tr").remove();
+        });
         /*
         //Tulostus
         function tulosta() {
@@ -184,7 +188,7 @@
             tbl.find('tr th:nth-child(8), tr td:nth-child(8)').remove();
             tbl.find('tr th:nth-child(9), tr td:nth-child(9)').remove();
             var res = doc.autoTableHtmlToJson(tbl.get(0));
-            var res2 = doc.autoTableHtmlToJson(document.getElementById("yhtTable"),true);
+            var res2 = doc.autoTableHtmlToJson(document.getElementById("yhtTable"), true);
 
             doc.autoTable(res.columns, res.data, { startY: 10 });
             doc.autoTable(res2.columns, null, {
@@ -264,13 +268,13 @@
             <!-- divi yhteissummalle. Pitää sisällään piilotetun taulun pdf:n tulostamista varten-->
             <div id="yhteensaDiv">
                 <p>Yhteensä <input type="text" id="txbYhteensa" step="0.01" readonly> </p>
-                <table id=yhtTable style="display: none;" >
+                <table id=yhtTable style="display: none;">
                     <tbody>
                         <tr>
                             <th>
                                 Yhteensä
-                            <th id ="tdYht"></th>    
-                            </th> 
+                            <th id="tdYht"></th>
+                            </th>
                         </tr>
                     </tbody>
                 </table>
