@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `tarvikkeet` (
   `varastoID` int(30) NOT NULL,
   `yksikkoID` int(30) NOT NULL,
   `nimi` varchar(30) NOT NULL,
-  `kuvaus` varchar(50) NOT NULL,
+  `kuvaus` varchar(100) NOT NULL,
   `maara` int(4) NOT NULL,
   `hinta` varchar(10) NOT NULL,
   `hpaikka` varchar(50) NOT NULL,
