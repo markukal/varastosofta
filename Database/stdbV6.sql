@@ -198,7 +198,15 @@ INSERT INTO `tarvikkeet` (`tarvikeID`, `tyyppiID`, `varastoID`, `yksikkoID`, `ni
 (2, 1, 1, 3, 'Vanerilevy', 'Tavallinen vanerilevy', 22, '17', 'Kesko', 4),
 (3, 2, 1, 1, 'Terästanko', 'Voi hitsata', 3, '21', 'Starkki', 5),
 (4, 4, 2, 4, 'WD-40', 'Voiteluun', 1, '21', 'Starkki', 5),
-(5, 5, 2, 3, 'Pistosahan metalliterä', 'Metalliosien sahaukseen', 8, '21', 'Starkki', 5);
+(6, 5, 3, 4, 'Ruuvi', 'Puuruuvi', 5, '10', 'K-Rauta', 2),
+(7, 1, 2, 3, 'Vanerilevy, 1 x 1 m', 'Tuotenro: vnrl11', 11, '5', 'Prisma', 1),
+(8, 3, 3, 4, 'Rautasaha', 'Yleiskäyttöinen malli', 12, '10', 'Starkki', 2),
+(9, 3, 3, 3, 'Hitsipuikko', 'Kempin puikko', 5, '20', 'Motonet', 10),
+(10, 5, 1, 3, 'Jatkojohto, 3 metriä, 1 rasia', 'Tuotenro: pwr3m', 10, '1', 'Starkki', 2),
+(11, 1, 2, 3, 'Kartonki, 10 x 10 cm', 'Tuotenro 1031', 2, '50', 'Motonet', 10),
+(12, 4, 2, 4, 'Lakka, puupinnoille, 1 l', 'Tuotenro: lk134', 7, '3', 'Remontti-Timppa', 2),
+(13, 4, 3, 3, 'Puuliima, Eri Keeper, 250 ml', 'Tuotenro: ek250', 5, '10', 'Tokmanni', 2),
+(14, 3, 2, 3, 'Hiontalaikka', 'Metallille', 3, '10', 'Motonet', 5);
 
 -- --------------------------------------------------------
 
