@@ -32,6 +32,7 @@ module.exports =
                     res.send({ "status": 500, "error": error, "response": null });
                 }
                 else {
+                    res.send({ "status": 201 });
                     res.json(results);
                     console.log("Yksiköiden haku onnistui.");
                 }

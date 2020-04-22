@@ -3,7 +3,7 @@ var chaiHttp = require("chai-http");
 var server = require("../server");
 var should = require("chai").should();
 var expect = require("chai").expect;
-var sleep = require("sleep");
+
 
 
 
@@ -71,7 +71,7 @@ describe('Tarvikkeet API', () => {
            
     });
 
-
+/*
     describe("GET /tarvikkeet/:id", () =>{
         it("Hakee yksikön id:llä", ()=>{
             chai.request(server)
@@ -114,7 +114,7 @@ describe('Tarvikkeet API', () => {
                 result.should.have.status(200);
             })
         })
-
+        
         it("Varmista poisto", () => {
             chai.request(server)
             .get("/tarvikkeet")
@@ -123,6 +123,7 @@ describe('Tarvikkeet API', () => {
                 expect(result).body.to.have.lenghtOf(1);
             })
         })
+        
     })
-
+*/
 });

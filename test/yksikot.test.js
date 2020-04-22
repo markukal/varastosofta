@@ -3,7 +3,7 @@
     var server = require("../server");
     var should = require("chai").should();
     var expect = require("chai").expect;
-    var sleep = require("sleep");
+
 
 
 
@@ -24,45 +24,43 @@
 
         describe("POST /yksikot", () =>{
             var yksikko =[{
-                "yksikkoID": "12345",
+            
                 "nimi": "test"
-            }, {
-                "yksikkoID": "123456",
-                "nimi": "test2"
             }]
             it("Lisää yksikko", () =>{
                 for (yksikko in yksikko){
                     chai.request(server)
                     .post("/yksikot")
-                    .send(yksikko[yksikko])
+                    .send("nimi=tasti")
                     .end((err, res) => {
-                        res.should.have.status(200);
+                        res.should.have.status(200)
                     })
                 }
             })
         })
 
         describe("GET /yksikot", () =>{
+            
             it("Hakee kaikki yksiköt", ()=>{
                 chai.request(server)
-                    .get('/yksikot')
+                    .get("/yksikot")
                     .end((err, res) => {
-                        res.should.have.status(200);
+
                         should.exist(res.body);                       
                     
                     });
             });  
                
-        });
-
-
-        describe("GET /yksikot/:id", () =>{
+        });  
+    });
+/* 
+       describe("GET /yksikot/:id", () =>{
+        
             it("Hakee yksikön id:llä", ()=>{
                 chai.request(server)
-                    .get("/yksikot?yksikkoID=" + "12345")
+                   .get("/yksikot?yksikkoID=" + "1")
                     .end((err, res) => {
-                        res.should.have.status(200);
-                        should.exist(res.body);                       
+                        should.have.status(201);
                     
                     });
             });  
@@ -108,8 +106,8 @@
                 })
             })
         })
+    */
     
-    });
 
 
   

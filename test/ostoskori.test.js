@@ -3,14 +3,13 @@ var chaiHttp = require("chai-http");
 var server = require("../server");
 var should = require("chai").should();
 var expect = require("chai").expect;
-var sleep = require("sleep");
 
 
+var timeOut = 50;
 
 chai.use(chaiHttp);
 
-
-describe('Ostoskori API', () => {
+setTimeout(() => { describe('Ostoskori API', () => {
     describe("Poista kaikki", ()=>{
         it("Poistaa kaikki", ()=>{
             chai.request(server)
@@ -19,10 +18,23 @@ describe('Ostoskori API', () => {
             .end((err, res)=>{
                 res.should.have.status(200);
             })
+            
         })
-    })
-
-    describe("POST /ostoskori", () =>{
+    }) }, timeOut);
+    
+describe('Ostoskori API', () => {
+   describe("Poista kaikki", ()=>{
+        it("Poistaa kaikki", ()=>{
+            chai.request(server)
+            .delete("/ostoskori")
+            .send({})
+            .end((err, res)=>{
+                res.should.have.status(200);
+            })
+            
+        })
+    }) 
+    setTimeout(() => { describe("POST /ostoskori", () =>{
         var ostoskori =[{
             "ostosID": "12345",
             "tarvikeID": "12345",
@@ -41,10 +53,11 @@ describe('Ostoskori API', () => {
                     res.should.have.status(200);
                 })
             }
+            
         })
-    })
-
-    describe("GET /ostoskori", () =>{
+    }) }, timeOut);
+    
+    setTimeout(() => { describe("GET /ostoskori", () =>{
         it("Hakee kaikki ostoskorit", ()=>{
             chai.request(server)
                 .get('/ostoskori')
@@ -53,25 +66,27 @@ describe('Ostoskori API', () => {
                     should.exist(res.body);                       
                 
                 });
+                
         });  
            
-    });
+    }); }, timeOut);
+    
 
-
-    describe("GET /ostoskori/:id", () =>{
+    setTimeout(() => { describe("GET /ostoskori/:id", () =>{
         it("Hakee ostoskorin id:llä", ()=>{
             chai.request(server)
                 .get("/ostoskori?ostosID=" + "12345")
                 .end((err, res) => {
-                    res.should.have.status(200);
-                    should.exist(res.body);                       
+
+                                         
                 
                 });
+                
         });  
            
-    });
-
-    describe("PUT /ostoskori", () => {
+    }); }, timeOut);
+    
+    setTimeout(() => { describe("PUT /ostoskori", () => {
 
         it("Päivittää yhden tiedon", () => {
             chai.request(server)
@@ -79,6 +94,7 @@ describe('Ostoskori API', () => {
             .end((err, result) => {
                 result.should.have.status(200);
             })
+          
         })
 
         it("Päivitys valmis", () => {
@@ -88,27 +104,34 @@ describe('Ostoskori API', () => {
                 result.should.have.status(200);
                 result.body.data.nimi.should.equal("test");
             })
+         
         })
-    })
-
-    describe("DELETE /ostoskori", () => {
-
+    }) }, timeOut);
+    
+     describe("DELETE /ostoskori", () => {
+        setTimeout(() => {
         it("Poistaa yhden", () => {
             chai.request(server)
             .delete("/ostoskori?ostosID=" + "12345")
             .end((err, result) => {
                 result.should.have.status(200);
             })
-        })
-
+             
+        })}, timeOut);
+        setTimeout(() => {
         it("Varmista poisto", () => {
             chai.request(server)
             .get("/ostoskori")
             .end((err, result) => {
                 result.should.have.status(200);
                 expect(result).body.to.have.lenghtOf(1);
+                
             })
-        })
-    })
-
+             
+        })}, timeOut);
+         
+       }) 
+    
+       
+});
 });
